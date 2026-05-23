@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLink } from "@/app/_components/brand-link";
 import { getAllPostsByYear } from "@/lib/posts";
 
 export default function Home() {
@@ -9,13 +10,16 @@ export default function Home() {
       <section className="pt-2 pb-14 sm:pb-20">
         <div className="space-y-4">
           <p className="text-stone-500">
-            {/* TODO: One sentence about what you like — replace this line. */}
-            One sentence about things I like will go here.
+            Drawn to the spaces where hardware, software, and good product
+            taste collide.
           </p>
           <p className="text-stone-500">
-            {/* TODO: A sentence or two about where you work and what you'd like to do. */}
-            A sentence or two about where I work and what I&apos;m building
-            toward will go here.
+            Currently a technical product manager at TELUS on the Internet
+            Hardware team, and co-founder of{" "}
+            <BrandLink href="https://unifysocial.ca" name="Unify" /> — a mobile
+            app helping newcomers settle in Canada. Writing on consumer
+            hardware, AI tools, and what it takes to build things people
+            actually want.
           </p>
         </div>
       </section>
