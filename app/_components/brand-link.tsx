@@ -18,11 +18,11 @@ export function BrandLink({ href, name, logo }: BrandLinkProps) {
       rel="noopener noreferrer"
       className="brand-inline-link group inline-flex items-center gap-1 align-baseline"
     >
-      <strong className="font-semibold text-stone-900">{name}</strong>
+      <strong className="font-bold text-stone-900">{name}</strong>
       {logo ? (
         <span
           aria-hidden="true"
-          className="inline-block h-4 w-4 shrink-0 -translate-y-px rounded-[3px] bg-cover bg-center"
+          className="inline-block h-5 w-5 shrink-0 -translate-y-px rounded-[3px] bg-contain bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${logo})` }}
         />
       ) : null}
