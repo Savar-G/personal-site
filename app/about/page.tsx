@@ -60,24 +60,24 @@ export default function AboutPage() {
         <h2>What I Believe</h2>
 
         <p>
-          <strong>Start with the customer and work backwards.</strong> Almost
-          every product question gets easier once you decide whose problem
-          you&apos;re actually solving.
+          <strong>Start with the customer and work backwards.</strong>{" "}
+          Almost every product question gets easier once you decide whose
+          problem you&apos;re actually solving.
         </p>
         <p>
-          <strong>Building beats planning.</strong> You learn more in a week
-          of shipping than a month of strategizing — usually about whether
-          the plan was right in the first place.
+          <strong>Building beats planning.</strong>{" "}
+          You learn more in a week of shipping than a month of strategizing —
+          usually about whether the plan was right in the first place.
         </p>
         <p>
-          <strong>Stop-gaps aren&apos;t fixes.</strong> It&apos;s easy to
-          patch the symptom and move on. The systems work — the part that
-          addresses the cause — is the real work.
+          <strong>Stop-gaps aren&apos;t fixes.</strong>{" "}
+          It&apos;s easy to patch the symptom and move on. The systems work —
+          the part that addresses the cause — is the real work.
         </p>
         <p>
-          <strong>First principles over precedent.</strong> The way
-          something has always been done isn&apos;t a reason to keep doing
-          it. Question whatever assumption you can afford to.
+          <strong>First principles over precedent.</strong>{" "}
+          The way something has always been done isn&apos;t a reason to keep
+          doing it. Question whatever assumption you can afford to.
         </p>
       </div>
 
