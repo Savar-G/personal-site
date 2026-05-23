@@ -19,18 +19,27 @@ export default function AboutPage() {
         <p>
           I&apos;m Savar Gupta. I study Mechatronic Systems Engineering and
           Business at Simon Fraser University in Vancouver, and right now
-          I&apos;m a Technical Product Manager co-op at TELUS on the Internet
-          Hardware team — working on how Wi-Fi gateways, access points, and
-          the software stack behind them actually serve customers.
+          I&apos;m a Technical Product Manager co-op at{" "}
+          <BrandLink
+            href="https://www.telus.com"
+            name="TELUS"
+            logo="/telus-logo.png"
+          />{" "}
+          on the Internet Hardware team — working on how Wi-Fi gateways,
+          access points, and the software stack behind them actually serve
+          customers.
         </p>
 
         <p>
           On the side I co-founded{" "}
-          <BrandLink href="https://unifysocial.ca" name="Unify" />, a mobile
-          app that helps newcomers settle in Canada — community, settlement
-          guidance, and a RAG-powered AI companion that keeps itself current
-          by scraping Government of Canada sources daily. 250+ users, 16
-          partnerships, and a few million social impressions in.
+          <BrandLink
+            href="https://unifysocial.ca"
+            name="Unify"
+            logo="/app-icon.png"
+          />, a mobile app that helps newcomers settle in Canada — community,
+          settlement guidance, and a RAG-powered AI companion that keeps
+          itself current by scraping Government of Canada sources daily. 250+
+          users, 16 partnerships, and a few million social impressions in.
         </p>
 
         <p>

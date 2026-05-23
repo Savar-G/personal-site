@@ -14,12 +14,21 @@ export default function Home() {
             taste collide.
           </p>
           <p className="text-stone-500">
-            Currently a technical product manager at TELUS on the Internet
-            Hardware team, and co-founder of{" "}
-            <BrandLink href="https://unifysocial.ca" name="Unify" /> — a mobile
-            app helping newcomers settle in Canada. Writing on consumer
-            hardware, AI tools, and what it takes to build things people
-            actually want.
+            Currently a technical product manager at{" "}
+            <BrandLink
+              href="https://www.telus.com"
+              name="TELUS"
+              logo="/telus-logo.png"
+            />{" "}
+            on the Internet Hardware team, and co-founder of{" "}
+            <BrandLink
+              href="https://unifysocial.ca"
+              name="Unify"
+              logo="/app-icon.png"
+            />{" "}
+            — a mobile app helping newcomers settle in Canada. Writing on
+            consumer hardware, AI tools, and what it takes to build things
+            people actually want.
           </p>
         </div>
       </section>
