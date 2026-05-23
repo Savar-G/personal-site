@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NavMenu } from "@/app/_components/nav-menu";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,17 +31,7 @@ export default function RootLayout({
         <div className="flex min-h-dvh flex-col bg-stone-50 text-stone-900">
           <div className="flex min-h-0 w-full flex-1 flex-col">
             <div className="sticky top-0 z-20 flex h-14 w-full shrink-0 items-center gap-1 bg-stone-50 px-3">
-              <button
-                type="button"
-                className="nav-menu-trigger press"
-                aria-label="Menu"
-              >
-                <span className="sr-only">Open menu</span>
-                <span
-                  className="nav-menu-icon nav-menu-icon--hamburger"
-                  aria-hidden="true"
-                />
-              </button>
+              <NavMenu />
             </div>
             <header className="mx-auto w-full max-w-[44rem] px-5 pt-8 pb-10 sm:px-8 sm:pt-12 sm:pb-14 animate-fade-in">
               <Link
