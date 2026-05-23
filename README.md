@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# savargupta.com
 
-## Getting Started
+Personal site of Savar Gupta. Minimalist writing-forward blog built on Next.js, Tailwind v4, and Geist. Posts live as MDX files in `content/posts/`.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Add a new post
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Create a file in `content/posts/`, e.g. `content/posts/your-slug.mdx`:
 
-## Learn More
+   ```markdown
+   ---
+   title: "Your post title"
+   date: "2026-06-15"
+   ---
 
-To learn more about Next.js, take a look at the following resources:
+   Body in MDX. Headings, **bold**, *italics*, lists, blockquotes, `code`, and
+   images all work.
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Commit and push. The post appears on the homepage, grouped by the year of `date`. Reading time is auto-computed.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project structure
 
-## Deploy on Vercel
+```
+app/
+  _components/    Reusable UI (BrandLink, NavMenu)
+  about/          /about page
+  [slug]/         Blog post route — renders MDX from content/posts/
+  icon.png        SG monogram favicon (auto-served by Next)
+  layout.tsx      Sticky header, fonts, sitewide chrome
+  page.tsx        Homepage (bio + post list grouped by year)
+  globals.css     Tailwind + custom prose, animations, nav overlay
+  opengraph-image.tsx  Auto-generated OG image at /opengraph-image
+  robots.ts       /robots.txt
+  sitemap.ts      /sitemap.xml
+content/posts/    MDX source for posts
+lib/posts.ts      MDX reader, frontmatter parsing, reading-time
+public/           Static assets (resume, brand logos)
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS v4
+- Geist Sans + Geist Mono via `next/font`
+- MDX via `next-mdx-remote` + `gray-matter`
+
+## Deploy
+
+Auto-deploys on push to `main` via Vercel.

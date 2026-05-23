@@ -15,8 +15,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Savar Gupta",
-  description: "Personal site of Savar Gupta — writing and projects.",
+  metadataBase: new URL("https://savargupta.com"),
+  title: {
+    default: "Savar Gupta",
+    template: "%s — Savar Gupta",
+  },
+  description:
+    "Hardware, software, and the craft of building things people actually want. Writing by Savar Gupta — technical product manager at TELUS, co-founder of Unify.",
+  openGraph: {
+    title: "Savar Gupta",
+    description:
+      "Hardware, software, and the craft of building things people actually want.",
+    url: "https://savargupta.com",
+    siteName: "Savar Gupta",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Savar Gupta",
+    description:
+      "Hardware, software, and the craft of building things people actually want.",
+    creator: "@SmartCompounder",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export default function RootLayout({
