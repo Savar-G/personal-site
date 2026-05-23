@@ -448,14 +448,18 @@ body {
 }
 
 .nav-menu-link {
-  color: var(--color-stone-50);
+  color: var(--color-stone-400);
   transition: color 0.16s var(--ease-out), transform 0.14s var(--ease-out);
 }
 .nav-menu-link:hover {
-  color: var(--color-stone-300);
+  color: var(--color-stone-50);
 }
 .nav-menu-link--active {
-  color: var(--color-stone-400);
+  color: var(--color-stone-50);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: color-mix(in oklab, var(--color-stone-50) 40%, transparent);
+  text-underline-offset: 8px;
 }
 
 @media (prefers-reduced-motion: reduce) {
