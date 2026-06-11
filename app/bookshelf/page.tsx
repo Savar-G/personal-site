@@ -17,6 +17,7 @@ export default function BookshelfPage() {
     title: book.title,
     author: book.author,
     status: book.status,
+    coverImage: book.coverImage,
     spineColor: book.spineColor,
     inkColor: book.inkColor,
     category: book.category,

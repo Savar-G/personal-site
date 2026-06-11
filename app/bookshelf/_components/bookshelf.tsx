@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { AnimatePresence, LayoutGroup, MotionConfig } from "motion/react";
-import { BookSpine } from "./book-spine";
+import { BookCover } from "./book-cover";
 import { BookReaderModal } from "./book-reader-modal";
 
 export type ReadingStatus = "reading" | "read";
@@ -14,6 +14,7 @@ export type BookItem = {
   title: string;
   author: string;
   status: ReadingStatus;
+  coverImage?: string;
   spineColor: string;
   inkColor?: string;
   category?: string;
@@ -45,7 +46,7 @@ function BookshelfSection({
       <div className="shelf">
         <div className="shelf-row">
           {books.map((book) => (
-            <BookSpine key={book.slug} book={book} onSelect={onSelect} />
+            <BookCover key={book.slug} book={book} onSelect={onSelect} />
           ))}
         </div>
         <div className="shelf-plinth" aria-hidden="true" />
@@ -72,7 +73,7 @@ export function Bookshelf({ items }: { items: BookItem[] }) {
     const slug = lastSlugRef.current;
     requestAnimationFrame(() => {
       document
-        .querySelector<HTMLElement>(`[data-spine="${slug}"]`)
+        .querySelector<HTMLElement>(`[data-book-slug="${slug}"]`)
         ?.focus();
     });
   }, []);

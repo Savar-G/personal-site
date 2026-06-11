@@ -11,12 +11,14 @@ export type Book = {
   title: string;
   author: string;
   status: ReadingStatus;
-  /** Muted spine/cover color, any CSS color. Drives the spine and the typographic cover. */
+  /** Path to the real cover image under /public (e.g. "/books/slug.jpg"). When
+   *  absent, a tasteful clearly-marked fallback is shown instead. */
+  coverImage?: string;
+  /** Muted accent color, any CSS color. Used for the fallback cover and small
+   *  modal accents (takeaway bullets, quote rules). */
   spineColor: string;
-  /** Optional override for ink color on the spine/cover (defaults to a warm cream). */
+  /** Optional override for ink color on the fallback cover (defaults to stone). */
   inkColor?: string;
-  /** Optional cover image path under /public. When absent, a typographic cover is generated. */
-  cover?: string;
   /** Optional short topic label, e.g. "Investing". */
   category?: string;
   dateRead?: string; // ISO YYYY-MM-DD
@@ -80,9 +82,9 @@ export function getAllBooks(): Book[] {
         title: String(data.title ?? slug),
         author: String(data.author ?? ""),
         status: normalizeStatus(data.status),
+        coverImage: data.coverImage ? String(data.coverImage) : undefined,
         spineColor: String(data.spineColor ?? "#5f5b54"),
         inkColor: data.inkColor ? String(data.inkColor) : undefined,
-        cover: data.cover ? String(data.cover) : undefined,
         category: data.category ? String(data.category) : undefined,
         dateRead,
         formattedDate: dateRead ? formatDate(dateRead) : undefined,

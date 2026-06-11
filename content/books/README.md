@@ -11,9 +11,10 @@ Create `content/books/<slug>.mdx`. The filename (minus `.mdx`) becomes the slug.
 ---
 title: "The Title"
 author: "Author Name"
+coverImage: "/books/the-title.jpg"  # real cover in /public/books (see below)
 status: "read"            # "read" | "reading"  (groups it into a shelf; default "read")
 category: "Investing"      # optional short topic label
-spineColor: "#5a6470"      # the spine + cover color (see palette below)
+spineColor: "#5a6470"      # accent color for the fallback cover + modal details
 dateRead: "2026-04-29"     # optional ISO date; used to sort newest-first
 rating: 5                  # optional 1–5; only shown when present
 summary: "One-line thesis shown at the top of the right page."
@@ -30,12 +31,13 @@ Everything below the frontmatter is your long-form notes. Plain Markdown —
 
 ### Field notes
 
-- **status** — `reading` books appear under "Currently reading"; everything else under "Read".
-- **spineColor** — drives both the shelf spine and the typographic cover. Keep it muted and mid-dark so the cream title text stays legible (aim for a lightness around 35–48%). A book with no takeaways/quotes/body (e.g. one you've just started) renders a clean "currently reading" state.
-- **cover** — optional. Omit it and a typographic cover is generated from `spineColor` + the title. To use a real image, drop it in `/public` and set `cover: "/covers/the-title.jpg"`.
+- **coverImage** — the real book cover. Save the image in `/public/books/` (e.g. `the-title.jpg` or `.png`) and point `coverImage` at `/books/the-title.jpg`. It's rendered with `next/image` on the shelf and in the reader, with alt text `Cover of <title> by <author>`. Aim for a portrait image around 300–600px wide (roughly 2:3); larger is fine, `next/image` resizes it.
+- **no coverImage** — omit the field and the book shows a clearly-marked stone "No cover" fallback (title + author). Tasteful, but obviously a placeholder — add real art when you have it.
+- **status** — `reading` books appear under "Currently reading"; everything else under "Read". A book with no takeaways/quotes/body (e.g. one you've just started) renders a clean "currently reading" state in the reader.
+- **spineColor** — no longer paints the cover (the real artwork does). It's the accent for the fallback cover and small reader details (takeaway bullets, the quote rule). Keep it muted and stone-friendly.
 - **quotes** — wrap each in straight double quotes and use curly `“ ” ’` *inside* so the YAML never needs escaping.
 
-### Current spine palette
+### Accent palette (`spineColor`)
 
 A muted, stone-friendly set already in use — reuse or extend:
 

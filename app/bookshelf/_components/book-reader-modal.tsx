@@ -4,6 +4,7 @@ import { useEffect, useId, useRef } from "react";
 import type { CSSProperties } from "react";
 import { motion } from "motion/react";
 import type { BookItem } from "./bookshelf";
+import { BookCoverFace } from "./book-cover";
 
 type BookReaderModalProps = {
   book: BookItem;
@@ -53,11 +54,6 @@ export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
     return () => dialog.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
-  const coverStyle = {
-    "--spine": book.spineColor,
-    ...(book.inkColor ? { "--spine-ink": book.inkColor } : {}),
-  } as CSSProperties;
-
   const metaLine =
     book.status === "reading"
       ? "Currently reading"
@@ -80,6 +76,7 @@ export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
       <motion.div
         ref={dialogRef}
         className="reader-spread"
+        style={{ "--spine": book.spineColor } as CSSProperties}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -111,41 +108,16 @@ export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
           </svg>
         </button>
 
-        {/* Left page — the cover. Shares layoutId with the shelf spine. */}
-        <motion.div
-          layoutId={`cover-${book.slug}`}
-          className="reader-cover"
-          style={coverStyle}
-        >
-          <div>
-            {book.category ? (
-              <p className="reader-cover-category">{book.category}</p>
-            ) : null}
-            <h2 id={titleId} className="reader-cover-title">
-              {book.title}
-            </h2>
-            <p className="reader-cover-author">{book.author}</p>
-          </div>
-          <div className="reader-cover-meta">
-            {typeof book.rating === "number" ? (
-              <span
-                className="reader-rating"
-                aria-label={`Rated ${book.rating} out of 5`}
-              >
-                {Array.from({ length: 5 }, (_, i) => (
-                  <span
-                    key={i}
-                    className="reader-rating-dot"
-                    data-filled={i < book.rating!}
-                  />
-                ))}
-              </span>
-            ) : null}
-            <span>{metaLine}</span>
-          </div>
-        </motion.div>
+        {/* Left pane — the real cover. Shares layoutId with the shelf cover. */}
+        <div className="reader-cover-pane">
+          <BookCoverFace
+            book={book}
+            className="reader-cover"
+            sizes="(max-width: 640px) 140px, 208px"
+          />
+        </div>
 
-        {/* Right page — notes, takeaways, quotes. */}
+        {/* Right pane — title, meta, notes, takeaways, quotes. */}
         <motion.div
           className="reader-notes"
           initial={{ opacity: 0, x: 8 }}
@@ -153,6 +125,38 @@ export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
           exit={{ opacity: 0 }}
           transition={{ delay: 0.08, duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
         >
+          <header className="reader-head">
+            {book.category ? (
+              <p className="reader-eyebrow">{book.category}</p>
+            ) : null}
+            <h2 id={titleId} className="reader-title">
+              {book.title}
+            </h2>
+            <p className="reader-byline">{book.author}</p>
+            <p className="reader-meta">
+              {typeof book.rating === "number" ? (
+                <>
+                  <span
+                    className="reader-rating"
+                    aria-label={`Rated ${book.rating} out of 5`}
+                  >
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <span
+                        key={i}
+                        className="reader-rating-dot"
+                        data-filled={i < book.rating!}
+                      />
+                    ))}
+                  </span>
+                  <span className="reader-meta-sep" aria-hidden="true">
+                    ·
+                  </span>
+                </>
+              ) : null}
+              <span>{metaLine}</span>
+            </p>
+          </header>
+
           {book.summary ? (
             <p className="reader-summary">{book.summary}</p>
           ) : null}
