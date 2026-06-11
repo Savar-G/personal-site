@@ -34,8 +34,8 @@ export default function BookshelfPage() {
       <header className="pt-2 pb-9 sm:pb-11">
         <h1 className="page-title">Bookshelf</h1>
         <p className="mt-3 max-w-prose text-stone-500">
-          Books I&apos;ve read, with the notes and lines worth keeping. Pick a
-          spine to open it.
+          Books I&apos;ve read, and the ideas that stuck. Tap a cover to open
+          one.
         </p>
       </header>
 
