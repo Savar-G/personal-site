@@ -7,16 +7,21 @@ import { usePathname } from "next/navigation";
 const LINKS = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
+  { href: "/bookshelf", label: "Bookshelf" },
+  { href: "https://health.savargupta.com", label: "Health", external: true },
 ];
 
 export function NavMenu() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  // Close when route changes
-  useEffect(() => {
+  // Close when the route changes — React's "adjust state during render"
+  // pattern, so we avoid a setState-in-effect cascade.
+  const [pathAtOpen, setPathAtOpen] = useState(pathname);
+  if (pathname !== pathAtOpen) {
+    setPathAtOpen(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
 
   // Close on Escape
   useEffect(() => {
@@ -83,17 +88,43 @@ export function NavMenu() {
           <ul className="nav-menu-stagger flex flex-col items-center gap-7">
             {LINKS.map((link) => {
               const isActive = pathname === link.href;
+              const className = `nav-menu-link press text-2xl font-medium tracking-tight sm:text-3xl ${
+                isActive ? "nav-menu-link--active" : ""
+              }`;
               return (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className={`nav-menu-link press text-2xl font-medium tracking-tight sm:text-3xl ${
-                      isActive ? "nav-menu-link--active" : ""
-                    }`}
-                    tabIndex={open ? 0 : -1}
-                  >
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={className}
+                      tabIndex={open ? 0 : -1}
+                    >
+                      {link.label}
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                        className="ml-1.5 inline-block h-[0.5em] w-[0.5em] -translate-y-[0.4em] opacity-60"
+                      >
+                        <path d="M7 17 17 7M8 7h9v9" />
+                      </svg>
+                      <span className="sr-only">(opens in new tab)</span>
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className={className}
+                      tabIndex={open ? 0 : -1}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               );
             })}
