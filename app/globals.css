@@ -435,25 +435,20 @@ body {
   box-shadow: 0 16px 22px -18px color-mix(in oklab, var(--color-stone-900) 38%, transparent);
 }
 
-/* Mobile: a single horizontal snap-scroll shelf. */
+/* Mobile/tablet: covers wrap into a vertical grid (all books discoverable
+   with natural vertical scrolling, rather than one long horizontal shelf). */
 @media (max-width: 640px) {
   .bookshelf {
-    --cover-w: 5.5rem;
+    --cover-w: 5rem;
   }
   .shelf-row {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    gap: 1.1rem;
-    margin-inline: -1.25rem;
-    padding-inline: 1.25rem;
-    scrollbar-width: none;
+    gap: 1.5rem 1rem;
+    justify-content: flex-start;
   }
-  .shelf-row::-webkit-scrollbar {
-    display: none;
-  }
-  .shelf-book {
-    scroll-snap-align: start;
+}
+@media (max-width: 360px) {
+  .bookshelf {
+    --cover-w: 4.5rem;
   }
 }
 
@@ -763,6 +758,13 @@ body {
   }
   .reader-notes {
     padding: 1.5rem 1.375rem 2rem;
+  }
+  /* Larger touch target for the close button on phones (>=44px). */
+  .reader-close {
+    width: 2.75rem;
+    height: 2.75rem;
+    top: 0.4rem;
+    right: 0.4rem;
   }
 }
 
