@@ -192,7 +192,7 @@ export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
             </section>
           ) : null}
 
-          {!hasBody ? (
+          {!hasBody && book.status === "reading" ? (
             <p className="reader-empty">Currently reading — notes to come.</p>
           ) : null}
         </motion.div>
