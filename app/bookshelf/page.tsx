@@ -26,20 +26,25 @@ export default function BookshelfPage() {
     summary: book.summary,
     takeaways: book.takeaways,
     quotes: book.quotes,
+    noteSections: book.noteSections,
     notes: book.content ? <MDXRemote source={book.content} /> : null,
   }));
 
   return (
-    <div className="animate-fade-in">
-      <header className="pt-2 pb-9 sm:pb-11">
-        <h1 className="page-title">Bookshelf</h1>
-        <p className="mt-3 max-w-prose text-stone-500">
-          Books I&apos;ve read, and the ideas that stuck. Tap a cover to open
-          one.
-        </p>
-      </header>
+    <div className="animate-fade-in lg:[margin-inline:calc(50%-50vw)]">
+      {/* The site column is 44rem everywhere; the bookshelf earns a wider column
+          on large screens so covers (kept at full size) flow more per row. */}
+      <div className="mx-auto w-full max-w-[44rem] lg:max-w-[56rem] lg:px-8">
+        <header className="pt-2 pb-9 sm:pb-11">
+          <h1 className="page-title">Bookshelf</h1>
+          <p className="mt-3 max-w-prose text-stone-500">
+            Books I&apos;ve read, and the ideas that stuck. Tap a cover to open
+            one — or switch to Notes to search everything.
+          </p>
+        </header>
 
-      <Bookshelf items={items} />
+        <Bookshelf items={items} />
+      </div>
     </div>
   );
 }

@@ -28,7 +28,13 @@ export type Book = {
   takeaways: string[];
   quotes: string[];
   content: string; // raw MDX body (the long-form notes), no frontmatter
+  /** The long-form notes flattened into { heading, text } sections — plain text
+   *  for the notes feed (cards + search). The reader still renders `content` as
+   *  rich MDX; this is the searchable/scannable mirror of it. */
+  noteSections: NoteSection[];
 };
+
+export type NoteSection = { heading: string; text: string };
 
 /** Shelf grouping: "Currently reading" first, then "Read". */
 const STATUS_ORDER: Record<ReadingStatus, number> = { reading: 0, read: 1 };
@@ -57,6 +63,48 @@ function toStringArray(value: unknown): string[] {
 
 function normalizeStatus(value: unknown): ReadingStatus {
   return value === "reading" ? "reading" : "read";
+}
+
+/** Strip the inline Markdown that would otherwise leak into plain-text cards. */
+function stripInlineMarkdown(s: string): string {
+  return s
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .trim();
+}
+
+/** Split the MDX body into { heading, text } sections, keyed off ##–#### headings.
+ *  List items and paragraphs under a heading are flattened into one text run. */
+function parseNoteSections(content: string): NoteSection[] {
+  if (!content) return [];
+  type Draft = { heading: string; parts: string[] };
+  const drafts: Draft[] = [];
+  let current: Draft | null = null;
+
+  for (const raw of content.split("\n")) {
+    const line = raw.trim();
+    const heading = line.match(/^#{2,4}\s+(.*)$/);
+    if (heading) {
+      if (current) drafts.push(current);
+      current = { heading: heading[1].trim(), parts: [] };
+      continue;
+    }
+    if (!line) continue;
+    if (!current) current = { heading: "", parts: [] };
+    current.parts.push(
+      line
+        .replace(/^[-*]\s+/, "")
+        .replace(/^\d+\.\s+/, "")
+        .replace(/^>\s?/, ""),
+    );
+  }
+  if (current) drafts.push(current);
+
+  return drafts
+    .map((d) => ({ heading: d.heading, text: stripInlineMarkdown(d.parts.join(" ")) }))
+    .filter((s) => s.heading || s.text);
 }
 
 export function getAllBooks(): Book[] {
@@ -93,6 +141,7 @@ export function getAllBooks(): Book[] {
         takeaways: toStringArray(data.takeaways),
         quotes: toStringArray(data.quotes),
         content: content.trim(),
+        noteSections: parseNoteSections(content.trim()),
       };
     })
     .sort((a, b) => {

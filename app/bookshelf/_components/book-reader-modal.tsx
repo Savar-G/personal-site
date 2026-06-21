@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { motion } from "motion/react";
 import type { BookItem } from "./bookshelf";
@@ -11,12 +11,36 @@ type BookReaderModalProps = {
   onClose: () => void;
 };
 
+type TabId = "summary" | "takeaways" | "quotes" | "notes";
+
 const FOCUSABLE =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 
 export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
+
+  // Which content tabs this book actually has, in reading order.
+  const tabs = useMemo(() => {
+    const t: { id: TabId; label: string; count?: number }[] = [];
+    if (book.summary) t.push({ id: "summary", label: "Summary" });
+    if (book.takeaways.length)
+      t.push({ id: "takeaways", label: "Takeaways", count: book.takeaways.length });
+    if (book.quotes.length)
+      t.push({ id: "quotes", label: "Quotes", count: book.quotes.length });
+    if (book.notes) t.push({ id: "notes", label: "Notes" });
+    return t;
+  }, [book]);
+
+  // Lead with the distilled lessons when present, falling back gracefully.
+  const defaultTab: TabId = book.takeaways.length
+    ? "takeaways"
+    : book.quotes.length
+      ? "quotes"
+      : book.notes
+        ? "notes"
+        : "summary";
+  const [active, setActive] = useState<TabId>(defaultTab);
 
   // Initial focus + focus trap + Escape, scoped to the dialog.
   useEffect(() => {
@@ -40,11 +64,11 @@ export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
       }
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
-      const active = document.activeElement;
-      if (e.shiftKey && (active === first || active === dialog)) {
+      const activeEl = document.activeElement;
+      if (e.shiftKey && (activeEl === first || activeEl === dialog)) {
         e.preventDefault();
         last.focus();
-      } else if (!e.shiftKey && active === last) {
+      } else if (!e.shiftKey && activeEl === last) {
         e.preventDefault();
         first.focus();
       }
@@ -61,8 +85,7 @@ export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
         ? `Read · ${book.formattedDate}`
         : "Read";
 
-  const hasBody =
-    book.takeaways.length > 0 || book.quotes.length > 0 || Boolean(book.notes);
+  const showTabs = tabs.length > 1;
 
   return (
     <motion.div
@@ -117,7 +140,7 @@ export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
           />
         </div>
 
-        {/* Right pane — title, meta, notes, takeaways, quotes. */}
+        {/* Right pane — title, meta, and the tabbed notes. */}
         <motion.div
           className="reader-notes"
           initial={{ opacity: 0, x: 8 }}
@@ -157,42 +180,59 @@ export function BookReaderModal({ book, onClose }: BookReaderModalProps) {
             </p>
           </header>
 
-          {book.summary ? (
-            <p className="reader-summary">{book.summary}</p>
-          ) : null}
+          {tabs.length > 0 ? (
+            <>
+              {showTabs ? (
+                <div className="reader-tabs" role="tablist" aria-label="Notes">
+                  {tabs.map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={active === t.id}
+                      className="reader-tab"
+                      onClick={() => setActive(t.id)}
+                    >
+                      {t.label}
+                      {typeof t.count === "number" ? (
+                        <span className="reader-tab-count">{t.count}</span>
+                      ) : null}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
 
-          {book.takeaways.length > 0 ? (
-            <section className="reader-section">
-              <h3 className="section-label">Key takeaways</h3>
-              <div className="reader-takeaways">
-                {book.takeaways.map((t, i) => (
-                  <p key={i} className="reader-takeaway">
-                    {t}
-                  </p>
-                ))}
+              <div className="reader-panel" role="tabpanel">
+                {active === "summary" && book.summary ? (
+                  <p className="reader-summary">{book.summary}</p>
+                ) : null}
+
+                {active === "takeaways" && book.takeaways.length > 0 ? (
+                  <div className="reader-takeaways">
+                    {book.takeaways.map((t, i) => (
+                      <p key={i} className="reader-takeaway">
+                        {t}
+                      </p>
+                    ))}
+                  </div>
+                ) : null}
+
+                {active === "quotes" && book.quotes.length > 0 ? (
+                  <div>
+                    {book.quotes.map((q, i) => (
+                      <p key={i} className="reader-quote">
+                        {q}
+                      </p>
+                    ))}
+                  </div>
+                ) : null}
+
+                {active === "notes" && book.notes ? (
+                  <div className="prose-site reader-prose">{book.notes}</div>
+                ) : null}
               </div>
-            </section>
-          ) : null}
-
-          {book.quotes.length > 0 ? (
-            <section className="reader-section">
-              <h3 className="section-label">Favorite quotes</h3>
-              {book.quotes.map((q, i) => (
-                <p key={i} className="reader-quote">
-                  {q}
-                </p>
-              ))}
-            </section>
-          ) : null}
-
-          {book.notes ? (
-            <section className="reader-section">
-              <h3 className="section-label">Notes</h3>
-              <div className="prose-site reader-prose">{book.notes}</div>
-            </section>
-          ) : null}
-
-          {!hasBody && book.status === "reading" ? (
+            </>
+          ) : book.status === "reading" ? (
             <p className="reader-empty">Currently reading — notes to come.</p>
           ) : null}
         </motion.div>
