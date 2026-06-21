@@ -55,7 +55,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="font-sans antialiased">
-        <div className="flex min-h-dvh flex-col overflow-x-clip bg-stone-50 text-stone-900">
+        <div className="flex min-h-dvh flex-col bg-stone-50 text-stone-900">
           <div className="flex min-h-0 w-full flex-1 flex-col">
             <div className="sticky top-0 z-20 flex h-14 w-full shrink-0 items-center gap-1 bg-stone-50 px-3">
               <NavMenu />
