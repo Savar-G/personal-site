@@ -38,7 +38,7 @@ export default function AboutPage() {
             logo="/app-icon.png"
           />, a mobile app that helps newcomers settle in Canada — community,
           settlement guidance, and a RAG-powered AI companion that keeps
-          itself current by scraping Government of Canada sources daily. 250+
+          itself current by scraping Government of Canada sources daily. 350+
           users, 16 partnerships, and a few million social impressions in.
         </p>
 
@@ -56,11 +56,11 @@ export default function AboutPage() {
           (mostly Claude Code), product management as a craft, and personal
           finance. I write about all four occasionally on X as{" "}
           <a
-            href="https://x.com/SmartCompounder"
+            href="https://x.com/savar_gupta"
             target="_blank"
             rel="noopener noreferrer"
           >
-            @SmartCompounder
+            @savar_gupta
           </a>
           . Long term I want to be building hardware that meets software
           where it&apos;s actually going.

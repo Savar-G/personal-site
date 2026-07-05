@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     title: "Savar Gupta",
     description:
       "Hardware, software, and the craft of building things people actually want.",
-    creator: "@SmartCompounder",
+    creator: "@savar_gupta",
   },
   robots: {
     index: true,
