@@ -53,8 +53,8 @@ export default function Home() {
       <section className="mb-10 sm:mb-12">
         <div className="space-y-4">
           <p className="text-stone-500">
-            Studying Mechatronics Engineering and Business @ SFU. Building in
-            physical AI.
+            Studying Mechatronics Engineering and Business @ SFU. Building at
+            the intersection of hardware, software, and AI.
           </p>
           <p className="text-stone-500">
             Currently a technical product manager at{" "}
@@ -63,7 +63,13 @@ export default function Home() {
               name="TELUS"
               logo="/telus-logo.png"
             />{" "}
-            on the Internet Hardware team, and co-founder of{" "}
+            on the Internet Hardware team, working in Product &amp; GTM at{" "}
+            <BrandLink
+              href="https://www.embedr.app/"
+              name="Embedr"
+              logo="https://www.embedr.app/logo.png"
+            />
+            , and co-founder of{" "}
             <BrandLink
               href="https://unifysocial.ca"
               name="Unify"
