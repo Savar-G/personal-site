@@ -11,6 +11,12 @@ import { getAllPostsByYear } from "@/lib/posts";
 
 const projects = [
   {
+    name: "Taskline",
+    description:
+      "Obsidian task dashboard that turns agent-extracted action items into one execution queue.",
+    href: "https://github.com/Savar-G/taskline",
+  },
+  {
     name: "Unify - Mobile App",
     description: "Mobile app helping newcomers settle in Canada.",
     href: "https://github.com/UnifyCN/mobile-app",
