@@ -87,21 +87,21 @@
   .desk-page .phone { width: 202px; height: 420px; transform-origin: 50% 22%; transition: transform 260ms var(--ease); }
   .desk-page .phone:hover, .desk-page .phone:focus-visible, .desk-page .phone.active { transform: translateY(30px) rotate(0deg) scale(1.5); z-index: 30; }
   .desk-page .screen { position: absolute; left: 75px; top: 84px; width: 67px; height: 89px; background: #0a1b3d; overflow: hidden;
-            font-family: var(--font-pixelify-sans), monospace; color: #e5e7eb; }
+            font-family: var(--font-pixelify-sans), monospace; line-height: 1.15; color: #e5e7eb; }
   .desk-page .screen .lock, .desk-page .screen .menu { position: absolute; inset: 0; transition: opacity 180ms ease; }
   .desk-page .screen .lock { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-                  background: radial-gradient(circle at 50% 30%, #1e4fa3, #0a1b3d 70%); }
-  .desk-page .screen .lock b { font-size: 16px; font-weight: 400; color: #fff; }
-  .desk-page .screen .lock span { font-size: 5px; color: #9fb7e8; }
-  .desk-page .screen .lock b i { font-style: normal; font-size: 5px; margin-left: 1px; }
-  .desk-page .screen .lock .lcity { font-size: 3.6px; letter-spacing: .4px; color: #6f8fcf; }
+                  background: radial-gradient(circle at 50% 30%, #1e4fa3, #0a1b3d 70%); gap: 3px; }
+  .desk-page .screen .lock b { font-size: 22px; font-weight: 400; line-height: 1; color: #fff; }
+  .desk-page .screen .lock span { font-size: calc(9px * var(--ts, 1)); color: #b8cbf0; }
+  .desk-page .screen .lock b i { font-style: normal; font-size: 8px; margin-left: 1px; }
+  .desk-page .screen .lock .lcity { font-size: calc(7px * var(--ts, 1)); letter-spacing: .5px; color: #8fa9dd; }
   .desk-page .screen .menu { opacity: 0; display: flex; flex-direction: column; }
   .desk-page .phone.active .lock { opacity: 0; }
   .desk-page .phone.active .menu { opacity: 1; }
   .desk-page .menu .bar { display: flex; justify-content: space-between; padding: 1px 3px; font-size: 5px; color: #9fb7e8; }
   .desk-page .menu .head { padding: 1px 3px; background: #2f6bd8; font-size: 7.5px; color: #fff; }
   .desk-page .menu ul { list-style: none; margin: 0; padding: 0; flex: 1; }
-  .desk-page .menu li { padding: 1.8px 3px; font-size: 7.2px; line-height: 1.15; cursor: pointer; }
+  .desk-page .menu li { padding: 1.5px 3px; font-size: 7.2px; line-height: 1.15; cursor: pointer; }
   .desk-page .menu li.on { background: #f59e0b; color: #1c1917; }
 
   /* ---------- projects folder: papers inside, they float up on hover ---------- */
@@ -281,7 +281,7 @@
   .desk-page .screen .call .ans { background: #22c55e; color: #052e16; } .desk-page .screen .call .ign { background: #ef4444; color: #fff; }
   .desk-page .phone.active .screen .call .keys .on { outline: 1px solid #fff; }
   @keyframes desk-blinkt { 50% { opacity: .35; } }
-  .desk-page .missed { font-size: 3.8px !important; color: #fca5a5 !important; }
+  .desk-page .missed { font-size: calc(5.5px * var(--ts, 1)) !important; color: #fca5a5 !important; }
 
   /* Dark desk: give the darkest objects a faint rim so they do not sink into the background. */
   @media (prefers-color-scheme: dark) { .desk-page .food > img { filter: drop-shadow(0 0 1.5px rgba(255,255,255,.2)); } }
