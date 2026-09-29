@@ -1,9 +1,9 @@
 # DESIGN.md - savargupta.com redesign
 
-> Status: direction B (desk of objects) chosen. Desktop homepage is in polish; phone layout M3 chosen.
+> Status: direction B (desk of objects) chosen. The desktop desk is built in Next.js (`app/_components/desk/`, R-59). Phones show the plain list until M3 is built.
 > Scope: homepage first. Inner pages are the current site pages with a new style (R-48); `/writing`, `/projects`, and `/travel` are new.
 > Canvas: Brilliant project "Personal Website", canvas `main`. Desktop: "B3" frame (behind the prototype; resync pending). Phone: "M3" + "M3 · Tap Socials → contact sheet".
-> Prototype (desktop, source of truth for motion): `mockups/desk-prototype/index.html` (gitignored; open the file directly, no server).
+> Prototype (desktop, source of truth for motion): `mockups/desk-prototype/index.html` (gitignored; open the file directly, no server). The site port is `app/_components/desk/` (`markup.ts`, `engine.js`, `desk.css`); keep the two in sync.
 > History and rejected options: `.design/redesign/decisions.md`.
 
 ## Job
@@ -42,14 +42,14 @@ White page. Photographic objects around the greeting. Every object has a level c
 
 ## Behaviour extras (desktop)
 
-- **Load:** greeting fades up; objects land one after another with a small bounce; sugar cubes last.
+- **Load:** greeting fades up; objects land one after another with a small bounce; sugar cubes last. On the site this plays once per browser session; a return to the desk fades in (240 ms).
 - **First visit:** polaroids develop from blank white to colour (stored, so it plays once).
 - **Coffee:** steams for 60 s, then goes cold; hover then shows "gone cold · grab a fresh one with me →".
 - **Drag:** the object lifts (−10px, 1.06×, soft shadow) and settles with a bounce on drop; a "tidy up" button (top right) returns every moved object.
 - **Plain list:** "prefer a list? →" (top left) opens a text page: bio, work, projects, writing, resume, About, bookshelf, Things, travel, contact (with Beli and Book a call).
 - **Phone:** after 20 s without input it rings ("INCOMING CALL · Savar", caption "Savar is calling…"); Answer = coffee chat, Ignore; unanswered = "1 MISSED CALL".
 - **Ghost:** catches persist and each one shows a fun fact (true facts only); sugar count persists.
-- **Pages:** Travel, Writing, and Projects open as pages that the object flies into; "back to the desk" and Esc reverse it.
+- **Pages:** in the prototype, Travel, Writing, and Projects open as pages that the object flies into. On the site they are real routes (`/travel`, `/writing`, `/projects`, `/bookshelf`, and `/about` from the name): the object lifts (1.08×) and the desk fades (240 ms), then the route opens in the same tab. The flights are not on the site yet.
 - **Inner pages (site):** no menu. "← back to the desk" sits top left on every inner page and under each essay. The name in the page header links to `/about`. Light and dark follow the system, with the desk's tokens.
 - **Theme:** light and dark follow the system setting.
 - **Mid-size screens:** captions, bio, and hint grow up to 1.3× when the desk is scaled down.
@@ -71,7 +71,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 
 ## Content facts
 
-- Resume: `~/Documents/Savar_Gupta_Resume.pdf` (Sep 18, 2026) is current. The live `public/Savar_Gupta_Resume.pdf` is older and must be replaced.
+- Resume: `public/Savar_Gupta_Resume.pdf` is the Sep 18, 2026 version (same file as `~/Documents/Savar_Gupta_Resume.pdf`).
 - Socials: linkedin.com/in/savar-gupta, x.com/savar_gupta, github.com/Savar-G, savar.gupta1922@gmail.com, beliapp.co/app/savargupta.
 - Coffee chat: cal.com/savar-gupta/embedr?user=savar-gupta&overlayCalendar=true.
 - Things (`/things`) has no desk object; it is in the plain list only.

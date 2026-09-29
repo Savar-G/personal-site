@@ -1,0 +1,308 @@
+/* The desk homepage, ported from mockups/desk-prototype/index.html.
+ * Every rule is scoped under .desk-page, so nothing leaks into the other
+ * pages after a client-side navigation. Design contract: .design/redesign/DESIGN.md.
+ */
+  /* Colour tokens. Dark mode follows the visitor's system setting. */
+  .desk-page { --ease: cubic-bezier(0.2, 0.8, 0.2, 1); color-scheme: light dark;
+          --bg: #ffffff; --ink: #18181b; --body: #52525b; --muted: #a1a1aa; --cap: #52525b; --halo: #ffffff;
+          --hl-bg: #e3ecfd; --hl-bg-hover: #d3e1fc; --hl-ink: #2f66f0; --toast-bg: #18181b; --toast-ink: #fafafa; --pill: #ffffff; --line: #e4e4e7;
+          --sheet: #ffffff; --puff: #d4d4d8; --steam: #a1a1aa; --ghost: #0c0c10; --ghost-eye: #ffffff; --paper-page: #faf7ef; --rim: transparent; }
+  @media (prefers-color-scheme: dark) {
+    .desk-page { --bg: #121214; --ink: #f4f4f5; --body: #a1a1aa; --muted: #71717a; --cap: #a1a1aa; --halo: #121214;
+            --hl-bg: #1c2b4d; --hl-bg-hover: #26396a; --hl-ink: #86a8ff; --toast-bg: #f4f4f5; --toast-ink: #18181b; --pill: #27272a; --line: #d4d4d8;
+            --sheet: #f4f4f5; --puff: #3f3f46; --steam: #71717a; --ghost: #f4f4f5; --ghost-eye: #121214; --paper-page: #1b1915; --rim: rgba(255,255,255,.09); }
+  }
+  .desk-page { position: fixed; inset: 0; overflow: hidden; background: var(--bg); font-family: var(--font-inter), system-ui, sans-serif; color: var(--ink); }
+
+  .desk-page .stage { position: absolute; left: 50%; top: 50%; width: 1440px; height: 900px; background: var(--bg);
+           transform: translate(-50%, -50%) scale(var(--s, 1)); transform-origin: center; }
+
+  /* ---------- greeting ---------- */
+  .desk-page .greet { position: absolute; z-index: 2; left: 345px; top: 362px; width: 750px; text-align: center; pointer-events: none; }
+  .desk-page .greet h1 { margin: 20px 0 0; font-size: 64px; font-weight: 600; line-height: 1.1; letter-spacing: -2.4px; color: var(--ink); }
+  /* Only the name: blue on a light-blue highlighter. Its halo matches the highlight, not the page. */
+  .desk-page .greet h1 .hl { display: inline-block; margin-left: 2px; padding: 0 12px 2px; border-radius: 12px; background: var(--hl-bg); color: var(--hl-ink);
+                  text-shadow: 3px 0 var(--hl-bg), -3px 0 var(--hl-bg), 0 3px var(--hl-bg), 0 -3px var(--hl-bg), 2px 2px var(--hl-bg), -2px 2px var(--hl-bg), 2px -2px var(--hl-bg), -2px -2px var(--hl-bg); }
+  /* The name opens About. Same lift as an object, only smaller. */
+  .desk-page .greet h1 .hl { pointer-events: auto; text-decoration: none; cursor: pointer; outline: none;
+                  transition: background-color 160ms ease, text-shadow 160ms ease, transform 180ms var(--ease); }
+  .desk-page .greet h1 .hl:hover, .desk-page .greet h1 .hl:focus-visible { --hl-bg: var(--hl-bg-hover); transform: translateY(-2px) rotate(-2deg); }
+  .desk-page .greet h1 .hl:focus-visible { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--hl-ink); }
+  /* --ts grows small text a little when the desk is scaled down on mid-size screens. */
+  .desk-page .greet p { margin: 14px auto 0; max-width: calc(500px * var(--ts, 1)); font-size: calc(17px * var(--ts, 1)); line-height: 1.5; color: var(--body); }
+  .desk-page .greet .cta { margin-top: 18px; display: inline-flex; align-items: center; gap: 6px; font-size: calc(14px * var(--ts, 1)); color: var(--muted); }
+  .desk-page .greet .cta svg { width: 14px; height: 14px; }
+  /* Hint hand taps three times, rests, repeats. Stops once the visitor has found an object. */
+  .desk-page .greet .tap { position: relative; display: inline-flex; }
+  .desk-page .greet .tap svg { animation: desk-tap 2.6s ease-in-out infinite; transform-origin: 40% 90%; }
+  .desk-page .greet .tap i { position: absolute; left: 1px; top: -4px; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--muted);
+                  opacity: 0; animation: desk-ripple 2.6s ease-out infinite; }
+  .desk-page .greet .cta.learned svg, .desk-page .greet .cta.learned .tap i { animation: none; }
+  @keyframes desk-tap { 0%, 48%, 100% { transform: translateY(0) scale(1); }
+                   6%, 22%, 38% { transform: translateY(2px) scale(.9); } 12%, 28%, 44% { transform: translateY(-1px) scale(1); } }
+  @keyframes desk-ripple { 0%, 5%, 21%, 37%, 100% { opacity: 0; transform: scale(.2); }
+                      7%, 23%, 39% { opacity: .8; transform: scale(.4); } 15%, 31%, 47% { opacity: 0; transform: scale(1.8); } }
+
+  /* ---------- objects ---------- */
+  .desk-page .obj { position: absolute; z-index: 3; cursor: pointer; user-select: none; -webkit-user-drag: none; touch-action: none;
+         transform: rotate(var(--r, 0deg)); transition: transform 180ms var(--ease); outline: none; }
+  .desk-page .obj.blend { mix-blend-mode: multiply; }
+  .desk-page .obj img { display: block; width: 100%; height: 100%; pointer-events: none; }
+  .desk-page .obj:hover, .desk-page .obj:focus-visible { transform: translateY(-6px) rotate(calc(var(--r, 0deg) + 2deg)) scale(1.03); z-index: 20; }
+  .desk-page .obj.dragging { transition: none; cursor: grabbing; z-index: 40 !important; }
+
+  /* Every object has a caption under it, like a file name on a desktop. It stays level. */
+  .desk-page .cap { position: absolute; left: 50%; top: var(--cy, 100%); transform: translateX(-50%) rotate(calc(var(--r, 0deg) * -1));
+         font-size: calc(12px * var(--ts, 1)); font-weight: 500; color: var(--cap); white-space: nowrap; pointer-events: none; transition: color 140ms ease; }
+  .desk-page .obj:hover .cap, .desk-page .obj:focus-visible .cap, .desk-page .obj.active .cap, .desk-page .obj.open .cap { color: var(--ink); }
+
+  /* ---------- notebook (opens on hover) ---------- */
+  /* The box is the closed book; the left page swings out past its left edge. */
+  .desk-page .notebook { width: 165px; height: 244px; }
+  .desk-page .notebook .hit { position: absolute; left: 0; top: 0; width: 165px; height: 244px; }
+  .desk-page .notebook.open .hit { left: -156px; width: 321px; }
+  .desk-page .notebook .book { position: absolute; left: -156px; top: 0; width: 321px; height: 244px; perspective: 1300px; pointer-events: none; }
+  .desk-page .notebook .page-r { position: absolute; left: 156px; top: 0; width: 165px; height: 244px;
+                      background: url(/desk/nb_right.webp) center / 100% 100%; box-shadow: 0 8px 22px rgba(0,0,0,.14); border-radius: 2px 6px 6px 2px; }
+  .desk-page .notebook .cover { position: absolute; left: 156px; top: 0; width: 165px; height: 244px; transform-origin: left center;
+                     transform-style: preserve-3d; transition: transform 720ms cubic-bezier(0.35, 0.7, 0.2, 1); }
+  .desk-page .notebook .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background-size: 100% 100%; }
+  .desk-page .notebook .front { background-image: url(/desk/nb_cover.webp); border-radius: 3px 10px 10px 3px; box-shadow: 0 0 0 1px var(--rim), 0 10px 26px rgba(0,0,0,.22); }
+  .desk-page .notebook .back { background-image: url(/desk/nb_left.webp); transform: rotateY(180deg); border-radius: 6px 2px 2px 6px; box-shadow: 0 8px 22px rgba(0,0,0,.14); }
+  .desk-page .notebook.open .cover { transform: rotateY(-178deg); }
+  .desk-page .notebook.open, .desk-page .notebook.open:hover, .desk-page .notebook.open:focus-visible { transform: rotate(var(--r)) scale(1.12); z-index: 20; }
+  /* What's written on the left page once the cover is open: the essays. */
+  .desk-page .notebook .pg { position: absolute; left: -148px; top: 14px; width: 132px; opacity: 0; pointer-events: none; transition: opacity 120ms ease; }
+  .desk-page .notebook.open .pg { opacity: 1; pointer-events: auto; transition: opacity 260ms ease 420ms; }
+  .desk-page .pg h4 { margin: 0; font-family: var(--font-reenie-beanie), cursive; font-weight: 400; font-size: 24px; line-height: 1; color: #27272a; }
+  .desk-page .pg .count { margin: 2px 0 10px; font-size: 8.5px; color: #a1a1aa; }
+  .desk-page .pg a { display: block; padding: 6px 6px 7px; margin: 0 -6px; border-radius: 6px; color: inherit; text-decoration: none; transition: background 140ms ease; }
+  .desk-page .pg a:hover { background: rgba(47, 102, 240, .08); }
+  .desk-page .pg .date { font-size: 7.5px; letter-spacing: .6px; color: #a1a1aa; }
+  .desk-page .pg .t { margin-top: 2px; font-size: 12px; font-weight: 600; line-height: 1.25; letter-spacing: -.2px; color: #18181b; }
+  .desk-page .pg .ex { margin-top: 4px; font-size: 8.5px; line-height: 1.45; color: #52525b; }
+  .desk-page .pg .more { margin-top: 5px; font-size: 8.5px; font-weight: 500; color: #2f66f0; }
+  .desk-page .notebook:hover { transform: rotate(var(--r)); } /* the flip is the hover; no extra lift */
+  /* ---------- RAZR (live contacts) ---------- */
+  .desk-page .phone { width: 202px; height: 420px; transform-origin: 50% 22%; transition: transform 260ms var(--ease); }
+  .desk-page .phone:hover, .desk-page .phone:focus-visible, .desk-page .phone.active { transform: translateY(30px) rotate(0deg) scale(1.5); z-index: 30; }
+  .desk-page .screen { position: absolute; left: 75px; top: 84px; width: 67px; height: 89px; background: #0a1b3d; overflow: hidden;
+            font-family: var(--font-pixelify-sans), monospace; color: #e5e7eb; }
+  .desk-page .screen .lock, .desk-page .screen .menu { position: absolute; inset: 0; transition: opacity 180ms ease; }
+  .desk-page .screen .lock { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+                  background: radial-gradient(circle at 50% 30%, #1e4fa3, #0a1b3d 70%); }
+  .desk-page .screen .lock b { font-size: 16px; font-weight: 400; color: #fff; }
+  .desk-page .screen .lock span { font-size: 5px; color: #9fb7e8; }
+  .desk-page .screen .lock b i { font-style: normal; font-size: 5px; margin-left: 1px; }
+  .desk-page .screen .lock .lcity { font-size: 3.6px; letter-spacing: .4px; color: #6f8fcf; }
+  .desk-page .screen .menu { opacity: 0; display: flex; flex-direction: column; }
+  .desk-page .phone.active .lock { opacity: 0; }
+  .desk-page .phone.active .menu { opacity: 1; }
+  .desk-page .menu .bar { display: flex; justify-content: space-between; padding: 1px 3px; font-size: 5px; color: #9fb7e8; }
+  .desk-page .menu .head { padding: 1px 3px; background: #2f6bd8; font-size: 7.5px; color: #fff; }
+  .desk-page .menu ul { list-style: none; margin: 0; padding: 0; flex: 1; }
+  .desk-page .menu li { padding: 1.8px 3px; font-size: 7.2px; line-height: 1.15; cursor: pointer; }
+  .desk-page .menu li.on { background: #f59e0b; color: #1c1917; }
+
+  /* ---------- projects folder: papers inside, they float up on hover ---------- */
+  /* The folder photo is drawn twice: whole at the back, and clipped to its front panel (top edge at 23.1%) in front of the papers. */
+  .desk-page .folder .fold { position: relative; width: 230px; height: 197px; }
+  .desk-page .folder .fold > img { position: absolute; inset: 0; }
+  .desk-page .folder .front { clip-path: inset(23.1% 0 0 0); }
+  .desk-page .folder .doc { position: absolute; left: var(--l); top: var(--t); rotate: var(--dr); translate: 0 0;
+                 transition: translate 460ms cubic-bezier(0.2, 0.9, 0.25, 1.25) var(--d), rotate 460ms cubic-bezier(0.2, 0.9, 0.25, 1.25) var(--d); }
+  /* Work artifacts instead of labelled papers: a blueprint, the circuit board, an app screen, a sticky note. */
+  .desk-page .folder .sheet { width: 112px; height: 118px; padding: 12px 10px; background: var(--sheet); border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,.16), 0 4px 10px rgba(0,0,0,.06); }
+  .desk-page .folder .sheet i { display: block; height: 3px; margin-bottom: 6px; width: var(--w, 82%); border-radius: 2px; background: var(--line); }
+  .desk-page .folder:hover .doc, .desk-page .folder:focus-visible .doc { translate: var(--ux) var(--up); rotate: var(--dr2); animation: desk-bob 2.6s ease-in-out calc(var(--d) + 480ms) infinite; }
+  @keyframes desk-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+  /* ---------- travel: three polaroids that fan out ---------- */
+  .desk-page .pola { position: absolute; left: var(--x); top: var(--y); width: 140px; padding: 10px 10px 0; background: #fdfdfb;
+          box-shadow: 0 1px 1px rgba(0,0,0,.08), 0 6px 14px rgba(0,0,0,.12); rotate: var(--pr); translate: 0 0;
+          transition: translate 380ms cubic-bezier(0.2, 0.9, 0.25, 1.2), rotate 380ms cubic-bezier(0.2, 0.9, 0.25, 1.2); }
+  .desk-page .pola .ph { width: 120px; height: 120px; background: center / cover; box-shadow: inset 0 0 0 1px rgba(0,0,0,.05); }
+  .desk-page .pola span { display: block; height: 34px; line-height: 36px; padding-left: 3px; font-family: var(--font-reenie-beanie), cursive; font-size: 21px; color: #27272a; }
+  .desk-page .travel:hover .pola, .desk-page .travel:focus-visible .pola { translate: var(--hx) var(--hy); rotate: var(--hr); }
+
+  /* ---------- bookshelf: the three books separate ---------- */
+  .desk-page .books .bk { position: absolute; width: 104px; height: 156px; rotate: var(--br); translate: 0 0;
+        transition: translate 360ms cubic-bezier(0.2, 0.9, 0.25, 1.2), rotate 360ms cubic-bezier(0.2, 0.9, 0.25, 1.2); }
+  .desk-page .books:hover .bk, .desk-page .books:focus-visible .bk { translate: var(--hx) var(--hy); rotate: var(--hr); }
+
+  /* ---------- food: steam rises while you look ---------- */
+  .desk-page .steam { position: absolute; left: 108px; top: 34px; width: 84px; height: 90px; pointer-events: none; }
+  .desk-page .steam svg { position: absolute; bottom: 0; width: 26px; height: 80px; opacity: 0; filter: blur(3.5px); }
+  .desk-page .food:hover .steam svg, .desk-page .food:focus-visible .steam svg { animation: desk-steam 2.2s ease-out infinite; }
+  .desk-page .food:hover .steam span:nth-child(2) svg, .desk-page .food:focus-visible .steam span:nth-child(2) svg { animation-delay: .6s; }
+  .desk-page .food:hover .steam span:nth-child(3) svg, .desk-page .food:focus-visible .steam span:nth-child(3) svg { animation-delay: 1.2s; }
+  @keyframes desk-steam { 0% { opacity: 0; transform: translateY(24px) scaleX(.8); } 30% { opacity: .75; }
+                     100% { opacity: 0; transform: translateY(-46px) scaleX(1.25); } }
+
+  /* ---------- resume sheet ---------- */
+  .desk-page .paper .sheet { position: relative; width: 100%; height: 100%; overflow: hidden; background: #fdfdfb; border-radius: 1px;
+                  box-shadow: 0 1px 1px rgba(0,0,0,.07), 0 6px 14px rgba(0,0,0,.10), 0 20px 36px -12px rgba(0,0,0,.22); }
+  .desk-page .paper .sheet::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+                         background: linear-gradient(118deg, rgba(255,255,255,0) 52%, rgba(0,0,0,.035) 78%, rgba(255,255,255,.35) 100%); }
+  .desk-page .paper:hover .sheet, .desk-page .paper:focus-visible .sheet { box-shadow: 0 1px 1px rgba(0,0,0,.07), 0 10px 20px rgba(0,0,0,.12), 0 30px 50px -14px rgba(0,0,0,.26); }
+
+  /* ---------- hyperspace to the resume ---------- */
+  /* A black iris closes around the paper, then opens again on the way back. */
+  @property --hole { syntax: '<length>'; inherits: false; initial-value: 2000px; }
+  .desk-page #iris { position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0; --hole: 2000px;
+          background: radial-gradient(circle at var(--cx, 50%) var(--cy, 50%), transparent var(--hole), #000 calc(var(--hole) + 380px));
+          transition: --hole 700ms cubic-bezier(0.3, 0, 0.3, 1), opacity 250ms ease 450ms; }
+  .desk-page #iris.closed { --hole: -400px; opacity: 1; transition: --hole 650ms cubic-bezier(0.5, 0, 0.6, 0.4), opacity 120ms ease; }
+  .desk-page #stars { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 91; pointer-events: none; }
+  .desk-page #flyer { position: fixed; z-index: 92; display: none; transform-origin: center; will-change: transform; background: #fff;
+           box-shadow: 0 30px 120px rgba(90, 130, 255, .18); }
+  .desk-page #viewer { position: fixed; inset: 0; z-index: 95; background: #000; overflow: auto; opacity: 0; visibility: hidden; transition: opacity 220ms ease; }
+  .desk-page #viewer.show { opacity: 1; visibility: visible; }
+  .desk-page .vbar { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;
+          background: linear-gradient(#000 60%, rgba(0,0,0,0)); }
+  .desk-page .vbar button, .desk-page .vbar a { font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 15px; color: #e4e4e7; background: transparent;
+                          border: 1px solid #3f3f46; border-radius: 999px; padding: 8px 14px; cursor: pointer; text-decoration: none; }
+  .desk-page .vbar button:hover, .desk-page .vbar a:hover { border-color: #a1a1aa; color: #fff; }
+  .desk-page #page { display: block; width: min(860px, 92vw); height: auto; margin: 4px auto 96px; background: #fff; box-shadow: 0 30px 120px rgba(90, 130, 255, .14); }
+
+  /* ---------- black coffee + sugar cubes you can drop in ---------- */
+  .desk-page .liquid { position: absolute; left: 68px; top: 61px; width: 106px; height: 106px; border-radius: 50%; overflow: hidden; pointer-events: none; }
+  .desk-page .ripple { position: absolute; width: 50px; height: 50px; margin: -25px 0 0 -25px; border-radius: 50%; border: 3px solid rgba(255, 238, 215, .9); }
+  .desk-page .cube { position: absolute; width: 44px; height: 39px; cursor: grab; touch-action: none; user-select: none;
+          filter: drop-shadow(0 3px 3px rgba(0,0,0,.2)); z-index: 15; rotate: var(--cr, 0deg); transition: scale 140ms var(--ease); }
+  .desk-page .cube img { display: block; width: 100%; height: 100%; pointer-events: none; }
+  .desk-page .cube:hover { scale: 1.08; }
+  .desk-page .cube.dragging { cursor: grabbing; z-index: 60; transition: none; scale: 1.12; }
+  /* Cartoon splash: fat drops with a highlight and an ink outline, a splat, and a "plop!" */
+  .desk-page .drop { position: absolute; pointer-events: none; z-index: 61; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+          background: radial-gradient(circle at 36% 30%, #c89a6e 0 16%, #4a2a16 18% 100%); box-shadow: 0 0 0 2px #1a0d06; }
+  .desk-page .splat { position: absolute; pointer-events: none; z-index: 60; overflow: visible; }
+  .desk-page .plop { position: absolute; pointer-events: none; z-index: 62; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 17px;
+          color: var(--ink); white-space: nowrap; }
+  .desk-page .cubehint { position: absolute; left: 668px; top: 800px; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 13px; color: var(--body);
+              opacity: 0; transition: opacity 160ms ease; pointer-events: none; }
+  .desk-page .cubehint.show { opacity: 1; }
+
+  /* ---------- the shy blob (desktop easter egg) ---------- */
+  /* The blob is drawn behind the headline. A white halo around each letter (invisible on the white page) separates
+     the black letters from the black blob, so the letters themselves hide it. The window is clipped at the baseline. */
+  .desk-page .greet h1 { position: relative; z-index: 1;
+              text-shadow: 3px 0 var(--halo), -3px 0 var(--halo), 0 3px var(--halo), 0 -3px var(--halo), 2px 2px var(--halo), -2px 2px var(--halo), 2px -2px var(--halo), -2px -2px var(--halo); }
+  /* Jerry lives on the desk under the objects (z 1), so every object, and the headline, can hide him. */
+  .desk-page #jerry { position: absolute; left: 0; top: 0; width: 40px; height: 40px; z-index: 1; will-change: transform; cursor: default; visibility: hidden; }
+  .desk-page #jerry .face { width: 100%; height: 100%; transition: transform 160ms var(--ease); }
+  .desk-page #jerry.flip .face { transform: scaleX(-1); }
+  .desk-page #jerry .body { width: 100%; height: 100%; transform-origin: 50% 100%; }
+  .desk-page #jerry svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .desk-page #jerry .eyes, .desk-page #jerry .lids { transform-box: fill-box; transform-origin: center; }
+  .desk-page #jerry .eyes { transition: transform 200ms var(--ease); }
+  .desk-page #jerry .dizzy { display: none; transform-box: fill-box; transform-origin: center; }
+  .desk-page #jerry.caught .dizzy { display: inline; animation: desk-spin .5s linear infinite; }
+  .desk-page #jerry.caught .eyes { display: none; }
+  .desk-page #jerry.stunned .lids { transform: scale(1.25); }
+  @keyframes desk-spin { to { transform: rotate(360deg); } }
+  .desk-page .hp { position: absolute; z-index: 8; display: flex; align-items: center; gap: 3px; padding: 2px 7px 2px 5px; border-radius: 999px; background: var(--pill);
+        box-shadow: 0 1px 4px rgba(0,0,0,.18); font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 13px; color: var(--ink); pointer-events: none; }
+  .desk-page .hp svg { width: 11px; height: 11px; }
+  .desk-page .flash { position: absolute; z-index: 8; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 3px solid #fde68a; pointer-events: none; }
+  .desk-page .bang { position: absolute; z-index: 8; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 18px; color: var(--ink); pointer-events: none; }
+  .desk-page .tally { position: fixed; left: 20px; bottom: 18px; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 13px; color: var(--body);
+           opacity: 0; transition: opacity 200ms ease; }
+  .desk-page .tally.show { opacity: 1; }
+  .desk-page .puff { position: absolute; z-index: 1; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--puff); pointer-events: none; }
+  .desk-page .whisper { position: absolute; z-index: 7; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 14px; color: var(--body); pointer-events: none; }
+
+  /* ---------- chrome ---------- */
+  .desk-page .hint { position: fixed; right: 24px; bottom: 20px; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 14px;
+          color: var(--body); opacity: 0; transform: translateY(6px); transition: opacity 160ms ease, transform 160ms var(--ease); }
+  .desk-page .hint.show { opacity: 1; transform: none; }
+  .desk-page .hint kbd { font: inherit; border: 1.5px solid var(--body); border-radius: 4px; padding: 0 5px; }
+  .desk-page .toast { position: fixed; z-index: 99; left: 50%; bottom: 24px; transform: translate(-50%, 12px); background: var(--toast-bg); color: var(--toast-ink);
+           font-size: 14px; padding: 10px 16px; border-radius: 999px; opacity: 0; transition: opacity 160ms ease, transform 160ms var(--ease); pointer-events: none; }
+  .desk-page .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  .desk-page .wisp { stroke: var(--steam); fill: none; }
+  .desk-page #jerry .gb { fill: var(--ghost); } .desk-page #jerry .ge { fill: var(--ghost-eye); } .desk-page #jerry .dizzy { stroke: var(--ghost-eye); }
+
+  /* ---------- polaroids develop on the first visit ---------- */
+  .desk-page .travel.developing .ph { animation: desk-develop 4.2s cubic-bezier(0.3, 0, 0.3, 1) var(--dd, 0ms) both; }
+  @keyframes desk-develop { 0% { filter: brightness(2.2) saturate(0) contrast(.25); } 40% { filter: brightness(1.45) saturate(.25) contrast(.55) sepia(.35); }
+                       75% { filter: brightness(1.08) saturate(.8) contrast(.9) sepia(.15); } 100% { filter: none; } }
+
+  /* ---------- coffee: steam for the first minute, then it goes cold ---------- */
+  .desk-page .steam.cup { left: 88px; top: 20px; width: 70px; }
+  .desk-page .steam.cup svg { animation: desk-steam 2.4s ease-out infinite; }
+  .desk-page .steam.cup span:nth-child(2) svg { animation-delay: .8s; } .desk-page .steam.cup span:nth-child(3) svg { animation-delay: 1.6s; }
+  .desk-page #coffee.cold .steam.cup { opacity: 0; transition: opacity 1.2s ease; }
+  .desk-page .coldnote { position: absolute; left: 50%; top: calc(var(--cy) + 18px); transform: translateX(-50%) rotate(calc(var(--r) * -1)); white-space: nowrap;
+              font-size: calc(11px * var(--ts, 1)); color: var(--hl-ink); opacity: 0; transition: opacity 160ms ease; pointer-events: none; }
+  .desk-page #coffee.cold:hover .coldnote, .desk-page #coffee.cold:focus-visible .coldnote { opacity: 1; }
+
+  /* ---------- picking things up ---------- */
+  .desk-page .obj.dragging { transform: rotate(var(--r, 0deg)) translateY(-10px) scale(1.06); filter: drop-shadow(0 22px 22px rgba(0,0,0,.22)); }
+  .desk-page .obj { transition: transform 180ms var(--ease), filter 180ms var(--ease); }
+
+  /* ---------- corners: plain list, tidy up, facts ---------- */
+  .desk-page .corner { position: fixed; z-index: 70; top: 16px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px;
+            font: 500 13px var(--font-inter), sans-serif; color: var(--body); background: transparent; border: 0; cursor: pointer; text-decoration: none; }
+  .desk-page .corner:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 6%, transparent); }
+  .desk-page #listlink { left: 16px; }
+  .desk-page #tidy { right: 16px; opacity: 0; transform: translateY(-6px); pointer-events: none; transition: opacity 180ms ease, transform 180ms var(--ease); }
+  .desk-page #tidy.show { opacity: 1; transform: none; pointer-events: auto; }
+  .desk-page #tidy svg { width: 14px; height: 14px; }
+  .desk-page .fact { position: fixed; z-index: 70; left: 20px; bottom: 44px; max-width: 280px; padding: 12px 14px; border-radius: 12px; background: var(--pill);
+          box-shadow: 0 8px 28px rgba(0,0,0,.16); font-size: 13px; line-height: 1.45; color: var(--ink); opacity: 0; transform: translateY(8px);
+          transition: opacity 220ms ease, transform 220ms var(--ease); pointer-events: none; }
+  .desk-page .fact.show { opacity: 1; transform: none; }
+  .desk-page .fact b { display: block; margin-bottom: 3px; font-family: var(--font-courier-prime), monospace; font-size: 12px; color: var(--hl-ink); }
+
+  /* ---------- plain list for skimmers ---------- */
+  .desk-page #list { position: fixed; inset: 0; z-index: 85; overflow: auto; background: var(--bg); opacity: 0; visibility: hidden; transition: opacity 200ms ease; }
+  .desk-page #list.show { opacity: 1; visibility: visible; }
+  .desk-page #list .col { max-width: 640px; margin: 0 auto; padding: 72px 24px 96px; }
+  .desk-page #list h1 { margin: 0; font-size: 32px; font-weight: 600; letter-spacing: -.8px; }
+  .desk-page #list .lede { margin: 10px 0 0; font-size: 16px; line-height: 1.55; color: var(--body); }
+  .desk-page #list h2 { margin: 40px 0 10px; font-size: 12px; font-weight: 500; letter-spacing: .6px; text-transform: uppercase; color: var(--muted); }
+  .desk-page #list ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); }
+  .desk-page #list li { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; font-size: 15px; border-bottom: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); }
+  .desk-page #list li span { color: var(--body); } .desk-page #list li em { font-style: normal; color: var(--muted); white-space: nowrap; font-size: 13px; }
+  .desk-page #list a { color: var(--ink); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--ink) 25%, transparent); text-underline-offset: 3px; }
+  .desk-page #list a:hover { text-decoration-color: var(--ink); }
+  .desk-page #list .close { position: fixed; top: 16px; left: 16px; }
+
+  /* ---------- the RAZR rings when you have been idle ---------- */
+  .desk-page .screen .call { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+                  background: radial-gradient(circle at 50% 35%, #1e7a4a, #0a1b3d 75%); }
+  .desk-page .phone.ringing .screen .call { display: flex; }
+  .desk-page .screen .call small { font-size: 4.5px; letter-spacing: .5px; color: #b7f5cf; animation: desk-blinkt 1s steps(2) infinite; }
+  .desk-page .screen .call b { font-size: 10px; font-weight: 400; color: #fff; }
+  .desk-page .screen .call .keys { display: flex; gap: 4px; margin-top: 4px; }
+  .desk-page .screen .call .keys span { padding: 1px 3px; border-radius: 2px; font-size: 5px; cursor: pointer; }
+  .desk-page .screen .call .ans { background: #22c55e; color: #052e16; } .desk-page .screen .call .ign { background: #ef4444; color: #fff; }
+  .desk-page .phone.active .screen .call .keys .on { outline: 1px solid #fff; }
+  @keyframes desk-blinkt { 50% { opacity: .35; } }
+  .desk-page .missed { font-size: 3.8px !important; color: #fca5a5 !important; }
+
+  /* Dark desk: give the darkest objects a faint rim so they do not sink into the background. */
+  @media (prefers-color-scheme: dark) { .desk-page .food > img { filter: drop-shadow(0 0 1.5px rgba(255,255,255,.2)); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .desk-page .greet h1 .hl:hover, .desk-page .greet h1 .hl:focus-visible { transform: none; }
+    .desk-page .obj, .desk-page .phone, .desk-page .notebook .cover, .desk-page .hint, .desk-page .toast, .desk-page #iris, .desk-page .folder .doc, .desk-page .pola, .desk-page .bk, .desk-page .notebook .pg { transition: none !important; }
+    .desk-page .folder:hover .doc, .desk-page .food:hover .steam svg, .desk-page .greet .tap svg, .desk-page .greet .tap i, .desk-page .steam.cup svg, .desk-page .travel.developing .ph, .desk-page .screen .call small { animation: none; }
+    .desk-page .obj:hover, .desk-page .obj:focus-visible { transform: rotate(var(--r, 0deg)); }
+  }
+
+/* ---------- port: Next.js ---------- */
+/* The stage is scaled in script (fit); keep it hidden until then so it never flashes at 1440 px. */
+.desk-page .stage:not(.ready) { visibility: hidden; }
+
+/* Phones: the desk needs about 1000 px of width. Until the pocket desk (M3) is built,
+   small screens get the plain list as the page. */
+@media (max-width: 767px) {
+  .desk-page { position: static; overflow: visible; min-height: 100dvh; }
+  .desk-page .stage, .desk-page #iris, .desk-page #stars, .desk-page #flyer, .desk-page #viewer, .desk-page .hint,
+  .desk-page #listlink, .desk-page #tidy, .desk-page .fact, .desk-page .tally, .desk-page #list .close { display: none; }
+  .desk-page #list { position: static; opacity: 1; visibility: visible; overflow: visible; }
+}
+.desk-page #list h2 a { color: inherit; }
