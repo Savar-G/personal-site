@@ -27,7 +27,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 
 | Object | Caption | Opens | Hover |
 |---|---|---|---|
-| Three CSS polaroids (Istanbul, Cappadocia, Bali), handwritten names | Travel | `/travel` | polaroids fan out |
+| Three CSS polaroids with Savar's photos (sushi, Cappadocia balloons, Indonesian sea cliffs), handwritten japan / turkey / indonesia | Travel | `/travel` | polaroids fan out |
 | Closed black notebook (165×244) | Writing | `/writing`, then `/<essay-slug>` | cover flips open in 3D into empty space; pen on the page |
 | Blue folder with three blank papers | Projects | `/projects` (HealthOS there is the way to Health) | papers rise, fan out, and float |
 | Silver Motorola RAZR V3, own right-hand column | Socials | contacts | lifts, straightens, scales 1.5×; lock screen wakes to Contacts; ↑/↓ + Enter or click a row (LinkedIn, X, GitHub, Email, Beli, Book a call); hint bottom-right |
@@ -87,7 +87,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 
 ## Open
 
-- Trip photos and object photos are AI stand-ins; Savar's own trip photos replace them before launch.
+- Object photos are AI stand-ins. (Trip photos are Savar's own since R-58.)
 - Desktop canvas frame is behind the prototype; resync before build.
 
 ## Exclusions
