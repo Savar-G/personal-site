@@ -11,6 +11,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/`, lastModified: now, priority: 1 },
     { url: `${BASE_URL}/about`, lastModified: now, priority: 0.8 },
     { url: `${BASE_URL}/things`, lastModified: now, priority: 0.6 },
+    { url: `${BASE_URL}/writing`, lastModified: now, priority: 0.8 },
+    { url: `${BASE_URL}/projects`, lastModified: now, priority: 0.8 },
+    { url: `${BASE_URL}/travel`, lastModified: now, priority: 0.6 },
     ...posts.map((post) => ({
       url: `${BASE_URL}/${post.slug}`,
       lastModified: post.date ? new Date(`${post.date}T00:00:00Z`) : now,

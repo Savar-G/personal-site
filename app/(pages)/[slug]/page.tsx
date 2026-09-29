@@ -55,7 +55,7 @@ export default async function PostPage({ params }: { params: Params }) {
           >
             ←
           </span>
-          <span>Back to essays</span>
+          <span>back to the desk</span>
         </Link>
       </div>
     </article>

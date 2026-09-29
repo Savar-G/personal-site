@@ -1,7 +1,7 @@
 # DESIGN.md - savargupta.com redesign
 
 > Status: direction B (desk of objects) chosen. Desktop homepage is in polish; phone layout M3 chosen.
-> Scope: homepage first. Other pages (writing, projects, travel, bookshelf) follow.
+> Scope: homepage first. Inner pages are the current site pages with a new style (R-48); `/writing`, `/projects`, and `/travel` are new.
 > Canvas: Brilliant project "Personal Website", canvas `main`. Desktop: "B3" frame (behind the prototype; resync pending). Phone: "M3" + "M3 · Tap Socials → contact sheet".
 > Prototype (desktop, source of truth for motion): `mockups/desk-prototype/index.html` (gitignored; open the file directly, no server).
 > History and rejected options: `.design/redesign/decisions.md`.
@@ -17,6 +17,7 @@
 ## Greeting (centre of the desk)
 
 - "Hi, I'm Savar." Inter 64px, 600, tracking -2.4px, `#18181B`; "Savar." in `#2F66F0` on a `#E3ECFD` highlight (12px radius).
+- "Savar." is a link to `/about`. Hover and focus: the highlight darkens to `#D3E1FC` and the name lifts 2px and turns -2°.
 - "Studying Mechatronics Engineering and Business @ SFU. Building at the intersection of hardware, software, and AI." Inter 17px, `#52525B`, max 500px.
 - "Click anything to learn more about me." Inter 14px, `#A1A1AA`, with a hand icon that taps three times (fingertip ripple), rests, and stops after the first object hover. Phone: "Tap anything…".
 
@@ -27,13 +28,13 @@ White page. Photographic objects around the greeting. Every object has a level c
 | Object | Caption | Opens | Hover |
 |---|---|---|---|
 | Three CSS polaroids (Istanbul, Cappadocia, Bali), handwritten names | Travel | `/travel` | polaroids fan out |
-| Closed black notebook (165×244) | Writing | `/writing` | cover flips open in 3D into empty space; pen on the page |
-| Blue folder with four papers (Taskline, Unify, HealthOS, Wearable) | Projects | `/projects` | papers rise, fan out, and float |
+| Closed black notebook (165×244) | Writing | `/writing`, then `/<essay-slug>` | cover flips open in 3D into empty space; pen on the page |
+| Blue folder with three blank papers | Projects | `/projects` (HealthOS there is the way to Health) | papers rise, fan out, and float |
 | Silver Motorola RAZR V3, own right-hand column | Socials | contacts | lifts, straightens, scales 1.5×; lock screen wakes to Contacts; ↑/↓ + Enter or click a row (LinkedIn, X, GitHub, Email, Beli, Book a call); hint bottom-right |
 | Paper render of the resume | Resume | resume page | lift; click plays the hyperspace zoom |
 | Three book covers | Bookshelf | `/bookshelf` | books fan out |
-| Black coffee on a saucer with spoon, three sugar cubes beside it | Coffee chat | Cal.com | lift; drag a cube into the cup: cartoon splash (outlined drops, splat, "plop!", ripples, cup squash-and-stretch); caption counts sugars; cubes respawn; first cube toasts "I take mine black, but you do you." |
-| Ramen | Food | Beli | steam rises |
+| Black coffee on a saucer with spoon, three sugar cubes beside it | Coffee chat | cal.com/savar-gupta/embedr | lift; drag a cube into the cup: cartoon splash (outlined drops, splat, "plop!", ripples, cup squash-and-stretch); caption counts sugars; cubes respawn; first cube toasts "I take mine black, but you do you." |
+| Ramen | Food | beliapp.co/app/savargupta | steam rises |
 
 **Default hover:** translateY -6px, rotate +2°, scale 1.03, 180 ms `cubic-bezier(0.2, 0.8, 0.2, 1)`.
 
@@ -45,10 +46,11 @@ White page. Photographic objects around the greeting. Every object has a level c
 - **First visit:** polaroids develop from blank white to colour (stored, so it plays once).
 - **Coffee:** steams for 60 s, then goes cold; hover then shows "gone cold · grab a fresh one with me →".
 - **Drag:** the object lifts (−10px, 1.06×, soft shadow) and settles with a bounce on drop; a "tidy up" button (top right) returns every moved object.
-- **Plain list:** "prefer a list? →" (top left) opens a text page: bio, work, projects, writing, resume, bookshelf, travel, contact.
+- **Plain list:** "prefer a list? →" (top left) opens a text page: bio, work, projects, writing, resume, About, bookshelf, Things, travel, contact (with Beli and Book a call).
 - **Phone:** after 20 s without input it rings ("INCOMING CALL · Savar", caption "Savar is calling…"); Answer = coffee chat, Ignore; unanswered = "1 MISSED CALL".
 - **Ghost:** catches persist and each one shows a fun fact (true facts only); sugar count persists.
 - **Pages:** Travel, Writing, and Projects open as pages that the object flies into; "back to the desk" and Esc reverse it.
+- **Inner pages (site):** no menu. "← back to the desk" sits top left on every inner page and under each essay. The name in the page header links to `/about`. Light and dark follow the system, with the desk's tokens.
 - **Theme:** light and dark follow the system setting.
 - **Mid-size screens:** captions, bio, and hint grow up to 1.3× when the desk is scaled down.
 - **Assets:** WebP, about 0.9 MB total; the full resume loads on first approach to the paper.
@@ -70,8 +72,12 @@ White page. Photographic objects around the greeting. Every object has a level c
 ## Content facts
 
 - Resume: `~/Documents/Savar_Gupta_Resume.pdf` (Sep 18, 2026) is current. The live `public/Savar_Gupta_Resume.pdf` is older and must be replaced.
-- Socials: linkedin.com/in/savar-gupta, x.com/savar_gupta, github.com/Savar-G, savar.gupta1922@gmail.com.
-- Trips: Turkey 2026 (Istanbul, Cappadocia, Antalya); Bali, Aug 2026.
+- Socials: linkedin.com/in/savar-gupta, x.com/savar_gupta, github.com/Savar-G, savar.gupta1922@gmail.com, beliapp.co/app/savargupta.
+- Coffee chat: cal.com/savar-gupta/embedr?user=savar-gupta&overlayCalendar=true.
+- Things (`/things`) has no desk object; it is in the plain list only.
+- Trips: Japan; Turkey 2026 (Istanbul, Cappadocia, Antalya); Indonesia (Bali, Aug 2026); Hawaii (Maui, TikTok vlog 7653625122300906772 by @savargupta03). Hawaii is on the Travel page only.
+- Projects: Unify (co-founder; landing page, mobile app, web app, each with a GitHub repo), Taskline, Embedr (Product & GTM; embedr.app, studio.embedr.app, YouTube ZQaxrc0SsEA from 0:13), Health & Activity Wearable, HealthOS (health.savargupta.com). Facts match the Sep 2026 resume.
+- Videos load only on click, behind a poster with a play button.
 
 ## Accessibility
 
@@ -81,9 +87,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 
 ## Open
 
-- Beli handle and Cal.com URL.
 - Trip photos and object photos are AI stand-ins; Savar's own trip photos replace them before launch.
-- Where Things lives.
 - Desktop canvas frame is behind the prototype; resync before build.
 
 ## Exclusions

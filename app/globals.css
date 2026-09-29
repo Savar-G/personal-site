@@ -5,8 +5,50 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+}
+
+/* ---------- Colour tokens ----------
+ * The site shares the homepage desk's neutrals (zinc) and follows the system
+ * theme. Components keep their stone-* classes: the scale is remapped here and
+ * inverted in dark mode. stone-50 is the page colour. Shadows and scrims use
+ * --shadow, which stays dark in both themes.
+ */
+@theme {
+  --color-stone-50: #ffffff;
+  --color-stone-100: #f4f4f5;
+  --color-stone-200: #e4e4e7;
+  --color-stone-300: #d4d4d8;
+  --color-stone-400: #a1a1aa;
+  --color-stone-500: #71717a;
+  --color-stone-600: #52525b;
+  --color-stone-700: #3f3f46;
+  --color-stone-800: #27272a;
+  --color-stone-900: #18181b;
+  --color-stone-950: #09090b;
+}
+
+:root {
+  color-scheme: light dark;
+  --shadow: #09090b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --shadow: #000000;
+    --color-stone-50: #121214;
+    --color-stone-100: #1c1c1f;
+    --color-stone-200: #2a2a2e;
+    --color-stone-300: #3f3f46;
+    --color-stone-400: #71717a;
+    --color-stone-500: #a1a1aa;
+    --color-stone-600: #b4b4bb;
+    --color-stone-700: #d4d4d8;
+    --color-stone-800: #e4e4e7;
+    --color-stone-900: #f4f4f5;
+    --color-stone-950: #fafafa;
+  }
 }
 
 html,
@@ -88,79 +130,26 @@ body {
   transition: transform 0.2s var(--ease-out), color 0.16s var(--ease-out);
 }
 
-/* ---------- Nav menu trigger (icon-only for now) ---------- */
+/* ---------- Back to the desk (top left on every inner page) ---------- */
 
-.nav-menu-trigger {
+.desk-back {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.5rem;
-  color: var(--color-stone-900);
-  cursor: pointer;
-  background-color: transparent;
-  border: 0;
-  transition: background-color 0.16s var(--ease-out),
-    color 0.16s var(--ease-out);
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-stone-600);
+  text-decoration: none;
 }
-.nav-menu-trigger:hover {
+.desk-back:hover {
+  color: var(--color-stone-900);
   background-color: color-mix(in oklab, var(--color-stone-900) 6%, transparent);
 }
-
-.nav-menu-icon {
-  display: block;
-  position: relative;
-}
-.nav-menu-icon--hamburger {
-  width: 1.125rem;
-  height: 0.75rem;
-}
-.nav-menu-icon--hamburger::before,
-.nav-menu-icon--hamburger::after {
-  content: "";
-  height: 2px;
-  background-color: currentColor;
-  border-radius: 1px;
-  position: absolute;
-  left: 0;
-  right: 0;
-}
-.nav-menu-icon--hamburger::before {
-  top: 0.125rem;
-}
-.nav-menu-icon--hamburger::after {
-  bottom: 0.125rem;
-}
-
-.nav-menu-icon--close {
-  width: 1rem;
-  height: 1rem;
-}
-.nav-menu-icon--close::before,
-.nav-menu-icon--close::after {
-  content: "";
-  background-color: currentColor;
-  border-radius: 1px;
-  width: 1rem;
-  height: 2px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-.nav-menu-icon--close::before {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-.nav-menu-icon--close::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-/* Variant when the trigger sits on a dark background (inside the overlay) */
-.nav-menu-trigger--on-dark {
-  color: var(--color-stone-50);
-}
-.nav-menu-trigger--on-dark:hover {
-  background-color: color-mix(in oklab, var(--color-stone-50) 10%, transparent);
+.desk-back:focus-visible {
+  outline: 2px solid var(--color-stone-900);
+  outline-offset: 2px;
 }
 
 .sr-only {
@@ -270,15 +259,15 @@ body {
   border-radius: 1rem;
   padding: 0.25rem;
   color: var(--color-stone-500);
-  box-shadow: 0 1px 2px color-mix(in oklab, var(--color-stone-900) 5%, transparent),
-    0 8px 24px color-mix(in oklab, var(--color-stone-900) 3%, transparent);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--shadow) 5%, transparent),
+    0 8px 24px color-mix(in oklab, var(--shadow) 3%, transparent);
   transition: border-color 0.16s var(--ease-out),
     box-shadow 0.2s var(--ease-out), transform 0.2s var(--ease-out);
 }
 .contribution-card:hover {
   border-color: var(--color-stone-300);
-  box-shadow: 0 1px 2px color-mix(in oklab, var(--color-stone-900) 7%, transparent),
-    0 10px 28px color-mix(in oklab, var(--color-stone-900) 5%, transparent);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--shadow) 7%, transparent),
+    0 10px 28px color-mix(in oklab, var(--shadow) 5%, transparent);
   transform: translateY(-1px);
 }
 .contribution-card:focus-visible {
@@ -293,7 +282,7 @@ body {
   overflow: hidden;
   border: 1px solid var(--color-stone-200);
   border-radius: 0.75rem;
-  background: color-mix(in oklab, white 58%, var(--color-stone-50));
+  background: var(--color-stone-50);
   padding: 1rem;
 }
 
@@ -550,7 +539,7 @@ body {
     var(--color-stone-300) 94%,
     transparent
   );
-  box-shadow: 0 16px 22px -18px color-mix(in oklab, var(--color-stone-900) 38%, transparent);
+  box-shadow: 0 16px 22px -18px color-mix(in oklab, var(--shadow) 38%, transparent);
 }
 
 /* Mobile/tablet: covers wrap into a vertical grid (all books discoverable
@@ -596,14 +585,14 @@ body {
   overflow: hidden;
   background-color: var(--color-stone-200);
   box-shadow:
-    0 1px 1px color-mix(in oklab, var(--color-stone-950) 12%, transparent),
-    0.45rem 0.85rem 1.1rem -0.7rem color-mix(in oklab, var(--color-stone-950) 50%, transparent);
+    0 1px 1px color-mix(in oklab, var(--shadow) 12%, transparent),
+    0.45rem 0.85rem 1.1rem -0.7rem color-mix(in oklab, var(--shadow) 50%, transparent);
   transition: box-shadow 0.22s var(--ease-out);
 }
 .shelf-book:hover .book-cover {
   box-shadow:
-    0 1px 1px color-mix(in oklab, var(--color-stone-950) 14%, transparent),
-    0.6rem 1.45rem 1.6rem -0.7rem color-mix(in oklab, var(--color-stone-950) 55%, transparent);
+    0 1px 1px color-mix(in oklab, var(--shadow) 14%, transparent),
+    0.6rem 1.45rem 1.6rem -0.7rem color-mix(in oklab, var(--shadow) 55%, transparent);
 }
 
 .book-cover-img {
@@ -630,8 +619,8 @@ body {
 .book-cover--fallback {
   background-color: var(--color-stone-100);
   box-shadow:
-    0 1px 1px color-mix(in oklab, var(--color-stone-950) 8%, transparent),
-    0.4rem 0.8rem 1rem -0.75rem color-mix(in oklab, var(--color-stone-950) 38%, transparent);
+    0 1px 1px color-mix(in oklab, var(--shadow) 8%, transparent),
+    0.4rem 0.8rem 1rem -0.75rem color-mix(in oklab, var(--shadow) 38%, transparent);
 }
 .book-cover--fallback::after {
   box-shadow: inset 0 0 0 1px var(--color-stone-300);
@@ -674,7 +663,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
-  background: color-mix(in oklab, var(--color-stone-900) 42%, transparent);
+  background: color-mix(in oklab, var(--shadow) 42%, transparent);
   backdrop-filter: blur(6px) saturate(0.92);
   -webkit-backdrop-filter: blur(6px) saturate(0.92);
 }
@@ -689,9 +678,9 @@ body {
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow:
-    0 1px 0 color-mix(in oklab, white 60%, transparent) inset,
-    0 40px 80px -32px color-mix(in oklab, var(--color-stone-950) 70%, transparent),
-    0 12px 24px -16px color-mix(in oklab, var(--color-stone-950) 50%, transparent);
+    0 1px 0 color-mix(in oklab, var(--color-stone-50) 60%, transparent) inset,
+    0 40px 80px -32px color-mix(in oklab, var(--shadow) 70%, transparent),
+    0 12px 24px -16px color-mix(in oklab, var(--shadow) 50%, transparent);
 }
 
 /* Left pane — holds the real cover (shares layoutId with the shelf cover). */
@@ -925,7 +914,7 @@ body {
   background: var(--color-stone-50);
   color: var(--color-stone-900);
   font-weight: 500;
-  box-shadow: 0 1px 2px color-mix(in oklab, var(--color-stone-950) 8%, transparent);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--shadow) 8%, transparent);
 }
 .bookshelf-view-tab:focus-visible {
   outline: 2px solid color-mix(in oklab, var(--color-stone-900) 55%, transparent);
@@ -1081,14 +1070,14 @@ body {
   cursor: pointer;
   font: inherit;
   color: inherit;
-  box-shadow: 0 1px 2px color-mix(in oklab, var(--color-stone-950) 3%, transparent);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--shadow) 3%, transparent);
   transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out),
     border-color 0.2s var(--ease-out);
 }
 .note-card:hover {
   transform: translateY(-3px);
   border-color: var(--color-stone-300);
-  box-shadow: 0 14px 28px -18px color-mix(in oklab, var(--color-stone-950) 32%, transparent);
+  box-shadow: 0 14px 28px -18px color-mix(in oklab, var(--shadow) 32%, transparent);
 }
 .note-card:focus-visible {
   outline: 2px solid color-mix(in oklab, var(--color-stone-900) 55%, transparent);
@@ -1143,7 +1132,7 @@ body {
   border-radius: 2px;
   flex: 0 0 auto;
   object-fit: cover;
-  box-shadow: 0 1px 2px color-mix(in oklab, var(--color-stone-950) 20%, transparent);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--shadow) 20%, transparent);
 }
 .note-card-foot-nocover {
   background: var(--color-stone-200);
@@ -1332,12 +1321,12 @@ body {
 .thing-img {
   object-fit: contain;
   object-position: bottom;
-  filter: drop-shadow(0 0.7rem 0.8rem color-mix(in oklab, var(--color-stone-950) 20%, transparent));
+  filter: drop-shadow(0 0.7rem 0.8rem color-mix(in oklab, var(--shadow) 20%, transparent));
   transition: transform 0.3s var(--ease-out), filter 0.3s var(--ease-out);
 }
 .thing-face:hover .thing-img {
   transform: translateY(-6px);
-  filter: drop-shadow(0 1.1rem 1.1rem color-mix(in oklab, var(--color-stone-950) 24%, transparent));
+  filter: drop-shadow(0 1.1rem 1.1rem color-mix(in oklab, var(--shadow) 24%, transparent));
 }
 
 .thing-figure-fallback {
@@ -1504,88 +1493,104 @@ body {
   }
 }
 
-/* ---------- Nav menu overlay (fullscreen drawer) ---------- */
+/* ---------- Projects and travel ---------- */
 
-.nav-menu-overlay {
-  background-color: var(--color-stone-950);
-  color: var(--color-stone-50);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.22s var(--ease-out), visibility 0.22s var(--ease-out);
-  position: fixed;
+.project {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--color-stone-200);
+}
+.project:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.project-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  color: var(--color-stone-900);
+}
+.project-description {
+  margin-top: 0.5rem;
+  max-width: 65ch;
+  line-height: 1.625;
+  color: var(--color-stone-600);
+}
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin-top: 0.75rem;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-stone-900);
+}
+.project-links a:hover {
+  color: var(--color-stone-600);
+}
+
+/* ---------- Video embed (loads on click) ---------- */
+
+.video-embed {
+  position: relative;
+  margin-top: 1rem;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background-color: var(--color-stone-100);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--shadow) 8%, transparent);
+}
+.video-embed--wide {
+  aspect-ratio: 16 / 9;
+}
+.video-embed--tall {
+  aspect-ratio: 9 / 16;
+  max-width: 20rem;
+}
+.video-embed iframe,
+.video-embed-poster {
+  position: absolute;
   inset: 0;
-  z-index: 10;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
-.nav-menu-overlay[data-open="true"] {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  z-index: 100;
+.video-embed-poster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: center / cover no-repeat var(--color-stone-100);
 }
-
-@keyframes nav-menu-link-in {
-  0% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.video-embed-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  color: #ffffff;
+  background-color: color-mix(in oklab, var(--shadow) 72%, transparent);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: transform 0.2s var(--ease-out), background-color 0.16s var(--ease-out);
 }
-
-.nav-menu-overlay[data-open="false"] .nav-menu-stagger > * {
-  opacity: 0;
-  animation: none !important;
+.video-embed-play svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 3px;
 }
-.nav-menu-overlay[data-open="true"] .nav-menu-stagger > * {
-  animation: nav-menu-link-in 0.26s var(--ease-out) forwards;
-  opacity: 0;
+.video-embed-poster:hover .video-embed-play {
+  transform: scale(1.06);
+  background-color: color-mix(in oklab, var(--shadow) 85%, transparent);
 }
-.nav-menu-overlay[data-open="true"] .nav-menu-stagger > *:nth-child(1) {
-  animation-delay: 0ms;
+.video-embed-poster:focus-visible {
+  outline: 2px solid var(--color-stone-900);
+  outline-offset: -4px;
 }
-.nav-menu-overlay[data-open="true"] .nav-menu-stagger > *:nth-child(2) {
-  animation-delay: 30ms;
-}
-.nav-menu-overlay[data-open="true"] .nav-menu-stagger > *:nth-child(3) {
-  animation-delay: 60ms;
-}
-.nav-menu-overlay[data-open="true"] .nav-menu-stagger > *:nth-child(4) {
-  animation-delay: 90ms;
-}
-.nav-menu-overlay[data-open="true"] .nav-menu-stagger > *:nth-child(5) {
-  animation-delay: 120ms;
-}
-
-.nav-menu-link {
-  color: var(--color-stone-400);
-  transition: color 0.16s var(--ease-out), transform 0.14s var(--ease-out);
-}
-.nav-menu-link:hover {
-  color: var(--color-stone-50);
-}
-.nav-menu-link--active {
-  color: var(--color-stone-50);
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-decoration-color: color-mix(in oklab, var(--color-stone-50) 40%, transparent);
-  text-underline-offset: 8px;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .nav-menu-overlay[data-open="true"] .nav-menu-stagger > * {
-    animation: nav-menu-link-in 0.2s ease-out forwards;
-  }
-  @keyframes nav-menu-link-in {
-    0% {
-      opacity: 0;
-      transform: none;
-    }
-    100% {
-      opacity: 1;
-      transform: none;
-    }
+  .video-embed-play,
+  .video-embed-poster:hover .video-embed-play {
+    transform: none;
+    transition: none;
   }
 }
