@@ -59,12 +59,12 @@ export function deskMarkup(essays: DeskEssay[]) {
   </svg></div></div></div>
 
   <div class="obj travel" tabindex="0" role="link" aria-label="Travel" data-vis="0 .02 .98 .96" data-open="/travel" style="left:78px;top:80px;width:230px;height:200px;--r:-3deg;--cy:212px">
-    <div class="pola" style="--dd:900ms;--x:0px;--y:22px;--pr:-11deg;--hx:-46px;--hy:10px;--hr:-17deg"><div class="ph" style="background-image:url(/desk/trip_japan.webp)"></div><span>japan</span></div>
-    <div class="pola" style="--dd:1400ms;--x:86px;--y:28px;--pr:9deg;--hx:58px;--hy:16px;--hr:16deg"><div class="ph" style="background-image:url(/desk/trip_bali.webp)"></div><span>indonesia</span></div>
-    <div class="pola" style="--dd:1900ms;--x:44px;--y:4px;--pr:-2deg;--hx:4px;--hy:-16px;--hr:-1deg"><div class="ph" style="background-image:url(/desk/trip_cappadocia.webp)"></div><span>turkey</span></div>
+    <div class="pola" style="--dd:900ms;--x:0px;--y:22px;--pr:-11deg;--hx:-46px;--hy:10px;--hr:-17deg;view-transition-name:polaroid-japan;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_japan.webp)"></div><span>japan</span></div>
+    <div class="pola" style="--dd:1400ms;--x:86px;--y:28px;--pr:9deg;--hx:58px;--hy:16px;--hr:16deg;view-transition-name:polaroid-indonesia;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_bali.webp)"></div><span>indonesia</span></div>
+    <div class="pola" style="--dd:1900ms;--x:44px;--y:4px;--pr:-2deg;--hx:4px;--hy:-16px;--hr:-1deg;view-transition-name:polaroid-turkey;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_cappadocia.webp)"></div><span>turkey</span></div>
     <span class="cap">Travel</span></div>
 
-  <div class="obj notebook" tabindex="0" role="link" aria-label="Writing" data-vis="0 0 1 1" data-open="/writing" style="left:610px;top:70px;--r:4deg;--cy:254px">
+  <div class="obj notebook" tabindex="0" role="link" aria-label="Writing" data-vis="0 0 1 1" data-open="/writing" style="view-transition-name:notebook;view-transition-class:flight;left:610px;top:70px;--r:4deg;--cy:254px">
     <div class="book"><div class="page-r"></div><div class="cover"><div class="face front"></div><div class="face back"></div></div></div>
     <div class="hit"></div>
     <div class="pg">
@@ -75,9 +75,9 @@ ${notebookPage(essays)}
   <div class="obj folder" tabindex="0" role="link" aria-label="Projects" data-vis=".08 .09 .92 .91" data-open="/projects" style="left:860px;top:70px;width:230px;height:197px;--r:-4deg;--cy:184px">
     <div class="fold">
       <img decoding="async" src="/desk/folder.webp" alt="">
-      <div class="doc sheet" style="--l:30px;--t:28px;--dr:-5deg;--dr2:-13deg;--up:-44px;--ux:-30px;--d:0ms"><i></i><i style="--w:62%"></i><i style="--w:74%"></i><i style="--w:50%"></i></div>
-      <div class="doc sheet" style="--l:60px;--t:24px;--dr:1deg;--dr2:1deg;--up:-60px;--ux:0px;--d:60ms"><i style="--w:70%"></i><i></i><i style="--w:58%"></i><i style="--w:66%"></i></div>
-      <div class="doc sheet" style="--l:90px;--t:30px;--dr:6deg;--dr2:14deg;--up:-46px;--ux:30px;--d:120ms"><i style="--w:76%"></i><i style="--w:54%"></i><i></i><i style="--w:62%"></i></div>
+      <div class="doc sheet" style="view-transition-name:paper-1;view-transition-class:flight;--l:30px;--t:28px;--dr:-5deg;--dr2:-13deg;--up:-44px;--ux:-30px;--d:0ms"><i></i><i style="--w:62%"></i><i style="--w:74%"></i><i style="--w:50%"></i></div>
+      <div class="doc sheet" style="view-transition-name:paper-2;view-transition-class:flight;--l:60px;--t:24px;--dr:1deg;--dr2:1deg;--up:-60px;--ux:0px;--d:60ms"><i style="--w:70%"></i><i></i><i style="--w:58%"></i><i style="--w:66%"></i></div>
+      <div class="doc sheet" style="view-transition-name:paper-3;view-transition-class:flight;--l:90px;--t:30px;--dr:6deg;--dr2:14deg;--up:-46px;--ux:30px;--d:120ms"><i style="--w:76%"></i><i style="--w:54%"></i><i></i><i style="--w:62%"></i></div>
       <img decoding="async" class="front" src="/desk/folder.webp" alt="">
     </div>
     <span class="cap">Projects</span></div>
@@ -106,9 +106,9 @@ ${notebookPage(essays)}
     <div class="sheet"><img decoding="async" src="/desk/resume_desk.webp" alt=""></div><span class="cap">Resume</span></div>
 
   <div class="obj books" tabindex="0" role="link" aria-label="Bookshelf" data-vis=".04 .1 .96 .92" data-open="/bookshelf" style="left:1180px;top:668px;width:190px;height:204px;--cy:206px">
-    <img decoding="async" class="bk" src="/desk/the-everything-store.webp" alt="" style="left:0;top:18px;--br:-12deg;--hx:-34px;--hy:-4px;--hr:-21deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
-    <img decoding="async" class="bk" src="/desk/build.webp" alt="" style="left:78px;top:24px;--br:9deg;--hx:30px;--hy:-2px;--hr:18deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
-    <img decoding="async" class="bk" src="/desk/chip-war.webp" alt="" style="left:40px;top:40px;--br:-2deg;--hx:-2px;--hy:-18px;--hr:-1deg;box-shadow:0 8px 18px rgba(0,0,0,.22)">
+    <img decoding="async" class="bk" src="/desk/the-everything-store.webp" alt="" style="view-transition-name:book-the-everything-store;view-transition-class:flight;left:0;top:18px;--br:-12deg;--hx:-34px;--hy:-4px;--hr:-21deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
+    <img decoding="async" class="bk" src="/desk/build.webp" alt="" style="view-transition-name:book-build;view-transition-class:flight;left:78px;top:24px;--br:9deg;--hx:30px;--hy:-2px;--hr:18deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
+    <img decoding="async" class="bk" src="/desk/chip-war.webp" alt="" style="view-transition-name:book-chip-war;view-transition-class:flight;left:40px;top:40px;--br:-2deg;--hx:-2px;--hy:-18px;--hr:-1deg;box-shadow:0 8px 18px rgba(0,0,0,.22)">
     <span class="cap">Bookshelf</span></div>
 
   <div class="obj" id="coffee" tabindex="0" role="link" aria-label="Book a coffee chat" data-vis=".07 .07 .85 .83" data-href="https://cal.com/savar-gupta/embedr?user=savar-gupta&amp;overlayCalendar=true" style="left:405px;top:585px;width:260px;height:267px;--r:-10deg;--cy:246px">

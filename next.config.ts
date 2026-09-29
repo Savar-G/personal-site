@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
     // dev server is OOM-killed. Keep the watch scope on this repo only.
     root: __dirname,
   },
+  experimental: {
+    // Desk objects fly into their pages (React <ViewTransition>, see
+    // app/_components/desk and the flights section in globals.css).
+    viewTransition: true,
+  },
 };
 
 export default nextConfig;

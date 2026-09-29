@@ -1592,3 +1592,81 @@ body {
     transition: none;
   }
 }
+
+/* ---------- Travel: polaroids (the desk's polaroids fly in here) ---------- */
+/* Same proportions as the desk polaroid (140 px wide: 10 px border, 34 px caption), so the flight is one object. */
+
+.polaroids {
+  --w: clamp(6.5rem, 28vw, 11rem);
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.5rem, 3vw, 1.5rem);
+  margin: 0 0 2.5rem;
+}
+.polaroid {
+  width: var(--w);
+  margin: 0;
+  padding: calc(var(--w) * 0.0714) calc(var(--w) * 0.0714) 0;
+  background: #fdfdfb;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 0.08), 0 6px 14px rgb(0 0 0 / 0.12);
+}
+.polaroid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.polaroid figcaption {
+  height: calc(var(--w) * 0.243);
+  line-height: calc(var(--w) * 0.257);
+  padding-left: calc(var(--w) * 0.02);
+  font-family: var(--font-reenie-beanie), cursive;
+  font-size: calc(var(--w) * 0.15);
+  color: #27272a;
+}
+
+/* ---------- Flights: desk objects become their pages (view transitions) ---------- */
+/* Desk elements carry view-transition-name + class "flight" inline (desk/markup.ts);
+   pages wrap their twin in <ViewTransition name=... share="flight">. */
+
+::view-transition-group(.flight) {
+  animation-duration: 640ms;
+  animation-timing-function: cubic-bezier(0.3, 0.8, 0.25, 1.05);
+}
+::view-transition-old(.flight) {
+  animation: 260ms ease-in both vt-fade-out;
+}
+::view-transition-new(.flight) {
+  animation: 380ms ease-out 120ms both vt-fade-in;
+}
+::view-transition-group(polaroid-indonesia),
+::view-transition-group(paper-2) {
+  animation-delay: 60ms;
+}
+::view-transition-group(polaroid-turkey),
+::view-transition-group(paper-3) {
+  animation-delay: 120ms;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

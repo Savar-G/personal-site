@@ -3,8 +3,10 @@
 // sugar cubes, the ghost, and the resume hyperspace. It stays plain,
 // imperative DOM code on purpose, close to the prototype, so the two are easy
 // to keep in sync. Differences from the prototype:
-// - Travel, Writing, Projects, and Bookshelf open real routes (router.navigate)
-//   after a short lift-and-fade, instead of in-page draft pages.
+// - Travel, Writing, Projects, and Bookshelf open real routes (router.navigate).
+//   Where the browser has view transitions, the object flies into its page
+//   (named elements in markup.ts, <ViewTransition> on the page); elsewhere the
+//   object lifts and the desk fades.
 // - Every listener, timer, and animation loop stops when the desk unmounts.
 // - The landing animation plays once per browser session.
 // - Phones and short screens get the pocket desk (M3): the same objects laid out
@@ -56,7 +58,8 @@ export function mountDesk(root, router) {
   };
   const session = {
     get(k) { try { return sessionStorage.getItem('desk.' + k); } catch { return null; } },
-    set(k) { try { sessionStorage.setItem('desk.' + k, '1'); } catch {} }
+    set(k) { try { sessionStorage.setItem('desk.' + k, '1'); } catch {} },
+    remove(k) { try { sessionStorage.removeItem('desk.' + k); } catch {} }
   };
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -69,14 +72,23 @@ export function mountDesk(root, router) {
   }
 
   // ---------- Leaving for a page ----------
-  // The object lifts toward you and the desk fades, then the route changes.
+  // Pages with a flight: the view transition carries the object, so only lift it.
+  // Other pages: the object lifts toward you and the desk fades, then the route changes.
+  const FLIGHTS = new Set(['/travel', '/writing', '/projects', '/bookshelf']);
+  const flies = href => 'startViewTransition' in document && FLIGHTS.has(href);
+  // Remember the page, so the desk knows on return whether a flight brings it back.
+  const navigate = href => { session.set('from:' + href); router.navigate(href); };
   let leaving = false;
   function leave(el, href) {
     if (leaving) return; leaving = true;
-    if (still) return router.navigate(href);
+    if (still) return navigate(href);
+    if (flies(href)) {
+      if (el) el.animate([{ scale: '1' }, { scale: '1.05' }], { duration: 160, easing: 'ease-out', fill: 'forwards' });
+      return navigate(href);
+    }
     if (el) el.animate([{ scale: '1' }, { scale: '1.08' }], { duration: 260, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'forwards' });
     stage.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 240, delay: 60, easing: 'ease-in', fill: 'forwards' })
-      .finished.then(() => router.navigate(href));
+      .finished.then(() => navigate(href));
   }
   function go(el) {
     if (el.id === 'resume') warpIn();
@@ -89,7 +101,7 @@ export function mountDesk(root, router) {
     if (!a || a.target === '_blank' || a.hasAttribute('download') || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
     e.preventDefault();
     const href = a.getAttribute('href');
-    if (stage.contains(a)) leave(a.closest('.obj'), href); else router.navigate(href);
+    if (stage.contains(a)) leave(a.closest('.obj'), href); else navigate(href);
   });
   new Set([...$$('[data-open]').map(el => el.dataset.open), ...$$('a[href^="/"]:not([download]):not([target])').map(a => a.getAttribute('href'))])
     .forEach(href => router.prefetch(href));
@@ -167,9 +179,10 @@ export function mountDesk(root, router) {
                                         { duration: 620, delay: 120 + i * 75, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'backwards' }));
     cubes.forEach((c, i) => c.animate([{ opacity: 0, translate: '0 -24px' }, { opacity: 1, translate: '0 3px', offset: .7 }, { opacity: 1, translate: '0 0' }],
                                       { duration: 480, delay: 780 + i * 90, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'backwards' }));
-  } else if (!still) {
-    stage.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: 'ease-out' });
+  } else if (!still && ![...FLIGHTS].some(href => session.get('from:' + href) && flies(href))) {
+    stage.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: 'ease-out' });   // back from a page without a flight
   }
+  FLIGHTS.forEach(href => session.remove('from:' + href));
 
   // ---------- Polaroids develop the first time someone visits ----------
   if (!still && !store.get('developed', false)) {

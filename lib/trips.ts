@@ -1,14 +1,26 @@
 export type Trip = {
   name: string;
   places?: string;
+  // The same photo as the polaroid on the desk; it flies here from there.
+  polaroid?: { src: string; caption: string; tilt: number };
   video?: { src: string; poster: string; title: string };
 };
 
-// Photos come later: the desk's trip photos are AI stand-ins and stay off the site.
 export const trips: Trip[] = [
-  { name: "Japan" },
-  { name: "Turkey", places: "Istanbul · Cappadocia · Antalya · 2026" },
-  { name: "Indonesia", places: "Bali · Aug 2026" },
+  {
+    name: "Japan",
+    polaroid: { src: "/desk/trip_japan.webp", caption: "japan", tilt: -4 },
+  },
+  {
+    name: "Turkey",
+    places: "Istanbul · Cappadocia · Antalya · 2026",
+    polaroid: { src: "/desk/trip_cappadocia.webp", caption: "turkey", tilt: 2 },
+  },
+  {
+    name: "Indonesia",
+    places: "Bali · Aug 2026",
+    polaroid: { src: "/desk/trip_bali.webp", caption: "indonesia", tilt: -3 },
+  },
   {
     name: "Hawaii",
     places: "Maui · 2025",

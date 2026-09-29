@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties, KeyboardEvent } from "react";
+import { ViewTransition, type CSSProperties, type KeyboardEvent } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import type { BookItem } from "./bookshelf";
@@ -72,21 +72,24 @@ export function BookCover({
   book: CoverBook;
   onSelect: (slug: string) => void;
 }) {
+  // The desk's three books fly to their covers here (view transition).
   return (
-    <motion.button
-      type="button"
-      data-book-slug={book.slug}
-      className="shelf-book"
-      style={{ "--spine": book.spineColor } as CSSProperties}
-      aria-haspopup="dialog"
-      aria-label={`${book.title} by ${book.author}`}
-      onClick={() => onSelect(book.slug)}
-      onKeyDown={onArrowKey}
-      whileHover={{ y: -6, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 340, damping: 26 }}
-    >
-      <BookCoverFace book={book} sizes="(max-width: 640px) 88px, 104px" />
-    </motion.button>
+    <ViewTransition name={`book-${book.slug}`} share="flight">
+      <motion.button
+        type="button"
+        data-book-slug={book.slug}
+        className="shelf-book"
+        style={{ "--spine": book.spineColor } as CSSProperties}
+        aria-haspopup="dialog"
+        aria-label={`${book.title} by ${book.author}`}
+        onClick={() => onSelect(book.slug)}
+        onKeyDown={onArrowKey}
+        whileHover={{ y: -6, scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 340, damping: 26 }}
+      >
+        <BookCoverFace book={book} sizes="(max-width: 640px) 88px, 104px" />
+      </motion.button>
+    </ViewTransition>
   );
 }
