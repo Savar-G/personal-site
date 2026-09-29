@@ -1,0 +1,31 @@
+{
+  "disableClaudeAiConnectors": true,
+  "permissions": {
+    "deny": [
+      "Bash(npm run dev)",
+      "Bash(npm run dev *)",
+      "Bash(npm run dev:agent*)",
+      "Bash(next dev*)",
+      "Bash(npx next dev*)",
+      "Bash(pnpm dev*)",
+      "Bash(yarn dev*)",
+      "Bash(npx playwright*)",
+      "mcp__Claude_Browser__preview_start"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|mcp__Claude_Browser__preview_start|mcp__Claude_Browser__navigate|mcp__Claude_Browser__tabs_create|mcp__claude-in-chrome__navigate|mcp__claude-in-chrome__tabs_create_mcp|mcp__Control_Chrome__open_url",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-local-servers.sh",
+            "timeout": 5,
+            "statusMessage": "Checking for local server / localhost browser use"
+          }
+        ]
+      }
+    ]
+  }
+}
