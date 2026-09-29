@@ -23,29 +23,13 @@ export default function TravelPage() {
             <h2 className="project-name">{trip.name}</h2>
             {trip.places && <p className="entry-meta">{trip.places}</p>}
 
-            {trip.vlog && (
-              <>
-                <VideoEmbed
-                  shape="tall"
-                  title={trip.vlog.title}
-                  src={`https://www.tiktok.com/player/v1/${trip.vlog.tiktokId}?autoplay=1&rel=0`}
-                />
-                <a
-                  href={trip.vlog.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="press group mt-3 inline-flex items-center gap-1 text-sm text-stone-500 hover:text-stone-900"
-                >
-                  Watch on TikTok
-                  <span
-                    aria-hidden="true"
-                    className="icon-shift text-[12px] leading-none group-hover:translate-x-0.5"
-                  >
-                    ↗
-                  </span>
-                  <span className="sr-only">(opens in new tab)</span>
-                </a>
-              </>
+            {trip.video && (
+              <VideoEmbed
+                kind="video"
+                title={trip.video.title}
+                poster={trip.video.poster}
+                src={trip.video.src}
+              />
             )}
           </article>
         ))}

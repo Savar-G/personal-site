@@ -75,7 +75,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 - Socials: linkedin.com/in/savar-gupta, x.com/savar_gupta, github.com/Savar-G, savar.gupta1922@gmail.com, beliapp.co/app/savargupta.
 - Coffee chat: cal.com/savar-gupta/embedr?user=savar-gupta&overlayCalendar=true.
 - Things (`/things`) has no desk object; it is in the plain list only.
-- Trips: Japan; Turkey 2026 (Istanbul, Cappadocia, Antalya); Indonesia (Bali, Aug 2026); Hawaii (Maui, TikTok vlog 7653625122300906772 by @savargupta03). Hawaii is on the Travel page only.
+- Trips: Japan; Turkey 2026 (Istanbul, Cappadocia, Antalya); Indonesia (Bali, Aug 2026); Hawaii (Maui, 2025; self-hosted vlog `public/videos/maui-2025.mp4`, poster `maui-2025.webp`). Hawaii is on the Travel page only.
 - Projects: Unify (co-founder; landing page, mobile app, web app, each with a GitHub repo), Taskline, Embedr (Product & GTM; embedr.app, studio.embedr.app, YouTube ZQaxrc0SsEA from 0:13), Health & Activity Wearable, HealthOS (health.savargupta.com). Facts match the Sep 2026 resume.
 - Videos load only on click, behind a poster with a play button.
 

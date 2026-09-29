@@ -52,7 +52,7 @@ export default function ProjectsPage() {
 
             {project.video && (
               <VideoEmbed
-                shape="wide"
+                kind="iframe"
                 title={project.video.title}
                 poster={`https://i.ytimg.com/vi/${project.video.youtubeId}/maxresdefault.jpg`}
                 src={`https://www.youtube-nocookie.com/embed/${project.video.youtubeId}?autoplay=1&rel=0${

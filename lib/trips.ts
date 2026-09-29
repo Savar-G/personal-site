@@ -1,7 +1,7 @@
 export type Trip = {
   name: string;
   places?: string;
-  vlog?: { tiktokId: string; title: string; href: string };
+  video?: { src: string; poster: string; title: string };
 };
 
 // Photos come later: the desk's trip photos are AI stand-ins and stay off the site.
@@ -11,11 +11,11 @@ export const trips: Trip[] = [
   { name: "Indonesia", places: "Bali · Aug 2026" },
   {
     name: "Hawaii",
-    places: "Maui",
-    vlog: {
-      tiktokId: "7653625122300906772",
-      title: "Maui vlog",
-      href: "https://www.tiktok.com/@savargupta03/video/7653625122300906772",
+    places: "Maui · 2025",
+    video: {
+      src: "/videos/maui-2025.mp4",
+      poster: "/videos/maui-2025.webp",
+      title: "Hawaii 2025, a Maui vlog",
     },
   },
 ];
