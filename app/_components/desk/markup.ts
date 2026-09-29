@@ -125,7 +125,7 @@ ${notebookPage(essays)}
     <img decoding="async" src="/desk/ramen.webp" alt="">
     <div class="steam"><span style="position:absolute;left:0;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span><span style="position:absolute;left:30px;bottom:6px"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span><span style="position:absolute;left:58px;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span></div>
     <span class="cap">Food</span></div>
-  <p class="pocket-only pocket-note"><span><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M232,168h-8V72a24,24,0,0,0-24-24H56A24,24,0,0,0,32,72v96H24a8,8,0,0,0-8,8v16a24,24,0,0,0,24,24H216a24,24,0,0,0,24-24V176A8,8,0,0,0,232,168ZM48,72a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8v96H48ZM224,192a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8v-8H224ZM152,88a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,88Z"/></svg>This desk is more fun on a laptop.</span></p>
+  <p class="pocket-only pocket-note"><span><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24h72v16H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V200h72a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40ZM48,56H208a8,8,0,0,1,8,8v80H40V64A8,8,0,0,1,48,56ZM208,184H48a8,8,0,0,1-8-8V160H216v16A8,8,0,0,1,208,184Z"/></svg>This desk is more fun on a desktop.</span></p>
   <p class="pocket-only pocket-foot">Vancouver, BC · <span id="ftime">7:41 PM</span></p>
 </div>
 

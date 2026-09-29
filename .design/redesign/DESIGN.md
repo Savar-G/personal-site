@@ -58,7 +58,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 ## Phone (M3 pocket desk, 390×844)
 
 - Built on the site (R-63) for screens under 768 px wide or under 520 px tall. The stage is 390 × 844, scaled to the screen width (max 1.25×), and scrolls. Object centres, rotations, and scales come from the Brilliant frame; they live in the `POCKET` table in `engine.js`. The prototype stays desktop-only.
-- Below the objects: a pill, "This desk is more fun on a laptop." with a laptop icon (R-64), then "Vancouver, BC · <live time>".
+- Below the objects: a pill, "This desk is more fun on a desktop." with a desktop icon (R-64, R-65), then "Vancouver, BC · <live time>".
 - Phones do not drag objects (the page scrolls); sugar cubes still drag, and a missed cube slides back. No ghost, no ringing phone, no tidy button.
 
 - All objects on one screen in a loose 2-3 column scatter under a compact greeting (32px headline, 14px bio). Captions 11px, aligned per row.
