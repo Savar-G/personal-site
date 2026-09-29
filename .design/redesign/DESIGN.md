@@ -1,6 +1,6 @@
 # DESIGN.md - savargupta.com redesign
 
-> Status: direction B (desk of objects) chosen. The desktop desk is built in Next.js (`app/_components/desk/`, R-59). Phones show the plain list until M3 is built.
+> Status: direction B (desk of objects) chosen. The desktop desk is built in Next.js (`app/_components/desk/`, R-59). Phones and short screens get the pocket desk (M3, R-63).
 > Scope: homepage first. Inner pages are the current site pages with a new style (R-48); `/writing`, `/projects`, and `/travel` are new.
 > Canvas: Brilliant project "Personal Website", canvas `main`. Desktop: "B3" frame (behind the prototype; resync pending). Phone: "M3" + "M3 · Tap Socials → contact sheet".
 > Prototype (desktop, source of truth for motion): `mockups/desk-prototype/index.html` (gitignored; open the file directly, no server). The site port is `app/_components/desk/` (`markup.ts`, `engine.js`, `desk.css`); keep the two in sync.
@@ -56,6 +56,10 @@ White page. Photographic objects around the greeting. Every object has a level c
 - **Assets:** WebP, about 0.9 MB total; the full resume loads on first approach to the paper.
 
 ## Phone (M3 pocket desk, 390×844)
+
+- Built on the site (R-63) for screens under 768 px wide or under 520 px tall. The stage is 390 × 844, scaled to the screen width (max 1.25×), and scrolls. Object centres, rotations, and scales come from the Brilliant frame; they live in the `POCKET` table in `engine.js`. The prototype stays desktop-only.
+- Below the objects: a pill, "This desk is more fun on a laptop." with a laptop icon (R-64), then "Vancouver, BC · <live time>".
+- Phones do not drag objects (the page scrolls); sugar cubes still drag, and a missed cube slides back. No ghost, no ringing phone, no tidy button.
 
 - All objects on one screen in a loose 2-3 column scatter under a compact greeting (32px headline, 14px bio). Captions 11px, aligned per row.
 - One tap opens the page. No hover effects; a tap gives a short press state.

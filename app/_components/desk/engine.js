@@ -7,6 +7,8 @@
 //   after a short lift-and-fade, instead of in-page draft pages.
 // - Every listener, timer, and animation loop stops when the desk unmounts.
 // - The landing animation plays once per browser session.
+// - Phones and short screens get the pocket desk (M3): the same objects laid out
+//   from the POCKET table, tap instead of drag, and a contact sheet for Socials.
 
 /**
  * @param {HTMLElement} root the .desk-page element
@@ -31,7 +33,14 @@ export function mountDesk(root, router) {
   const rows = $$('#contacts li');
   let scale = 1, z = 10, sel = 0, toastTimer;
 
+  // Same query as the pocket-desk block in desk.css.
+  const small = matchMedia('(max-width: 767px), (max-height: 520px)');
   function fit() {
+    if (small.matches) {                                   // pocket desk: 390 px wide, scrolls down
+      scale = Math.min(innerWidth / 390, 1.25);
+      stage.style.setProperty('--s', scale); stage.style.setProperty('--ts', 1);
+      return;
+    }
     scale = Math.min(innerWidth / 1440, innerHeight / 900);
     stage.style.setProperty('--s', scale);
     // On a 13" laptop or a half-width window the desk shrinks; keep captions and body text readable.
@@ -56,7 +65,7 @@ export function mountDesk(root, router) {
     cancel(toastTimer); toastTimer = later(() => toast.classList.remove('show'), 1800);
   }
   function overlayOpen() {
-    return $('#list').classList.contains('show') || $('#viewer').classList.contains('show');
+    return $('#list').classList.contains('show') || $('#viewer').classList.contains('show') || $('#sheet').classList.contains('show');
   }
 
   // ---------- Leaving for a page ----------
@@ -89,43 +98,48 @@ export function mountDesk(root, router) {
   $$('.obj').forEach(el => {
     let start = null;
     on(el, 'pointerdown', e => {
-      if (e.target.closest('#contacts') || e.target.closest('.pg a')) return;
+      if (!small.matches && (e.target.closest('#contacts') || e.target.closest('.pg a'))) return;
       start = { x: e.clientX, y: e.clientY, left: el.offsetLeft, top: el.offsetTop, moved: false };
-      el.setPointerCapture(e.pointerId);
+      if (!small.matches) el.setPointerCapture(e.pointerId);     // phones scroll instead of dragging
     });
     on(el, 'pointermove', e => {
       if (!start) return;
       const dx = (e.clientX - start.x) / scale, dy = (e.clientY - start.y) / scale;
       if (!start.moved && Math.hypot(dx, dy) < 4) return;
+      if (small.matches) { start.moved = true; return; }         // a swipe, not a tap
       if (!start.moved) { start.moved = true; el.classList.add('dragging'); el.style.zIndex = ++z; }
       el.style.left = start.left + dx + 'px'; el.style.top = start.top + dy + 'px';
     });
     on(el, 'pointerup', () => {
       if (!start) return;
       const moved = start.moved; start = null; el.classList.remove('dragging');
-      if (moved) { if (!still) el.animate([{ scale: '1.04' }, { scale: '.97' }, { scale: '1' }], { duration: 320, easing: 'ease-out' }); messy(); }
-      if (!moved && el !== phone) go(el);
+      if (moved && !small.matches) { if (!still) el.animate([{ scale: '1.04' }, { scale: '.97' }, { scale: '1' }], { duration: 320, easing: 'ease-out' }); messy(); }
+      if (!moved) { if (el !== phone) go(el); else if (small.matches) openSheet(); }
     });
-    on(el, 'keydown', e => { if (e.key === 'Enter' && el !== phone && e.target === el) go(el); });
+    on(el, 'pointercancel', () => { start = null; el.classList.remove('dragging'); });
+    on(el, 'keydown', e => {
+      if (e.key !== 'Enter' || e.target !== el) return;
+      if (el !== phone) go(el); else if (small.matches) openSheet();
+    });
   });
 
   // Notebook: the cover opens while the pointer is on it.
   const nb = $('.notebook');
-  on(nb.querySelector('.hit'), 'pointerenter', () => nb.classList.add('open'));
+  on(nb.querySelector('.hit'), 'pointerenter', () => { if (!small.matches) nb.classList.add('open'); });
   on(nb, 'pointerleave', () => nb.classList.remove('open'));
-  on(nb, 'focus', () => nb.classList.add('open'));
+  on(nb, 'focus', () => { if (!small.matches) nb.classList.add('open'); });
   on(nb, 'blur', () => nb.classList.remove('open'));
 
   // RAZR: wake on hover or focus, arrows move, Enter opens.
   function paint() { rows.forEach((r, i) => r.classList.toggle('on', i === sel)); }
-  function wake(isOn) { phone.classList.toggle('active', isOn); hint.classList.toggle('show', isOn); }
+  function wake(isOn) { if (isOn && small.matches) return; phone.classList.toggle('active', isOn); hint.classList.toggle('show', isOn); }
   on(phone, 'pointerenter', () => wake(true));
   on(phone, 'pointerleave', () => { if (document.activeElement !== phone) wake(false); });
   on(phone, 'focus', () => wake(true));
   on(phone, 'blur', () => wake(false));
   rows.forEach((r, i) => {
     on(r, 'pointerenter', () => { sel = i; paint(); });
-    on(r, 'click', () => { sel = i; paint(); go(r); });
+    on(r, 'click', () => { if (small.matches) return; sel = i; paint(); go(r); });
   });
   on(window, 'keydown', e => {
     if (!phone.classList.contains('active')) return;
@@ -168,7 +182,8 @@ export function mountDesk(root, router) {
 
   // ---------- Tidy up: put everything back where it started ----------
   const tidyBtn = $('#tidy');
-  const homes = new Map([...objsAll, ...cubes].map(o => [o, [o.offsetLeft, o.offsetTop]]));
+  let homes;
+  const rememberHomes = () => { homes = new Map([...objsAll, ...cubes].map(o => [o, [o.offsetLeft, o.offsetTop]])); };
   function messy() { tidyBtn.classList.add('show'); }
   on(tidyBtn, 'click', () => {
     let i = 0;
@@ -184,13 +199,10 @@ export function mountDesk(root, router) {
 
   // ---------- Plain list for skimmers and screen readers (and the whole page on phones) ----------
   const list = $('#list');
-  const small = matchMedia('(max-width: 767px)');
-  const syncList = () => list.setAttribute('aria-hidden', String(!small.matches && !list.classList.contains('show')));
   function showList(isOn) {
-    list.classList.toggle('show', isOn); syncList();
+    list.classList.toggle('show', isOn); list.setAttribute('aria-hidden', String(!isOn));
     (isOn ? $('#listclose') : $('#listlink')).focus({ preventScroll: true });
   }
-  on(small, 'change', syncList); syncList();
   on($('#listlink'), 'click', e => { e.preventDefault(); showList(true); });
   on($('#listclose'), 'click', e => { e.preventDefault(); showList(false); });
   on(window, 'keydown', e => { if (e.key === 'Escape' && list.classList.contains('show')) showList(false); });
@@ -233,10 +245,11 @@ export function mountDesk(root, router) {
 
   function splash(clientX, clientY) {
     const L = liquid.getBoundingClientRect();
-    const rad = L.width / 2 / scale;        // liquid radius in stage px (a circle, so rotation does not matter)
+    const cs = parseFloat(coffee.style.getPropertyValue('--ms')) || 1;   // the cup's pocket scale
+    const rad = liquid.offsetWidth / 2;     // liquid radius in its own px (a circle, so rotation does not matter)
     // Drop point in the liquid's own (rotated) frame, for the ripples.
     const ang = -(parseFloat(coffee.style.getPropertyValue('--r')) || 0) * Math.PI / 180;
-    const dx = (clientX - (L.left + L.width / 2)) / scale, dy = (clientY - (L.top + L.height / 2)) / scale;
+    const dx = (clientX - (L.left + L.width / 2)) / (scale * cs), dy = (clientY - (L.top + L.height / 2)) / (scale * cs);
     const lx = rad + dx * Math.cos(ang) - dy * Math.sin(ang), ly = rad + dx * Math.sin(ang) + dy * Math.cos(ang);
     [0, 160].forEach((delay, i) => {
       const ring = document.createElement('div');
@@ -251,14 +264,14 @@ export function mountDesk(root, router) {
     for (let i = 0; i < 16; i++) { const rr = i % 2 ? 11 : 22, t = i / 16 * Math.PI * 2; pts.push(`${(Math.cos(t) * rr).toFixed(1)},${(Math.sin(t) * rr).toFixed(1)}`); }
     const splat = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     splat.setAttribute('class', 'splat'); splat.setAttribute('viewBox', '-30 -30 60 60');
-    Object.assign(splat.style, { left: p.x - 30 + 'px', top: p.y - 30 + 'px', width: '60px', height: '60px' });
+    Object.assign(splat.style, { left: p.x - 30 * cs + 'px', top: p.y - 30 * cs + 'px', width: 60 * cs + 'px', height: 60 * cs + 'px' });
     splat.innerHTML = `<polygon points="${pts.join(' ')}" fill="#4a2a16" stroke="#1a0d06" stroke-width="2.5" stroke-linejoin="round"/><circle cx="-6" cy="-7" r="4" fill="#c89a6e"/>`;
     stage.appendChild(splat);
     splat.animate([{ transform: 'scale(0) rotate(0deg)' }, { transform: 'scale(1.2) rotate(12deg)', offset: .35 }, { transform: 'scale(0) rotate(20deg)' }],
                   { duration: 420, easing: 'cubic-bezier(0.2, 1.4, 0.4, 1)' }).finished.then(() => splat.remove());
     // Fat drops burst out, pointing the way they fly, arc up and fall back.
     for (let i = 0; i < 9; i++) {
-      const d = document.createElement('div'), s = 9 + Math.random() * 7, a = (i / 9) * Math.PI * 2 + Math.random() * .5, dist = 34 + Math.random() * 30;
+      const d = document.createElement('div'), s = (9 + Math.random() * 7) * cs, a = (i / 9) * Math.PI * 2 + Math.random() * .5, dist = (34 + Math.random() * 30) * cs;
       const ddx = Math.cos(a) * dist, ddy = Math.sin(a) * dist, deg = a * 180 / Math.PI + 90;
       d.className = 'drop';
       Object.assign(d.style, { left: p.x - s / 2 + 'px', top: p.y - s * .6 + 'px', width: s + 'px', height: s * 1.25 + 'px' });
@@ -272,7 +285,7 @@ export function mountDesk(root, router) {
     // "plop!"
     const w = document.createElement('div');
     w.className = 'plop'; w.textContent = 'plop!';
-    Object.assign(w.style, { left: p.x + 18 + 'px', top: p.y - 30 + 'px' });
+    Object.assign(w.style, { left: p.x + 18 * cs + 'px', top: p.y - 30 * cs + 'px', fontSize: 17 * Math.max(cs, .7) + 'px' });
     stage.appendChild(w);
     w.animate([{ transform: 'translateY(8px) rotate(-8deg) scale(.5)', opacity: 0 }, { transform: 'translateY(-6px) rotate(-8deg) scale(1.15)', opacity: 1, offset: .3 },
                { transform: 'translateY(-26px) rotate(-8deg) scale(1)', opacity: 0 }], { duration: 900, easing: 'cubic-bezier(0.2, 0.9, 0.3, 1)' }).finished.then(() => w.remove());
@@ -284,7 +297,6 @@ export function mountDesk(root, router) {
 
   sugarCap();
   cubes.forEach(cube => {
-    const [hx, hy] = cube.dataset.home.split(',').map(Number);
     let start = null;
     on(cube, 'pointerenter', () => cubehint.classList.add('show'));
     on(cube, 'pointerleave', () => { if (!start) cubehint.classList.remove('show'); });
@@ -292,6 +304,7 @@ export function mountDesk(root, router) {
       start = { x: e.clientX, y: e.clientY, left: cube.offsetLeft, top: cube.offsetTop };
       cube.setPointerCapture(e.pointerId); cube.classList.add('dragging');
     });
+    on(cube, 'pointercancel', () => { start = null; cube.classList.remove('dragging'); });
     on(cube, 'pointermove', e => {
       if (!start) return;
       cube.style.left = start.left + (e.clientX - start.x) / scale + 'px';
@@ -302,7 +315,15 @@ export function mountDesk(root, router) {
       start = null; cube.classList.remove('dragging'); cubehint.classList.remove('show');
       const c = cube.getBoundingClientRect(), L = liquid.getBoundingClientRect();
       const cx = c.left + c.width / 2, cy = c.top + c.height / 2;
-      if (Math.hypot(cx - (L.left + L.width / 2), cy - (L.top + L.height / 2)) > L.width / 2 * 0.9) { if (cube.offsetLeft !== hx || cube.offsetTop !== hy) messy(); return; }
+      const [hx, hy] = homes.get(cube);
+      if (Math.hypot(cx - (L.left + L.width / 2), cy - (L.top + L.height / 2)) > L.width / 2 * 0.9) {
+        if (cube.offsetLeft === hx && cube.offsetTop === hy) return;
+        if (!small.matches) return messy();
+        const bx = cube.offsetLeft - hx, by = cube.offsetTop - hy;      // phones have no tidy button: slide back
+        cube.style.left = hx + 'px'; cube.style.top = hy + 'px';
+        if (!still) cube.animate([{ translate: `${bx}px ${by}px` }, { translate: '0 0' }], { duration: 320, easing: 'cubic-bezier(0.3, 0.8, 0.3, 1)' });
+        return;
+      }
       cube.style.pointerEvents = 'none';
       const cr = parseFloat(cube.style.getPropertyValue('--cr')) || 0;
       await cube.animate([{ scale: '1.12', rotate: cr + 'deg', opacity: 1 }, { scale: '.25', rotate: cr + 40 + 'deg', opacity: 0 }],
@@ -327,7 +348,8 @@ export function mountDesk(root, router) {
     $('#ltime').textContent = `${parts.hour}:${parts.minute}`;
     $('#lampm').textContent = parts.dayPeriod;
     $('#ldate').textContent = date;
-    $('#mtime').textContent = `${parts.hour}:${parts.minute}`;
+    $$('#mtime, .mtime').forEach(el => { el.textContent = `${parts.hour}:${parts.minute}`; });
+    $('#ftime').textContent = `${parts.hour}:${parts.minute} ${parts.dayPeriod}`;
   }
   vancouverNow(); every(vancouverNow, 10000);
 
@@ -566,8 +588,9 @@ export function mountDesk(root, router) {
   function deskPose() {
     const r = resume.getBoundingClientRect(), pr = page.getBoundingClientRect();
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    const lifted = resume.matches(':hover, :focus-visible');   // match the hover pose so the hand-off has no jump
-    const k = (resume.offsetWidth * scale * (lifted ? 1.03 : 1)) / pr.width;
+    const lifted = !small.matches && resume.matches(':hover, :focus-visible');   // match the hover pose so the hand-off has no jump
+    const ms = parseFloat(resume.style.getPropertyValue('--ms')) || 1;
+    const k = (resume.offsetWidth * scale * ms * (lifted ? 1.03 : 1)) / pr.width;
     const rot = (parseFloat(resume.style.getPropertyValue('--r')) || 0) + (lifted ? 2 : 0);
     return { cx, cy, t: `translate(${cx - (pr.left + pr.width / 2)}px, ${cy - (pr.top + pr.height / 2)}px) rotate(${rot}deg) scale(${k})` };
   }
@@ -622,6 +645,54 @@ export function mountDesk(root, router) {
   }
   on($('#back'), 'click', warpOut);
   on(window, 'keydown', e => { if (e.key === 'Escape' && viewer.classList.contains('show')) warpOut(); });
+
+  // ---------- Pocket desk (M3): where each object sits on a phone ----------
+  // From the Brilliant frame "M3 · Pocket desk" (390 x 844): each object's centre, rotation (deg),
+  // scale, and caption row. Captions line up per row at y = 340, 524, and 736.
+  const POCKET = [
+    ['.travel', 102, 274, -3, .6, 340], ['.notebook', 240, 268, 4, .509, 340], ['#phone', 341, 267, 8, .347, 340],
+    ['.folder', 93.5, 459, -4, .62, 524], ['#resume', 223, 458.5, -6, .511, 524], ['.books', 334, 454, 0, .47, 524],
+    ['#coffee', 102, 652.5, -10, .646, 736], ['.food', 299, 647.5, 6, .567, 736],
+  ];
+  const POCKET_CUBES = [[196, 640.5, -8], [208, 660.5, 14], [194, 678.5, 3]], CUBE_SCALE = .6;
+  const deskStyle = new Map([...objsAll, ...cubes].map(el => [el, el.getAttribute('style')]));
+  function layout() {
+    deskStyle.forEach((style, el) => el.setAttribute('style', style));      // the desk: positions from the markup
+    if (small.matches) {
+      POCKET.forEach(([sel, cx, cy, r, ms, row]) => {
+        const el = $(sel), w = el.offsetWidth, h = el.offsetHeight;
+        Object.assign(el.style, { left: cx - w / 2 + 'px', top: cy - h / 2 + 'px' });
+        el.style.setProperty('--r', r + 'deg'); el.style.setProperty('--ms', ms);
+        el.style.setProperty('--cy', (row - cy) / ms + h / 2 + 'px');
+      });
+      cubes.forEach((c, i) => {
+        const [cx, cy, r] = POCKET_CUBES[i];
+        Object.assign(c.style, { left: cx - c.offsetWidth / 2 + 'px', top: cy - c.offsetHeight / 2 + 'px' });
+        c.style.setProperty('--cr', r + 'deg'); c.style.setProperty('--ms', CUBE_SCALE);
+      });
+    }
+    rememberHomes(); tidyBtn.classList.remove('show');
+  }
+  layout();
+  on(small, 'change', () => { closeSheet(); layout(); fit(); });
+
+  // ---------- Phones: Socials opens a contact sheet ----------
+  const sheet = $('#sheet'), sheetRows = $$('.sheetrows li');
+  function openSheet() {
+    const room = innerHeight - 290;                  // the sheet without the phone: header, buttons, hint, gaps
+    sheet.style.setProperty('--k', Math.max(.75, Math.min(1.1, room / 420)).toFixed(3));
+    sheet.classList.add('show'); sheet.setAttribute('aria-hidden', 'false'); sheet.scrollTop = 0;
+    $('#sheetclose').focus({ preventScroll: true });
+  }
+  function closeSheet() {
+    if (!sheet.classList.contains('show')) return;
+    sheet.classList.remove('show'); sheet.setAttribute('aria-hidden', 'true');
+    phone.focus({ preventScroll: true });
+  }
+  on($('#sheetclose'), 'click', closeSheet);
+  on(sheet, 'click', e => { if (e.target === sheet) closeSheet(); });      // a tap on the dim closes it
+  sheetRows.forEach(r => on(r, 'click', () => { sheetRows.forEach(x => x.classList.toggle('on', x === r)); go(r); }));
+  on(window, 'keydown', e => { if (e.key === 'Escape') closeSheet(); });
 
   return () => {
     dead = true;
