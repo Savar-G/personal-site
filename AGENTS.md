@@ -15,3 +15,9 @@ This laptop has 24 GB of RAM. One Next.js dev server plus one browser pane costs
 - **One worktree at a time for this repo.** Do not spawn parallel worktrees or subagents with `isolation: "worktree"` here. Check `git worktree list` before creating one.
 - **Before handoff, run `npm run dev:check`.** If it reports a listener, inspect ownership before stopping it. Never kill an unknown or user-owned process.
 - **The hook also matches prose.** A shell heredoc that mentions the banned commands is blocked too. Edit documentation with the file tools, not with Bash.
+
+## Homepage redesign in progress
+
+- The design contract is `.design/redesign/DESIGN.md`. The reasons for every choice, including rejected options, are in `.design/redesign/decisions.md`. Read both before you change the redesign. The root `DESIGN.md` covers only the Things page.
+- The working prototype is `mockups/desk-prototype/index.html`. `mockups/` is gitignored, so the prototype exists only on this laptop. Savar opens it as a file (`open <path>`); it needs no server.
+- Agents cannot see the prototype render. After each edit, run a headless runtime test (jsdom, with stubs for `matchMedia` and `Element.animate`) as well as a syntax check.

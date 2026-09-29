@@ -1,0 +1,75 @@
+{
+  "schema_version": 2,
+  "route": "full",
+  "job_kind": "redesign",
+  "surface": "marketing",
+  "constraint_mode": "greenfield",
+  "phase": "explore",
+  "gates": {
+    "contract": "approved",
+    "direction": "approved",
+    "ship": "pending"
+  },
+  "artifacts": {
+    "design_contract": ".design/redesign/DESIGN.md",
+    "references": ".design/redesign/references.json",
+    "decisions": ".design/redesign/decisions.md",
+    "selected_experiment": "Brilliant frame B3 (07c1a01251c4353c) + mockups/desk-prototype/index.html",
+    "experiments": ".design/redesign/experiments/r1/manifest.json",
+    "latest_evidence": [
+      ".design/redesign/evidence/r1/a-structured-1440.jpg",
+      ".design/redesign/evidence/r1/b-desk-1440.jpg",
+      ".design/redesign/evidence/r1/c-hybrid-1440.jpg"
+    ],
+    "latest_review": null,
+    "canvas": "Brilliant project 'Personal Website', canvas 'main' (frames A_root, B_root, C_root)",
+    "prototype": "mockups/desk-prototype/index.html (gitignored; open the file directly, no server)",
+    "mobile_frames": "Brilliant main: M3 (109385e3d7cd496f), M3f contact sheet (4bda77c0b55f21fa)"
+  },
+  "open_decisions": [
+    {
+      "id": "D2",
+      "question": "Where do Bookshelf and Things live in the new nav?",
+      "owner": "user",
+      "status": "open"
+    },
+    {
+      "id": "D3",
+      "question": "Coffee chat: /meet page or direct Cal.com link?",
+      "owner": "user",
+      "status": "open"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "B1",
+      "reason": "No headshot on file",
+      "needs": "Savar supplies a photo (A uses one)"
+    },
+    {
+      "id": "B2",
+      "reason": "Beli handle and Cal.com URL unknown",
+      "needs": "Savar supplies both links"
+    },
+    {
+      "id": "B3",
+      "reason": "Travel photos are AI stand-ins",
+      "needs": "Savar supplies his own trip photos before build"
+    },
+    {
+      "id": "B4",
+      "reason": "Prototype not yet seen in a browser (repo rule: agents do not open browsers)",
+      "needs": "Savar opens mockups/desk-prototype/index.html and reports issues"
+    },
+    {
+      "id": "B5",
+      "reason": "Live site serves the old resume (May 7); confirmed current is ~/Documents/Savar_Gupta_Resume.pdf (Sep 18)",
+      "needs": "Replace public/Savar_Gupta_Resume.pdf and deploy (needs Savar OK to push)"
+    },
+    {
+      "id": "B6",
+      "reason": "Composio GEMINI_GENERATE_IMAGE is set to ask_every_call; the last calls were denied without an approval",
+      "needs": "Savar approves the call in Composio (or allows the tool), then retry chopsticks + chopstick-free ramen"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "source": "https://www.kuldeep.us/",
+    "author": "user",
+    "captured": "2026-09-28",
+    "annotation": "Visually appealing, easy to read, structured, simple, minimal.",
+    "take": ["one narrow column", "greeting + 3 short bio lines with bold entities", "status dot + 'let's chat' link", "icon row for socials", "photo carousel", "experience rows with logo, role, dates", "2-up project cards", "dot-grid background", "nav: about / projects / blog / meet"],
+    "avoid": ["generic dev-portfolio sameness", "hides the non-work side"],
+    "applies_to": ["hierarchy", "layout", "type", "content"],
+    "priority": "primary"
+  },
+  {
+    "source": "https://prasjain.com/",
+    "author": "user",
+    "captured": "2026-09-28",
+    "annotation": "Icons as objects you can move around and click to open a page. Unique and interactive.",
+    "take": ["photo cut-out objects as navigation (film strip = photos, folder = resume, pizza = Beli, phone = socials, plane = travel)", "handwritten greeting + mono subtitle", "white page, no chrome", "Beli link at app.beliapp.com/lists/<handle>"],
+    "avoid": ["no facts on first screen", "weak on mobile (site says 'looks way better on desktop')", "heavy image payload"],
+    "applies_to": ["interaction", "imagery", "navigation"],
+    "priority": "primary"
+  }
+]

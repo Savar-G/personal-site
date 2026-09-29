@@ -1,0 +1,40 @@
+{
+  "round": 1,
+  "decision": "Which homepage model should savargupta.com use: structured index, object desk, or a hybrid?",
+  "primary_axis": "page structure / navigation model (scannable index vs. objects-as-navigation)",
+  "invariants": [
+    "same content and facts (see DESIGN.md content invariants)",
+    "desktop viewport 1440 wide",
+    "same section set: about, projects, writing, travel, food (Beli), coffee chat (Cal.com), resume",
+    "same generated object and photo assets reused across B and C"
+  ],
+  "tool": "Brilliant, project 'Personal Website', canvas 'main'",
+  "options": [
+    {
+      "id": "A",
+      "artifact": "Brilliant frame 'A - Structured'",
+      "reference": "https://www.kuldeep.us/",
+      "bet": "A calm, scannable one-column page wins the 20-second visit",
+      "benefit": "Fastest read for recruiters; easy to build and maintain; ages well",
+      "cost": "Low personality; the travel and food side of Savar reads as a footnote",
+      "risk": "Looks like many other student portfolios"
+    },
+    {
+      "id": "B",
+      "artifact": "Brilliant frame 'B - Desk'",
+      "reference": "https://prasjain.com/",
+      "bet": "A playful desk of objects makes the site memorable and invites exploration",
+      "benefit": "Distinct; shows taste and the life outside work (travel, food, coffee)",
+      "cost": "No facts on the first screen; every answer is one click away; heavy image assets",
+      "risk": "Recruiters bounce; mobile needs a separate layout (the reference admits it)"
+    },
+    {
+      "id": "C",
+      "artifact": "Brilliant frame 'C - Hybrid'",
+      "bet": "Facts on the left, a desk of objects on the right, a structured index below",
+      "benefit": "Scannable first screen plus a memorable, clickable personality layer",
+      "cost": "More complex to build; two navigation systems (nav bar and objects)",
+      "risk": "Can feel like two sites stitched together if the visual language does not unify them"
+    }
+  ]
+}
