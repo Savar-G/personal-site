@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/bookshelf", label: "Bookshelf" },
+  { href: "/things", label: "Things" },
   { href: "https://health.savargupta.com", label: "Health", external: true },
 ];
 

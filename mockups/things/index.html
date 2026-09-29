@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Things I Love — 3 options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; margin-top: 2.25rem; }
+  @media (max-width: 860px) { .opts { grid-template-columns: 1fr; } }
+  .opt {
+    display: block; text-decoration: none; color: inherit;
+    border: 1px solid var(--stone-200); border-radius: 0.85rem;
+    padding: 1.4rem 1.5rem 1.6rem; background: var(--stone-50);
+    transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+  }
+  .opt:hover { transform: translateY(-4px); border-color: var(--stone-300); box-shadow: 0 20px 38px -24px rgba(12,10,9,0.35); }
+  .opt-tag { display: flex; align-items: center; gap: 0.6rem; }
+  .opt-letter {
+    font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
+    color: var(--stone-50); background: var(--stone-900);
+    width: 1.7rem; height: 1.7rem; border-radius: 0.45rem;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .opt h2 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.015em; margin: 0; }
+  .opt p { color: var(--stone-600); font-size: 0.9rem; line-height: 1.55; margin: 0.85rem 0 0; }
+  .opt dl { margin: 1.1rem 0 0; font-size: 0.8rem; line-height: 1.5; }
+  .opt dt { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone-400); margin-top: 0.7rem; }
+  .opt dd { margin: 0.15rem 0 0; color: var(--stone-600); }
+  .note { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--stone-200); font-size: 0.85rem; color: var(--stone-500); line-height: 1.65; max-width: 66ch; }
+  .note strong { color: var(--stone-800); font-weight: 500; }
+  .note ul { padding-left: 1.1rem; margin: 0.6rem 0 0; }
+  .note li { margin-bottom: 0.35rem; }
+</style>
+</head>
+<body>
+  <div class="wrap" style="max-width:60rem;">
+    <header class="page-head">
+      <p class="page-kicker">Round 1 · progressive disclosure</p>
+      <h1 class="page-title">How should the reason be revealed?</h1>
+      <p class="lede">Same five products, same cutouts, same stone and Geist tokens, same placeholder copy. Only the disclosure model changes.</p>
+    </header>
+
+    <div class="opts">
+      <a class="opt" href="a-table.html">
+        <div class="opt-tag"><span class="opt-letter">A</span><h2>Table of objects</h2></div>
+        <p>All five sit on one shared floor line at plausible relative scale. Click one and the reason opens in a panel <em>below the row</em> — the objects are never covered.</p>
+        <dl>
+          <dt>Bet</dt><dd>Keep one surface. Never put a sheet over the page.</dd>
+          <dt>Cost</dt><dd>One reason at a time; the page grows when it opens.</dd>
+          <dt>Risk</dt><dd>The panel can feel detached from the object you clicked.</dd>
+        </dl>
+      </a>
+
+      <a class="opt" href="b-essay.html">
+        <div class="opt-tag"><span class="opt-letter">B</span><h2>Illustrated essay</h2></div>
+        <p>Nothing is hidden. Every object and every reason is on the page, alternating sides. There is no click target at all.</p>
+        <dl>
+          <dt>Bet</dt><dd>At five items the reason is the page. Hiding it wastes it.</dd>
+          <dt>Cost</dt><dd>Drops your click-to-reveal ask. Longest page.</dd>
+          <dt>Risk</dt><dd>Reads as a blog post rather than a collection.</dd>
+        </dl>
+      </a>
+
+      <a class="opt" href="c-tile.html">
+        <div class="opt-tag"><span class="opt-letter">C</span><h2>Tile reveal</h2></div>
+        <p>Your brief, literally. A grid of objects; click one and the reason takes its place inside the same tile. The grid never reflows.</p>
+        <dl>
+          <dt>Bet</dt><dd>Compact, stable, closest to what you described.</dd>
+          <dt>Cost</dt><dd>The tile caps how long a reason can be.</dd>
+          <dt>Risk</dt><dd>Hides the only real content behind a click.</dd>
+        </dl>
+      </a>
+    </div>
+
+    <div class="note">
+      <strong>What is real and what is not.</strong>
+      <ul>
+        <li><strong>Real:</strong> the five products, the cutouts (generated from official retail shots), the aspect ratios, the stone/Geist tokens, and every interaction.</li>
+        <li><strong>Placeholder:</strong> all reason copy, marked with a dashed rule and a <em>placeholder copy</em> tag. Savar writes the real text. Lengths are varied on purpose — one sentence for AirPods, four for the mouse — so each layout meets its extremes.</li>
+        <li><strong>To check:</strong> the images are Logitech <em>MX Master 3S</em>; confirm whether you own the 3 or the 3S.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

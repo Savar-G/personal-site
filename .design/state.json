@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "route": "focused",
+  "job_kind": "new",
+  "surface": "marketing",
+  "constraint_mode": "existing-system",
+  "phase": "explore",
+  "gates": {
+    "contract": "approved",
+    "direction": "pending",
+    "ship": "pending"
+  },
+  "artifacts": {
+    "design_contract": "DESIGN.md",
+    "references": ".design/references.json",
+    "decisions": ".design/decisions.md",
+    "selected_experiment": null,
+    "latest_evidence": [
+      ".design/evidence/r1/a-table-open-1280.jpg",
+      ".design/evidence/r1/b-essay-1280.jpg",
+      ".design/evidence/r1/c-tile-open-1280.jpg"
+    ],
+    "latest_review": null,
+    "experiments": ".design/experiments/r1/manifest.json"
+  },
+  "open_decisions": [
+    {
+      "id": "D1",
+      "question": "How is the reason revealed, and how much of it is visible at rest? Must not be a visual copy of the bookshelf cover-to-modal morph.",
+      "owner": "user",
+      "status": "open"
+    },
+    {
+      "id": "D2",
+      "question": "Route and nav label: /things (\"Things\"), /loves, /gear, or /kit?",
+      "owner": "user",
+      "status": "open"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "B1",
+      "reason": "All reason copy is placeholder. Only 'I vlog using this' is Savar's own wording.",
+      "needs": "Savar writes 2-4 sentences per product. Build cannot ship without them."
+    },
+    {
+      "id": "B2",
+      "reason": "Cutouts are of the Logitech MX Master 3S; Savar named the MX Master 3.",
+      "needs": "Confirm which model he owns, then re-source that image if it is the 3."
+    }
+  ]
+}

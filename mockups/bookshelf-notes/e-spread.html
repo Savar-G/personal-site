@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E · Book Spread — Bookshelf mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+<style>
+  /* Shelf */
+  .shelf-sec { margin-bottom: 2.6rem; }
+  .shelf-label { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-400); margin: 0 0 1.1rem; }
+  .shelf { position: relative; }
+  .shelf-row { display: flex; flex-wrap: wrap; gap: 1.5rem 1.4rem; align-items: flex-end; padding-bottom: 1rem; }
+  .sbook { position: relative; border: 0; background: transparent; padding: 0; cursor: pointer; width: 6rem; transition: transform 0.22s var(--ease-out); }
+  .sbook:hover { transform: translateY(-6px); }
+  .sbook img { width: 6rem; height: 9rem; object-fit: cover; border-radius: 2px 4px 4px 2px; box-shadow: 0 1px 1px rgba(0,0,0,0.18), 0.4rem 0.7rem 1rem -0.55rem rgba(0,0,0,0.5); display: block; }
+  .sbook .scount { display: block; margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.68rem; color: var(--stone-400); text-align: center; }
+  .sbook:hover .scount { color: var(--stone-600); }
+  .shelf-plinth { height: 0.5rem; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--stone-300) 6%, var(--stone-300) 94%, transparent); box-shadow: 0 16px 22px -18px rgba(28,25,23,0.38); }
+
+  /* Cross-book search results */
+  .results-head { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--stone-400); margin: 0 0 1.1rem; }
+  .res { display: flex; gap: 0.95rem; width: 100%; text-align: left; background: var(--stone-50); border: 1px solid var(--stone-200); border-radius: 0.6rem; padding: 0.85rem 1rem; margin-bottom: 0.7rem; cursor: pointer; font: inherit; color: inherit; transition: border-color 0.16s var(--ease-out), background-color 0.16s var(--ease-out); }
+  .res:hover { border-color: var(--stone-300); background: var(--stone-100); }
+  .res img { width: 1.9rem; height: 2.8rem; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.28); flex: 0 0 auto; }
+  .res .res-body { min-width: 0; }
+  .res .res-text { font-size: 0.92rem; line-height: 1.5; color: var(--stone-800); margin: 0; }
+  .res.q .res-text { font-style: italic; color: var(--stone-600); }
+  .res .res-meta { display: flex; align-items: center; gap: 0.55rem; margin-top: 0.4rem; }
+  .res .res-book { font-size: 0.76rem; color: var(--stone-500); }
+
+  /* ---- Two-page spread reader ---- */
+  .spread-backdrop { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1.25rem; background: color-mix(in oklab, var(--stone-950) 46%, transparent); backdrop-filter: blur(7px) saturate(0.9); -webkit-backdrop-filter: blur(7px) saturate(0.9); opacity: 0; transition: opacity 0.24s var(--ease-out); }
+  .spread-backdrop[data-open="true"] { opacity: 1; }
+  .spread { --accent: var(--stone-400); position: relative; display: flex; width: 100%; max-width: 56rem; max-height: min(88vh, 42rem); background: #fbfaf8; border-radius: 0.4rem; overflow: hidden; box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset, 0 44px 90px -34px rgba(12,10,9,0.6); transform: translateY(10px) scale(0.99); transition: transform 0.28s var(--ease-out); }
+  .spread-backdrop[data-open="true"] .spread { transform: none; }
+  /* center gutter */
+  .spread::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 2.5rem; transform: translateX(-50%); pointer-events: none; background: linear-gradient(90deg, transparent, rgba(28,25,23,0.07) 45%, rgba(28,25,23,0.10) 50%, rgba(28,25,23,0.07) 55%, transparent); z-index: 3; }
+  @media (max-width: 700px){ .spread { flex-direction: column; max-height: 92vh; } .spread::after { display:none; } }
+
+  .page { flex: 1 1 50%; min-width: 0; overflow-y: auto; }
+  .page-left { background: linear-gradient(150deg, #fbfaf8, color-mix(in oklab, var(--accent) 12%, #fbfaf8)); border-right: 1px solid rgba(28,25,23,0.07); display: flex; flex-direction: column; align-items: center; text-align: center; padding: 2.4rem 2rem; }
+  @media (max-width:700px){ .page-left { border-right: 0; border-bottom: 1px solid rgba(28,25,23,0.08);} }
+  .page-left img { width: 11rem; max-width: 50%; border-radius: 3px; box-shadow: 0 2px 3px rgba(0,0,0,0.15), 0.5rem 1rem 1.6rem -0.7rem rgba(0,0,0,0.5); }
+  .pl-eyebrow { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 1.5rem 0 0; }
+  .pl-title { font-family: "Newsreader", Georgia, serif; font-weight: 500; font-size: 1.55rem; line-height: 1.16; margin: 0.4rem 0 0; }
+  .pl-by { margin: 0.4rem 0 0; color: var(--stone-500); font-size: 0.9rem; }
+  .pl-meta { margin: 0.9rem 0 0; font-size: 0.78rem; color: var(--stone-400); display:flex; gap:0.5rem; align-items:center; justify-content:center; }
+  .pl-rating { display:inline-flex; gap:0.26rem; }
+  .pl-rating i { width:0.42rem;height:0.42rem;border-radius:999px;background:var(--stone-600);font-style:normal; }
+  .pl-rating i[data-on="false"]{ background: var(--stone-300); }
+  .pl-summary { font-family:"Newsreader",Georgia,serif; font-style: italic; font-size: 1.05rem; line-height: 1.5; color: var(--stone-600); margin: 1.5rem 0 0; }
+
+  .page-right { padding: 2.4rem 2rem 2.4rem 2.4rem; }
+  .sp-tabs { display:flex; gap: 0.3rem; border-bottom: 1px solid rgba(28,25,23,0.1); margin-bottom: 1.3rem; }
+  .sp-tab { font: inherit; font-size: 0.85rem; color: var(--stone-500); background: none; border: 0; border-bottom: 2px solid transparent; padding: 0.5rem 0.2rem; margin-bottom: -1px; cursor: pointer; }
+  .sp-tab:hover { color: var(--stone-800); }
+  .sp-tab[aria-selected="true"] { color: var(--stone-900); border-bottom-color: var(--accent); font-weight: 500; }
+  .sp-tab .c { font-family: var(--font-mono); font-size: 0.7rem; opacity:0.5; margin-left: 0.3rem; }
+  .sp-panel[hidden]{ display:none; }
+  .sp-tk { position: relative; padding-left: 1.1rem; margin: 0 0 0.75rem; font-size: 0.95rem; line-height: 1.55; color: var(--stone-700); }
+  .sp-tk::before { content:""; position:absolute; left:0; top:0.62em; width:0.38rem;height:0.38rem;border-radius:999px;background:var(--accent); }
+  .sp-q { font-family:"Newsreader",Georgia,serif; font-size: 1.12rem; line-height: 1.45; color: var(--stone-700); margin: 0 0 1.2rem; padding-left: 1rem; border-left: 2px solid color-mix(in oklab,var(--accent) 55%, var(--stone-200)); }
+  .sp-q cite { display:block; font-family: var(--font-sans); font-style: normal; font-size: 0.76rem; color: var(--stone-400); margin-top: 0.4rem; }
+  .sp-note { margin: 0 0 1.3rem; }
+  .sp-note h4 { font-family:"Newsreader",Georgia,serif; font-weight:500; font-size: 1.08rem; margin: 0 0 0.35rem; }
+  .sp-note p, .sp-note li { font-size: 0.92rem; line-height: 1.6; color: var(--stone-700); margin: 0; }
+  .sp-note ul { margin:0; padding-left: 1.1rem; }
+  .sp-faint { color: var(--stone-400); font-style: italic; }
+  .sp-close { position: absolute; top: 0.6rem; right: 0.6rem; z-index: 4; display:inline-flex; align-items:center; justify-content:center; width:2.4rem;height:2.4rem;border:0;border-radius:999px;background:color-mix(in oklab,#fbfaf8 80%,transparent);color:var(--stone-600);cursor:pointer; }
+  .sp-close:hover { background:#fff; color: var(--stone-900); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="page-kicker">Bookshelf · Notes</p>
+      <h1 class="page-title">Bookshelf</h1>
+      <p class="page-sub">Browse the shelf and open any book as a two-page spread — or search to pull matching notes from across every book.</p>
+    </header>
+
+    <div class="controls">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="q" type="search" placeholder="Search across every note…" aria-label="Search notes">
+        <button class="search-clear" id="clear" aria-label="Clear search">✕</button>
+      </div>
+      <div class="chips" id="catChips" role="group" aria-label="Filter by category"></div>
+    </div>
+
+    <div id="shelf"></div>
+    <div id="results" hidden></div>
+    <div class="empty" id="empty" hidden><strong>Nothing matches that yet.</strong>Try another word or topic.</div>
+  </div>
+
+  <div class="mock-tag"><a href="index.html">← all mockups</a> · E — Book Spread</div>
+
+  <script src="_data.js"></script>
+  <script>
+    const esc=(s)=>String(s).replace(/[&<>"]/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    function hl(t,q){const e=esc(t);if(!q)return e;const re=new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig");return e.replace(re,"<mark class='hit'>$1</mark>");}
+    let state={q:"",cat:"all"};
+    const notes=allNotes();
+
+    const catChips=document.getElementById("catChips");
+    const catAll=document.createElement("button"); catAll.className="chip"; catAll.setAttribute("aria-pressed","true"); catAll.textContent="All topics"; catAll.onclick=()=>{state.cat="all";syncCat(catAll);render();}; catChips.appendChild(catAll);
+    CATEGORIES.forEach((c)=>{const b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed","false");b.textContent=c;b.onclick=()=>{state.cat=c;syncCat(b);render();};catChips.appendChild(b);});
+    function syncCat(a){catChips.querySelectorAll(".chip").forEach((c)=>c.setAttribute("aria-pressed",String(c===a)));}
+
+    const q=document.getElementById("q"),clear=document.getElementById("clear");
+    q.addEventListener("input",()=>{state.q=q.value.trim();clear.setAttribute("data-show",String(!!state.q));render();});
+    clear.onclick=()=>{q.value="";state.q="";clear.setAttribute("data-show","false");render();q.focus();};
+
+    const SHELVES=[{id:"reading",label:"Currently reading"},{id:"read",label:"Read"}];
+    const inCat=(b)=> state.cat==="all"||b.category===state.cat;
+
+    function shelfView(){
+      const host=document.getElementById("shelf");
+      host.innerHTML=SHELVES.map((s)=>{
+        const books=BOOKS.filter((b)=>b.status===s.id&&inCat(b));
+        if(!books.length) return "";
+        return `<section class="shelf-sec"><h2 class="shelf-label">${s.label}</h2><div class="shelf"><div class="shelf-row">`+
+          books.map((b)=>`<button class="sbook" data-slug="${b.slug}" style="--accent:${b.spineColor}"><img src="${b.cover}" alt="Cover of ${esc(b.title)} by ${esc(b.author)}"><span class="scount">${noteCount(b)?noteCount(b)+" notes":"—"}</span></button>`).join("")+
+          `</div><div class="shelf-plinth" aria-hidden="true"></div></div></section>`;
+      }).join("");
+      host.querySelectorAll(".sbook").forEach((el)=>el.onclick=()=>openSpread(el.dataset.slug));
+    }
+
+    function resultsView(){
+      const list=notes.filter((x)=>inCat(x.book) && (x.text+" "+(x.heading||"")+" "+x.book.title+" "+x.book.author).toLowerCase().includes(state.q.toLowerCase()));
+      const host=document.getElementById("results");
+      const labelFor={takeaway:"Takeaway",quote:"Quote",note:"Note"};
+      host.innerHTML = `<p class="results-head">${list.length} match${list.length!==1?"es":""} for “${esc(state.q)}”${state.cat!=="all"?" in "+esc(state.cat):""}</p>`+
+        list.map((x)=>`<button class="res ${x.type==="quote"?"q":""}" data-slug="${x.book.slug}" data-tab="${x.type}"><img src="${x.book.cover}" alt=""><div class="res-body"><p class="res-text">${x.type==="quote"?"“":""}${hl(x.heading?x.heading+" — "+x.text:x.text,state.q)}${x.type==="quote"?"”":""}</p><div class="res-meta"><span class="badge is-${x.type}">${labelFor[x.type]}</span><span class="res-book">${esc(x.book.title)} · ${esc(x.book.author)}</span></div></div></button>`).join("");
+      host.querySelectorAll(".res").forEach((el)=>el.onclick=()=>openSpread(el.dataset.slug, el.dataset.tab));
+      return list.length;
+    }
+
+    function render(){
+      const searching=!!state.q;
+      document.getElementById("shelf").hidden=searching;
+      document.getElementById("results").hidden=!searching;
+      const empty=document.getElementById("empty");
+      if(searching){ const n=resultsView(); empty.hidden=n>0; }
+      else { shelfView(); empty.hidden=true; }
+    }
+
+    /* ---- spread reader ---- */
+    let sb, lastFocus;
+    function ensureSpread(){
+      if(sb) return;
+      sb=document.createElement("div"); sb.className="spread-backdrop"; sb.setAttribute("data-open","false");
+      sb.innerHTML='<div class="spread" role="dialog" aria-modal="true" tabindex="-1"></div>';
+      document.body.appendChild(sb);
+      sb.addEventListener("mousedown",(e)=>{if(e.target===sb) closeSpread();});
+      document.addEventListener("keydown",(e)=>{if(e.key==="Escape"&&sb.getAttribute("data-open")==="true")closeSpread();});
+    }
+    function closeSpread(){ sb.setAttribute("data-open","false"); document.body.style.overflow=""; setTimeout(()=>sb.style.display="none",240); if(lastFocus)lastFocus.focus(); }
+    function openSpread(slug, tab){
+      ensureSpread(); const b=BOOKS.find((x)=>x.slug===slug); if(!b) return; lastFocus=document.activeElement;
+      const sp=sb.querySelector(".spread"); sp.style.setProperty("--accent",b.spineColor);
+      const meta=b.status==="reading"?"Currently reading":(b.date?`Read · ${b.date}`:"Read");
+      const hasT=b.takeaways.length,hasQ=b.quotes.length,hasN=b.notes.length;
+      const first = tab && {takeaway:"takeaways",quote:"quotes",note:"notes"}[tab] || (hasT?"takeaways":hasQ?"quotes":hasN?"notes":"takeaways");
+      const tHTML=hasT?b.takeaways.map((t)=>`<p class="sp-tk">${esc(t)}</p>`).join(""):'<p class="sp-faint">No takeaways yet.</p>';
+      const qHTML=hasQ?b.quotes.map((x)=>`<blockquote class="sp-q">“${esc(x.text)}”${x.source?`<cite>— ${esc(x.source)}</cite>`:""}</blockquote>`).join(""):'<p class="sp-faint">No quotes saved.</p>';
+      const nHTML=hasN?b.notes.map((n)=>{const body=n.list?`<ul>${n.list.map((li)=>`<li>${esc(li)}</li>`).join("")}</ul>`:`<p>${esc(n.p)}</p>`;return `<div class="sp-note">${n.h?`<h4>${esc(n.h)}</h4>`:""}${body}</div>`;}).join(""):`<p class="sp-faint">${b.status==="reading"?"Currently reading — notes to come.":"No long-form notes yet."}</p>`;
+      sp.innerHTML=`<button class="sp-close" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        <div class="page page-left"><img src="${b.cover}" alt="Cover of ${esc(b.title)}"><p class="pl-eyebrow">${esc(b.category)}</p><h2 class="pl-title">${esc(b.title)}</h2><p class="pl-by">${esc(b.author)}</p><p class="pl-meta">${b.rating?`<span class="pl-rating">${Array.from({length:5},(_,i)=>`<i data-on="${i<b.rating}"></i>`).join("")}</span><span>·</span>`:""}<span>${meta}</span></p><p class="pl-summary">${esc(b.summary)}</p></div>
+        <div class="page page-right">
+          <div class="sp-tabs" role="tablist">
+            <button class="sp-tab" data-tab="takeaways" role="tab" aria-selected="${first==="takeaways"}">Takeaways<span class="c">${hasT}</span></button>
+            <button class="sp-tab" data-tab="quotes" role="tab" aria-selected="${first==="quotes"}">Quotes<span class="c">${hasQ}</span></button>
+            <button class="sp-tab" data-tab="notes" role="tab" aria-selected="${first==="notes"}">Notes<span class="c">${hasN}</span></button>
+          </div>
+          <div class="sp-panel" data-panel="takeaways" ${first==="takeaways"?"":"hidden"}>${tHTML}</div>
+          <div class="sp-panel" data-panel="quotes" ${first==="quotes"?"":"hidden"}>${qHTML}</div>
+          <div class="sp-panel" data-panel="notes" ${first==="notes"?"":"hidden"}>${nHTML}</div>
+        </div>`;
+      sp.querySelector(".sp-close").onclick=closeSpread;
+      sp.querySelectorAll(".sp-tab").forEach((t)=>t.onclick=()=>{sp.querySelectorAll(".sp-tab").forEach((x)=>x.setAttribute("aria-selected",String(x===t)));sp.querySelectorAll(".sp-panel").forEach((p)=>p.hidden=p.dataset.panel!==t.dataset.tab);});
+      sb.style.display="flex"; document.body.style.overflow="hidden";
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{sb.setAttribute("data-open","true");sp.focus();}));
+    }
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "source": "app/bookshelf/_components/bookshelf.tsx + app/globals.css:395-776",
+      "author": "existing-product",
+      "annotation": "The site's own precedent: a grid of face-out covers that morph into a modal reader via motion layoutId. This is the pattern Things I Love must not simply repeat.",
+      "take": [
+        "layoutId shared-element morph is already proven in this codebase",
+        "labelled stone fallback for missing artwork",
+        "soft contact shadow to make a flat image read as a physical object",
+        "muted per-item accent used only for small marks, never fills"
+      ],
+      "avoid": [
+        "cover-to-modal as the literal interaction, which would make two pages feel like one template",
+        "the 2:3 uniform aspect ratio, which products do not share",
+        "shelf plinth metaphor, which belongs to books"
+      ],
+      "applies_to": ["interaction", "motion", "layout", "color"],
+      "priority": "primary"
+    },
+    {
+      "source": "https://wesbos.com/uses",
+      "author": "agent",
+      "annotation": "Verified. The dominant /uses pattern: category headings, then item name plus one line of personal reason. The reason carries the value, not the list.",
+      "take": [
+        "one specific first-person line per item, with a date or a switch story",
+        "plain scannable structure"
+      ],
+      "avoid": [
+        "affiliate links and their disclosure burden - user chose no links",
+        "software and desk-app categories, which are out of scope",
+        "long undifferentiated bullet lists, which do not suit 5 items"
+      ],
+      "applies_to": ["content", "hierarchy"],
+      "priority": "supporting"
+    },
+    {
+      "source": "https://kk.org/cooltools/",
+      "author": "agent",
+      "annotation": "Verified. Kevin Kelly's rule since 2000: 'We only post things we like and ignore the rest.' Positive-only, short entry, category tag, reviewer byline.",
+      "take": [
+        "the positive-only rule, adopted as an explicit exclusion in the contract",
+        "short entry length as a discipline"
+      ],
+      "avoid": [
+        "category tags and archive structure, which solve a thousand-item problem",
+        "multiple reviewers - this page is one voice"
+      ],
+      "applies_to": ["content"],
+      "priority": "supporting"
+    },
+    {
+      "source": "https://patrickcollison.com/bookshelf",
+      "author": "agent",
+      "annotation": "Verified. About 1,200 titles with a two-colour highlight system: green for excellent, light blue for above average.",
+      "take": [
+        "the idea that a quality mark lets a long list still show a short favourite set"
+      ],
+      "avoid": [
+        "the mark itself - at 4-5 items every item is a favourite, so a rank carries zero information and adds noise"
+      ],
+      "applies_to": ["hierarchy", "color"],
+      "priority": "texture"
+    },
+    {
+      "source": "https://www.thingsiboughtandliked.com/",
+      "author": "agent",
+      "annotation": "Verified. Consumer product recommendation site: product image first, monthly top 5, shop links throughout.",
+      "take": [
+        "product image as the primary identifier",
+        "a small fixed count reads as curation"
+      ],
+      "avoid": [
+        "storefront mechanics, shop links, and influencer framing, which conflict with the no-links decision"
+      ],
+      "applies_to": ["hierarchy", "content"],
+      "priority": "supporting"
+    },
+    {
+      "source": "https://uses.tech/",
+      "author": "agent",
+      "annotation": "Directory of 928+ personal /uses pages. Establishes the genre and its convention, and shows how saturated the dev-tools version is.",
+      "take": ["genre validation"],
+      "avoid": ["the /uses framing itself - physical products only keeps this page distinct"],
+      "applies_to": ["content"],
+      "priority": "texture"
+    }
+  ],
+  "tensions": [
+    {
+      "id": "T1",
+      "tension": "The site's own bookshelf is the closest and strongest reference, and also the thing this page must not duplicate. Reusing its interaction is the fastest path and the worst outcome.",
+      "resolution": "Reuse the motion primitives and the fallback pattern. Vary the reveal model. That is open decision D1."
+    },
+    {
+      "id": "T2",
+      "tension": "Every consumer-product reference in the genre earns its density from volume and links. This page has 5 items and no links.",
+      "resolution": "Do not scale a catalog down. Design for 5 directly: low density, large objects, the reason treated as primary content rather than as a caption."
+    }
+  ]
+}

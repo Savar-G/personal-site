@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BrandLink } from "@/app/_components/brand-link";
+import { GitHubContributions } from "@/app/_components/github-contributions";
 import { LocationTime } from "@/app/_components/location-time";
 import {
   GitHubIcon,
@@ -91,6 +92,8 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      <GitHubContributions />
 
       <section className="mb-10 sm:mb-12">
         <h3 className="section-label pb-3 sm:pb-4">Projects</h3>

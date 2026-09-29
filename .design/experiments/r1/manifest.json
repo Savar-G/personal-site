@@ -1,0 +1,51 @@
+{
+  "round": 1,
+  "decision": "How is the reason revealed, and how much of it is visible at rest?",
+  "primary_axis": "progressive disclosure",
+  "invariants": [
+    "same 5 products and the same generated cutouts",
+    "same stone palette, Geist type, and --ease-out easing as app/globals.css",
+    "same placeholder reason copy, at deliberately uneven lengths (1 sentence to 4)",
+    "1280x900 viewport",
+    "no purchase links, no ratings, no categories"
+  ],
+  "artifact_dir": "mockups/things",
+  "serve": "python3 -m http.server 8912 (run inside mockups/things)",
+  "options": [
+    {
+      "id": "A",
+      "artifact": "mockups/things/a-table.html",
+      "evidence": ".design/evidence/r1/a-table-open-1280.jpg",
+      "bet": "All five objects sit on one shared floor line at plausible relative scale; the reason opens in a panel below the row",
+      "benefit": "Objects stay visible while the reason is read. Nothing covers the page, so it never repeats the bookshelf modal.",
+      "cost": "One reason at a time. Page height changes when the panel opens.",
+      "risk": "The panel can read as detached from the object that was clicked",
+      "observed": "Five objects fit one row at 64rem. Longest entry (4 sentences) fits the panel with room to spare. Selected object is marked by weight plus a dot."
+    },
+    {
+      "id": "B",
+      "artifact": "mockups/things/b-essay.html",
+      "evidence": ".design/evidence/r1/b-essay-1280.jpg",
+      "bet": "Nothing is hidden. Every object and reason is on the page, alternating sides. No click target exists.",
+      "benefit": "The reason is unmissable. Strongest layout at exactly five items.",
+      "cost": "Abandons the user's stated click-to-reveal model. Longest page.",
+      "risk": "Reads as a blog post rather than a collection",
+      "observed": "Alternating rhythm holds. Objects render largest here. The one-sentence AirPods entry leaves visible slack beside a tall object."
+    },
+    {
+      "id": "C",
+      "artifact": "mockups/things/c-tile.html",
+      "evidence": ".design/evidence/r1/c-tile-open-1280.jpg",
+      "bet": "The user's stated model, literally: click a tile and the reason replaces the object inside the same tile",
+      "benefit": "Grid never reflows. Most compact. Closest to the brief as written.",
+      "cost": "The tile caps reason length",
+      "risk": "Hides the only real content behind a click",
+      "observed": "CONFIRMED COST: the 4-sentence entry is scroll-clipped inside the tile. A 3-column grid also leaves one empty cell at 5 items, which reads as unfinished."
+    }
+  ],
+  "known_gaps": [
+    "All reason copy is placeholder; only 'I vlog using this' is the user's own.",
+    "Product images are Logitech MX Master 3S; the user said MX Master 3. Needs confirming.",
+    "Only the 1280 viewport was captured this round. 360 and 640 are checked at build."
+  ]
+}

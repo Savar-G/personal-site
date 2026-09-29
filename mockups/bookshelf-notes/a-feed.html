@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A · Notes Feed — Bookshelf mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+<style>
+  /* Masonry of note cards */
+  .feed {
+    column-count: 3;
+    column-gap: 1rem;
+  }
+  @media (max-width: 900px) { .feed { column-count: 2; } }
+  @media (max-width: 560px) { .feed { column-count: 1; } }
+
+  .card {
+    break-inside: avoid;
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 1rem;
+    padding: 1.05rem 1.1rem 0.9rem;
+    background: var(--stone-50);
+    border: 1px solid var(--stone-200);
+    border-radius: 0.65rem;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    box-shadow: 0 1px 2px rgba(12,10,9,0.03);
+    transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--stone-300);
+    box-shadow: 0 14px 28px -18px rgba(12,10,9,0.32);
+  }
+  .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.7rem; }
+
+  .card-text { font-size: 0.94rem; line-height: 1.55; color: var(--stone-800); margin: 0; }
+  .card.is-takeaway { border-left: 3px solid color-mix(in oklab, var(--accent) 70%, var(--stone-200)); }
+
+  .card.is-quote { background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 6%, var(--stone-50)), var(--stone-50)); }
+  .card.is-quote .card-text { font-style: italic; font-size: 1.02rem; line-height: 1.5; color: var(--stone-700); letter-spacing: -0.01em; }
+  .quote-mark { font-family: Georgia, "Times New Roman", serif; font-size: 2.4rem; line-height: 0; color: color-mix(in oklab, var(--accent) 60%, var(--stone-300)); display: block; height: 0.7rem; }
+  .card-cite { display: block; font-style: normal; font-size: 0.78rem; color: var(--stone-400); margin-top: 0.55rem; }
+
+  .card.is-note h3 { margin: 0 0 0.35rem; font-size: 0.95rem; font-weight: 600; color: var(--stone-900); letter-spacing: -0.01em; }
+
+  .card-foot {
+    display: flex; align-items: center; gap: 0.5rem;
+    margin-top: 0.95rem; padding-top: 0.7rem;
+    border-top: 1px dashed var(--stone-200);
+  }
+  .card-foot img { width: 1.3rem; height: 1.9rem; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+  .card-foot .fbook { font-size: 0.78rem; color: var(--stone-600); font-weight: 500; line-height: 1.2; }
+  .card-foot .fauthor { font-size: 0.74rem; color: var(--stone-400); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="page-kicker">Bookshelf · Notes</p>
+      <h1 class="page-title">Everything I've highlighted</h1>
+      <p class="page-sub">Every takeaway, quote, and note from every book — one stream. Search it, filter it, tap a card to open the book.</p>
+    </header>
+
+    <div class="controls">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="q" type="search" placeholder="Search notes, quotes, books…" aria-label="Search notes">
+        <button class="search-clear" id="clear" aria-label="Clear search">✕</button>
+      </div>
+      <div class="chips" id="typeChips" role="group" aria-label="Filter by type"></div>
+      <div class="chips" id="catChips" role="group" aria-label="Filter by category"></div>
+    </div>
+
+    <p class="result-meta" id="meta"></p>
+    <div class="feed" id="feed"></div>
+    <div class="empty" id="empty" hidden><strong>Nothing matches that yet.</strong>Try a different word or clear the filters.</div>
+  </div>
+
+  <div class="mock-tag"><a href="index.html">← all mockups</a> · A — Notes Feed</div>
+
+  <script src="_data.js"></script>
+  <script src="_reader.js"></script>
+  <script>
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    function highlight(text, q) {
+      const e = esc(text);
+      if (!q) return e;
+      const re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig");
+      return e.replace(re, "<mark class='hit'>$1</mark>");
+    }
+    const TYPES = [
+      { id: "all", label: "All" },
+      { id: "takeaway", label: "Takeaways" },
+      { id: "quote", label: "Quotes" },
+      { id: "note", label: "Notes" },
+    ];
+    const notes = allNotes();
+    let state = { q: "", type: "all", cat: "all" };
+
+    // build chips
+    const typeChips = document.getElementById("typeChips");
+    TYPES.forEach((t) => {
+      const n = t.id === "all" ? notes.length : notes.filter((x) => x.type === t.id).length;
+      const b = document.createElement("button");
+      b.className = "chip"; b.setAttribute("aria-pressed", t.id === "all");
+      b.innerHTML = `${t.label}<span class="chip-count">${n}</span>`;
+      b.onclick = () => { state.type = t.id; syncChips(typeChips, b); render(); };
+      typeChips.appendChild(b);
+    });
+    const catChips = document.getElementById("catChips");
+    const catAll = document.createElement("button");
+    catAll.className = "chip"; catAll.setAttribute("aria-pressed","true"); catAll.textContent = "All topics";
+    catAll.onclick = () => { state.cat = "all"; syncChips(catChips, catAll); render(); };
+    catChips.appendChild(catAll);
+    CATEGORIES.forEach((c) => {
+      const b = document.createElement("button");
+      b.className = "chip"; b.setAttribute("aria-pressed","false"); b.textContent = c;
+      b.onclick = () => { state.cat = c; syncChips(catChips, b); render(); };
+      catChips.appendChild(b);
+    });
+    function syncChips(group, active) {
+      group.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c === active)));
+    }
+
+    const q = document.getElementById("q");
+    const clear = document.getElementById("clear");
+    q.addEventListener("input", () => {
+      state.q = q.value.trim();
+      clear.setAttribute("data-show", String(!!state.q));
+      render();
+    });
+    clear.onclick = () => { q.value = ""; state.q = ""; clear.setAttribute("data-show","false"); render(); q.focus(); };
+
+    function match(item) {
+      if (state.type !== "all" && item.type !== state.type) return false;
+      if (state.cat !== "all" && item.book.category !== state.cat) return false;
+      if (state.q) {
+        const hay = (item.text + " " + (item.heading||"") + " " + item.book.title + " " + item.book.author).toLowerCase();
+        if (!hay.includes(state.q.toLowerCase())) return false;
+      }
+      return true;
+    }
+
+    function card(item) {
+      const b = item.book, q = state.q;
+      const foot = `<div class="card-foot"><img src="${b.cover}" alt=""><div><div class="fbook">${highlight(b.title,q)}</div><div class="fauthor">${highlight(b.author,q)}</div></div></div>`;
+      let inner;
+      if (item.type === "quote") {
+        inner = `<span class="quote-mark" aria-hidden="true">“</span><p class="card-text">${highlight(item.text,q)}</p>${item.source ? `<span class="card-cite">— ${esc(item.source)}</span>` : ""}`;
+      } else if (item.type === "note") {
+        inner = `<div class="card-head"><span class="badge is-note">Note</span></div>${item.heading?`<h3>${highlight(item.heading,q)}</h3>`:""}<p class="card-text">${highlight(item.text,q)}</p>`;
+      } else {
+        inner = `<div class="card-head"><span class="badge is-takeaway">Takeaway</span></div><p class="card-text">${highlight(item.text,q)}</p>`;
+      }
+      return `<button class="card is-${item.type}" style="--accent:${b.spineColor}" data-slug="${b.slug}">${inner}${foot}</button>`;
+    }
+
+    function render() {
+      const list = notes.filter(match);
+      const feed = document.getElementById("feed");
+      const empty = document.getElementById("empty");
+      feed.innerHTML = list.map(card).join("");
+      empty.hidden = list.length > 0;
+      const books = new Set(list.map((x) => x.book.slug)).size;
+      document.getElementById("meta").innerHTML =
+        list.length ? `${list.length} note${list.length>1?"s":""} · ${books} book${books>1?"s":""}` : "";
+      feed.querySelectorAll(".card").forEach((c) => (c.onclick = () => openReader(c.dataset.slug)));
+    }
+    render();
+  </script>
+</body>
+</html>

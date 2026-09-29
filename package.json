@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:agent": "node scripts/with-dev-server.mjs",
+    "dev:check": "node scripts/check-localhost-processes.mjs",
+    "dev:cleanup-test": "node scripts/test-dev-agent-cleanup.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

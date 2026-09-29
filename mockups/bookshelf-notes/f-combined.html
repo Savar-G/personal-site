@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>F · Shelf + Notes — Bookshelf mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_base.css">
+<style>
+  /* Top-level Shelf / Notes tabs */
+  .toptabs { display: inline-flex; gap: 0.2rem; padding: 0.25rem; background: var(--stone-100); border: 1px solid var(--stone-200); border-radius: 0.7rem; margin: 0.25rem 0 2.25rem; }
+  .toptabs button { font: inherit; font-size: 0.9rem; color: var(--stone-500); background: transparent; border: 0; border-radius: 0.5rem; padding: 0.55rem 1.1rem; cursor: pointer; transition: color 0.16s var(--ease-out), background-color 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out); display: inline-flex; align-items: center; gap: 0.45rem; }
+  .toptabs button:hover { color: var(--stone-800); }
+  .toptabs button[aria-selected="true"] { background: var(--stone-50); color: var(--stone-900); font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+  .toptabs svg { width: 1rem; height: 1rem; }
+  .toptabs .tn { font-family: var(--font-mono); font-size: 0.72rem; opacity: 0.55; }
+
+  .panel[hidden] { display: none; }
+  .fade-in { animation: fadeIn 0.3s var(--ease-out); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ---- Shelf: a faithful copy of the live site's floating shelf ---- */
+  .bookshelf { --cover-w: 6.5rem; }
+  .shelf-sec { margin-bottom: 3rem; }
+  .shelf { position: relative; margin-top: 1.25rem; }
+  .shelf-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1.85rem 1.35rem; padding: 0.5rem 0.125rem 1.35rem; }
+  .shelf-plinth { height: 2px; border-radius: 2px; background: linear-gradient(to right, transparent, var(--stone-300) 6%, var(--stone-300) 94%, transparent); box-shadow: 0 16px 22px -18px color-mix(in oklab, var(--stone-900) 38%, transparent); }
+  @media (max-width: 640px) { .bookshelf { --cover-w: 5rem; } .shelf-row { gap: 1.5rem 1rem; justify-content: flex-start; } }
+  @media (max-width: 360px) { .bookshelf { --cover-w: 4.5rem; } }
+
+  .shelf-book { flex: 0 0 auto; width: var(--cover-w); padding: 0; border: 0; background: transparent; cursor: pointer; border-radius: 2px 4px 4px 2px; transition: transform 0.22s var(--ease-out); }
+  .shelf-book:hover { transform: translateY(-6px) scale(1.02); }
+  .shelf-book:active { transform: translateY(-3px) scale(0.99); }
+  .shelf-book:focus-visible { outline: 2px solid color-mix(in oklab, var(--stone-900) 55%, transparent); outline-offset: 4px; border-radius: 3px; }
+
+  .book-cover { position: relative; width: 100%; aspect-ratio: 2 / 3; border-radius: 1px 4px 4px 1px; overflow: hidden; background-color: var(--stone-200); box-shadow: 0 1px 1px color-mix(in oklab, var(--stone-950) 12%, transparent), 0.45rem 0.85rem 1.1rem -0.7rem color-mix(in oklab, var(--stone-950) 50%, transparent); transition: box-shadow 0.22s var(--ease-out); }
+  .shelf-book:hover .book-cover { box-shadow: 0 1px 1px color-mix(in oklab, var(--stone-950) 14%, transparent), 0.6rem 1.45rem 1.6rem -0.7rem color-mix(in oklab, var(--stone-950) 55%, transparent); }
+  .book-cover-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* Physical-book edges drawn over the artwork: spine (left), page block (right). */
+  .book-cover::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: inset 1.5px 0 0 color-mix(in oklab, black 22%, transparent), inset 3px 0 5px -3px color-mix(in oklab, black 26%, transparent), inset -2px 0 0 color-mix(in oklab, white 16%, transparent), inset -4px 0 5px -3px color-mix(in oklab, black 14%, transparent), inset 0 0 0 1px color-mix(in oklab, black 7%, transparent); }
+
+  /* ---- Notes feed (variation A) ---- */
+  .feed { column-count: 3; column-gap: 1rem; }
+  @media (max-width: 900px) { .feed { column-count: 2; } }
+  @media (max-width: 560px) { .feed { column-count: 1; } }
+  .card { break-inside: avoid; display: block; width: 100%; text-align: left; margin-bottom: 1rem; padding: 1.05rem 1.1rem 0.9rem; background: var(--stone-50); border: 1px solid var(--stone-200); border-radius: 0.65rem; cursor: pointer; font: inherit; color: inherit; box-shadow: 0 1px 2px rgba(12,10,9,0.03); transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out); }
+  .card:hover { transform: translateY(-3px); border-color: var(--stone-300); box-shadow: 0 14px 28px -18px rgba(12,10,9,0.32); }
+  .card-head { margin-bottom: 0.7rem; }
+  .card-text { font-size: 0.9375rem; line-height: 1.55; color: var(--stone-800); margin: 0; }
+  .card.is-takeaway { border-left: 3px solid color-mix(in oklab, var(--accent) 70%, var(--stone-200)); }
+  .card.is-quote { background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 6%, var(--stone-50)), var(--stone-50)); }
+  .card.is-quote .card-text { font-style: italic; color: var(--stone-700); }
+  .card-cite { display: block; font-style: normal; font-size: 0.78rem; color: var(--stone-400); margin-top: 0.55rem; }
+  .card.is-note h3 { margin: 0 0 0.35rem; font-size: 0.9375rem; font-weight: 600; color: var(--stone-900); letter-spacing: -0.01em; }
+  .card-foot { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.95rem; padding-top: 0.7rem; border-top: 1px dashed var(--stone-200); }
+  .card-foot img { width: 1.3rem; height: 1.9rem; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+  .card-foot .fbook { font-size: 0.78rem; color: var(--stone-600); font-weight: 500; line-height: 1.2; }
+  .card-foot .fauthor { font-size: 0.74rem; color: var(--stone-400); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-head">
+      <h1 class="page-title">Bookshelf</h1>
+      <p class="page-sub">Books I've read, and the ideas that stuck. Tap a cover to open one, or switch to Notes to search everything.</p>
+    </header>
+
+    <div class="toptabs" role="tablist" aria-label="Bookshelf views">
+      <button id="tab-shelf" role="tab" aria-selected="true" aria-controls="panel-shelf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="16" rx="1"/><path d="M17 5l3.5 1-3 15"/></svg>
+        Shelf
+      </button>
+      <button id="tab-notes" role="tab" aria-selected="false" aria-controls="panel-notes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+        Notes <span class="tn" id="notesCount"></span>
+      </button>
+    </div>
+
+    <!-- SHELF -->
+    <section class="panel" id="panel-shelf" role="tabpanel" aria-labelledby="tab-shelf">
+      <div class="bookshelf" id="shelf"></div>
+    </section>
+
+    <!-- NOTES -->
+    <section class="panel" id="panel-notes" role="tabpanel" aria-labelledby="tab-notes" hidden>
+      <div class="controls">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="q" type="search" placeholder="Search every note, quote, and book…" aria-label="Search notes">
+          <button class="search-clear" id="clear" aria-label="Clear search">✕</button>
+        </div>
+        <div class="chips" id="typeChips" role="group" aria-label="Filter by type"></div>
+        <div class="chips" id="catChips" role="group" aria-label="Filter by category"></div>
+      </div>
+      <p class="result-meta" id="meta"></p>
+      <div class="feed" id="feed"></div>
+      <div class="empty" id="empty" hidden><strong>Nothing matches that yet.</strong>Try a different word or clear the filters.</div>
+    </section>
+  </div>
+
+  <div class="mock-tag"><a href="index.html">← all mockups</a> · F — Shelf + Notes</div>
+
+  <script src="_data.js"></script>
+  <script src="_spread.js"></script>
+  <script>
+    const esc=(s)=>String(s).replace(/[&<>"]/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    function hl(t,q){const e=esc(t);if(!q)return e;const re=new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig");return e.replace(re,"<mark class='hit'>$1</mark>");}
+
+    /* ---- tabs ---- */
+    const tabShelf=document.getElementById("tab-shelf"), tabNotes=document.getElementById("tab-notes");
+    const panelShelf=document.getElementById("panel-shelf"), panelNotes=document.getElementById("panel-notes");
+    function select(which){
+      const notes = which==="notes";
+      tabShelf.setAttribute("aria-selected",String(!notes));
+      tabNotes.setAttribute("aria-selected",String(notes));
+      panelShelf.hidden=notes; panelNotes.hidden=!notes;
+      const live = notes?panelNotes:panelShelf;
+      live.classList.remove("fade-in"); void live.offsetWidth; live.classList.add("fade-in");
+      history.replaceState(null,"", notes?"#notes":"#shelf");
+      if(notes) document.getElementById("q").focus();
+    }
+    tabShelf.onclick=()=>select("shelf");
+    tabNotes.onclick=()=>select("notes");
+
+    /* ---- shelf (matches the live site) ---- */
+    const SHELVES=[{id:"reading",label:"Currently reading"},{id:"read",label:"Read"}];
+    (function shelf(){
+      const host=document.getElementById("shelf");
+      host.innerHTML = SHELVES.map((s)=>{
+        const books=BOOKS.filter((b)=>b.status===s.id);
+        if(!books.length) return "";
+        return `<section class="shelf-sec"><h2 class="section-label">${s.label}</h2><div class="shelf"><div class="shelf-row">`+
+          books.map((b)=>`<button class="shelf-book" data-slug="${b.slug}" aria-haspopup="dialog" aria-label="${esc(b.title)} by ${esc(b.author)}"><div class="book-cover"><img class="book-cover-img" src="${b.cover}" alt="Cover of ${esc(b.title)} by ${esc(b.author)}"></div></button>`).join("")+
+          `</div><div class="shelf-plinth" aria-hidden="true"></div></div></section>`;
+      }).join("");
+      host.querySelectorAll(".shelf-book").forEach((el)=>el.onclick=()=>openSpread(el.dataset.slug));
+    })();
+
+    /* ---- notes feed ---- */
+    const TYPES=[{id:"all",label:"All"},{id:"takeaway",label:"Takeaways"},{id:"quote",label:"Quotes"},{id:"note",label:"Notes"}];
+    const notes=allNotes();
+    let state={q:"",type:"all",cat:"all"};
+    document.getElementById("notesCount").textContent=notes.length;
+
+    const typeChips=document.getElementById("typeChips");
+    TYPES.forEach((t)=>{ const n=t.id==="all"?notes.length:notes.filter((x)=>x.type===t.id).length; const b=document.createElement("button"); b.className="chip"; b.setAttribute("aria-pressed",t.id==="all"); b.innerHTML=`${t.label}<span class="chip-count">${n}</span>`; b.onclick=()=>{state.type=t.id; syncChips(typeChips,b); renderFeed();}; typeChips.appendChild(b); });
+    const catChips=document.getElementById("catChips");
+    const catAll=document.createElement("button"); catAll.className="chip"; catAll.setAttribute("aria-pressed","true"); catAll.textContent="All topics"; catAll.onclick=()=>{state.cat="all"; syncChips(catChips,catAll); renderFeed();}; catChips.appendChild(catAll);
+    CATEGORIES.forEach((c)=>{ const b=document.createElement("button"); b.className="chip"; b.setAttribute("aria-pressed","false"); b.textContent=c; b.onclick=()=>{state.cat=c; syncChips(catChips,b); renderFeed();}; catChips.appendChild(b); });
+    function syncChips(group,active){ group.querySelectorAll(".chip").forEach((c)=>c.setAttribute("aria-pressed",String(c===active))); }
+
+    const q=document.getElementById("q"), clear=document.getElementById("clear");
+    q.addEventListener("input",()=>{ state.q=q.value.trim(); clear.setAttribute("data-show",String(!!state.q)); renderFeed(); });
+    clear.onclick=()=>{ q.value=""; state.q=""; clear.setAttribute("data-show","false"); renderFeed(); q.focus(); };
+
+    function matchNote(item){
+      if(state.type!=="all"&&item.type!==state.type) return false;
+      if(state.cat!=="all"&&item.book.category!==state.cat) return false;
+      if(state.q){ const hay=(item.text+" "+(item.heading||"")+" "+item.book.title+" "+item.book.author).toLowerCase(); if(!hay.includes(state.q.toLowerCase())) return false; }
+      return true;
+    }
+    function cardHTML(item){
+      const b=item.book,Q=state.q;
+      const foot=`<div class="card-foot"><img src="${b.cover}" alt=""><div><div class="fbook">${hl(b.title,Q)}</div><div class="fauthor">${hl(b.author,Q)}</div></div></div>`;
+      const badge = item.type==="quote"?`<span class="badge is-quote">Quote</span>`:item.type==="note"?`<span class="badge is-note">Note</span>`:`<span class="badge is-takeaway">Takeaway</span>`;
+      let inner;
+      if(item.type==="quote"){ inner=`<div class="card-head">${badge}</div><p class="card-text">“${hl(item.text,Q)}”</p>${item.source?`<span class="card-cite">— ${esc(item.source)}</span>`:""}`; }
+      else if(item.type==="note"){ inner=`<div class="card-head">${badge}</div>${item.heading?`<h3>${hl(item.heading,Q)}</h3>`:""}<p class="card-text">${hl(item.text,Q)}</p>`; }
+      else { inner=`<div class="card-head">${badge}</div><p class="card-text">${hl(item.text,Q)}</p>`; }
+      return `<button class="card is-${item.type}" style="--accent:${b.spineColor}" data-slug="${b.slug}">${inner}${foot}</button>`;
+    }
+    function renderFeed(){
+      const list=notes.filter(matchNote);
+      const feed=document.getElementById("feed"), empty=document.getElementById("empty");
+      feed.innerHTML=list.map(cardHTML).join("");
+      empty.hidden=list.length>0;
+      const books=new Set(list.map((x)=>x.book.slug)).size;
+      document.getElementById("meta").textContent=list.length?`${list.length} note${list.length>1?"s":""} · ${books} book${books>1?"s":""}`:"";
+      feed.querySelectorAll(".card").forEach((c)=>c.onclick=()=>openSpread(c.dataset.slug));
+    }
+    renderFeed();
+
+    if(location.hash==="#notes") select("notes");
+  </script>
+</body>
+</html>
