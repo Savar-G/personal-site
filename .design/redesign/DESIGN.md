@@ -44,7 +44,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 
 ## Behaviour extras (desktop)
 
-- **Load:** greeting fades up; objects land one after another with a small bounce; sugar cubes last. On the site this plays once per browser session; a return to the desk fades in (240 ms).
+- **Load:** greeting fades up; objects land one after another with a small bounce; sugar cubes last. On the site the landing is CSS (class `landing` on the stage), started before the first paint by the pre-paint script; it plays once per browser session, and a return to the desk has no fade.
 - **First visit:** polaroids develop from blank white to colour (stored, so it plays once).
 - **Coffee:** steams for 60 s, then goes cold; hover then shows "gone cold · grab a fresh one with me →".
 - **Drag:** the object lifts (−10px, 1.06×, soft shadow) and settles with a bounce on drop; a "tidy up" button (top right) returns every moved object.
