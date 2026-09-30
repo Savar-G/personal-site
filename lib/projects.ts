@@ -158,17 +158,47 @@ export const projects: Project[] = [
   },
   {
     name: "Embedr",
-    category: "Product · AI",
-    tone: "product",
+    category: "Startup · Software & AI",
+    tone: "startup",
     role: "Product & GTM",
     dates: "Now",
     summary:
       "An AI engineering environment for hardware: datasheets, KiCad schematics, and firmware bring-up.",
-    did: [
-      { text: "Worked on the landing page." },
-      { text: "Worked on the product, Embedr Studio." },
+    did: [],
+    didGroups: [
+      {
+        title: "Product",
+        items: [
+          { lead: "Redesigned the landing page", text: "at embedr.app." },
+          {
+            lead: "Helped develop the product roadmap",
+            text: "for Embedr Studio.",
+          },
+          {
+            lead: "Ran user interviews and surveys",
+            text: "to shape what the product builds next.",
+          },
+        ],
+      },
+      {
+        title: "Go-to-market",
+        items: [
+          {
+            lead: "Led GTM and built the outbound engine:",
+            text: "automated prospect finding with enrichment and personalised hooks, a 4-step threaded email sequence, and reply handling that catches replies, bounces, and auto-replies and flags interested leads.",
+          },
+          {
+            lead: "Made content for YouTube, X, and Instagram,",
+            text: "including the product demo below.",
+          },
+          {
+            lead: "Booked and ran calls",
+            text: "with enterprise clients.",
+          },
+        ],
+      },
     ],
-    tools: [],
+    tools: ["Google Apps Script", "Gmail API", "Claude Code", "Composio"],
     links: [
       { label: "embedr.app", href: "https://www.embedr.app/", kind: "site" },
       { label: "Embedr Studio", href: "https://studio.embedr.app/home" },

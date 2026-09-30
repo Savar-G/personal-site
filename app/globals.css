@@ -1956,8 +1956,9 @@ body {
   gap: 1.25rem;
   margin-top: 0.75rem;
 }
+/* Side by side only in the full-width card; stacked in the half-width ones. */
 @media (min-width: 640px) {
-  .pj-did-groups {
+  .pj-card--feature .pj-did-groups {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
   }
