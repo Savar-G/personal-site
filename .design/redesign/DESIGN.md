@@ -35,7 +35,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 | Silver Motorola RAZR V3, own right-hand column | Socials | contacts | lifts, straightens, scales 1.5×; lock screen wakes to Contacts; ↑/↓ + Enter or click a row (LinkedIn, X, GitHub, Email, Beli, Book a call); hint bottom-right |
 | Paper render of the resume | Resume | resume page | lift; click plays the hyperspace zoom |
 | Three book covers | Bookshelf | `/bookshelf` | books fan out |
-| Black coffee on a saucer with spoon, three sugar cubes beside it | Coffee chat | cal.com/savar-gupta/embedr | lift; drag a cube into the cup: cartoon splash (outlined drops, splat, "plop!", ripples, cup squash-and-stretch); caption counts sugars; cubes respawn; first cube toasts "I take mine black, but you do you." |
+| Black coffee on a saucer with spoon, three sugar cubes beside it | Coffee chat | cal.com/savar-gupta/coffee-chat | lift; drag a cube into the cup: cartoon splash (outlined drops, splat, "plop!", ripples, cup squash-and-stretch); caption counts sugars; cubes respawn; first cube toasts "I take mine black, but you do you." |
 | Ramen | Food | beliapp.co/app/savargupta | steam rises |
 
 **Default hover:** translateY -6px, rotate +2°, scale 1.03, 180 ms `cubic-bezier(0.2, 0.8, 0.2, 1)`.
@@ -80,7 +80,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 
 - Resume: `public/Savar_Gupta_Resume.pdf` is the Sep 18, 2026 version (same file as `~/Documents/Savar_Gupta_Resume.pdf`).
 - Socials: linkedin.com/in/savar-gupta, x.com/savar_gupta, github.com/Savar-G, savar.gupta1922@gmail.com, beliapp.co/app/savargupta.
-- Coffee chat: cal.com/savar-gupta/embedr?user=savar-gupta&overlayCalendar=true.
+- Coffee chat: cal.com/savar-gupta/coffee-chat.
 - Things (`/things`) has no desk object; it is in the plain list only.
 - Trips: Japan; Turkey 2026 (Istanbul, Cappadocia, Antalya); Indonesia (Bali, Aug 2026); Hawaii (Maui, 2025; self-hosted vlog `public/videos/maui-2025.mp4`, poster `maui-2025.webp`). Hawaii is on the Travel page only.
 - Projects: Unify (co-founder; landing page, mobile app, web app, each with a GitHub repo), Taskline, Embedr (Product & GTM; embedr.app, studio.embedr.app, YouTube ZQaxrc0SsEA from 0:13), Health & Activity Wearable, HealthOS (health.savargupta.com). Facts match the Sep 2026 resume.

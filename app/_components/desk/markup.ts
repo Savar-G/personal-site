@@ -118,7 +118,7 @@ ${notebookPage(essays)}
           <li data-href="https://github.com/Savar-G">GitHub</li>
           <li data-href="mailto:savar.gupta1922@gmail.com">Email</li>
           <li data-href="https://beliapp.co/app/savargupta">Beli</li>
-          <li data-href="https://cal.com/savar-gupta/embedr?user=savar-gupta&amp;overlayCalendar=true">Book a call</li>
+          <li data-href="https://cal.com/savar-gupta/coffee-chat">Book a call</li>
         </ul>
       </div>
     </div>
@@ -133,7 +133,7 @@ ${notebookPage(essays)}
     <img decoding="async" fetchpriority="low" class="bk" src="/desk/chip-war.webp" alt="" style="view-transition-name:book-chip-war;view-transition-class:flight;left:40px;top:40px;--br:-2deg;--hx:-2px;--hy:-18px;--hr:-1deg;box-shadow:0 8px 18px rgba(0,0,0,.22)">
     <span class="cap">Bookshelf</span></div>
 
-  <div class="obj" id="coffee" tabindex="0" role="link" aria-label="Book a coffee chat" data-vis=".07 .07 .85 .83" data-href="https://cal.com/savar-gupta/embedr?user=savar-gupta&amp;overlayCalendar=true" style="left:405px;top:585px;width:260px;height:267px;--r:-10deg;--cy:246px">
+  <div class="obj" id="coffee" tabindex="0" role="link" aria-label="Book a coffee chat" data-vis=".07 .07 .85 .83" data-href="https://cal.com/savar-gupta/coffee-chat" style="left:405px;top:585px;width:260px;height:267px;--r:-10deg;--cy:246px">
     <img decoding="async" fetchpriority="low" src="/desk/coffee.webp" alt=""><div class="liquid" id="liquid"></div>
     <div class="steam cup"><span style="position:absolute;left:0;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" stroke-linecap="round"/></svg></span><span style="position:absolute;left:24px;bottom:6px"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" stroke-linecap="round"/></svg></span><span style="position:absolute;left:46px;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" stroke-linecap="round"/></svg></span></div>
     <span class="cap" id="coffeecap">Coffee chat</span><span class="coldnote">gone cold · grab a fresh one with me →</span></div>
@@ -172,7 +172,7 @@ ${notebookPage(essays)}
         <li data-href="https://github.com/Savar-G">GitHub</li>
         <li data-href="mailto:savar.gupta1922@gmail.com">Email</li>
         <li data-href="https://beliapp.co/app/savargupta">Beli</li>
-        <li data-href="https://cal.com/savar-gupta/embedr?user=savar-gupta&amp;overlayCalendar=true">Book a call</li>
+        <li data-href="https://cal.com/savar-gupta/coffee-chat">Book a call</li>
       </ul>
     </div></div>
   </div></div>
@@ -182,7 +182,7 @@ ${notebookPage(essays)}
     <a href="https://github.com/Savar-G" target="_blank" rel="noopener"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"/></svg>GitHub</a>
     <a href="mailto:savar.gupta1922@gmail.com"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg>Email</a>
     <a href="https://beliapp.co/app/savargupta" target="_blank" rel="noopener"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M72,88V40a8,8,0,0,1,16,0V88a8,8,0,0,1-16,0ZM216,40V224a8,8,0,0,1-16,0V176H152a8,8,0,0,1-8-8,268.75,268.75,0,0,1,7.22-56.88c9.78-40.49,28.32-67.63,53.63-78.47A8,8,0,0,1,216,40ZM200,53.9c-32.17,24.57-38.47,84.42-39.7,106.1H200ZM119.89,38.69a8,8,0,1,0-15.78,2.63L112,88.63a32,32,0,0,1-64,0l7.88-47.31a8,8,0,1,0-15.78-2.63l-8,48A8.17,8.17,0,0,0,32,88a48.07,48.07,0,0,0,40,47.32V224a8,8,0,0,0,16,0V135.32A48.07,48.07,0,0,0,128,88a8.17,8.17,0,0,0-.11-1.31Z"/></svg>Beli</a>
-    <a href="https://cal.com/savar-gupta/embedr?user=savar-gupta&amp;overlayCalendar=true" target="_blank" rel="noopener"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z"/></svg>Book a call</a>
+    <a href="https://cal.com/savar-gupta/coffee-chat" target="_blank" rel="noopener"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z"/></svg>Book a call</a>
   </div>
   <p class="shint">tap a contact, or the phone's screen</p>
 </div>
@@ -221,7 +221,7 @@ ${notebookPage(essays)}
       <li><span><a href="/bookshelf">Bookshelf</a></span></li>
       <li><span><a href="/things">Things</a></span></li>
       <li><span><a href="/travel">Travel</a> · Japan, Turkey, Indonesia, Hawaii</span></li>
-      <li><span><a href="mailto:savar.gupta1922@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/savar-gupta" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://x.com/savar_gupta" target="_blank" rel="noopener">X</a> · <a href="https://github.com/Savar-G" target="_blank" rel="noopener">GitHub</a> · <a href="https://beliapp.co/app/savargupta" target="_blank" rel="noopener">Beli</a> · <a href="https://cal.com/savar-gupta/embedr?user=savar-gupta&amp;overlayCalendar=true" target="_blank" rel="noopener">Book a call</a></span></li>
+      <li><span><a href="mailto:savar.gupta1922@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/savar-gupta" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://x.com/savar_gupta" target="_blank" rel="noopener">X</a> · <a href="https://github.com/Savar-G" target="_blank" rel="noopener">GitHub</a> · <a href="https://beliapp.co/app/savargupta" target="_blank" rel="noopener">Beli</a> · <a href="https://cal.com/savar-gupta/coffee-chat" target="_blank" rel="noopener">Book a call</a></span></li>
     </ul>
   </div>
 </div>
