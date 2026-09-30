@@ -70,7 +70,8 @@
   .desk-page .notebook .front { background-image: url(/desk/nb_cover.webp); border-radius: 3px 10px 10px 3px; box-shadow: 0 0 0 1px var(--rim), 0 10px 26px rgba(0,0,0,.22); }
   .desk-page .notebook .back { background-image: url(/desk/nb_left.webp); transform: rotateY(180deg); border-radius: 6px 2px 2px 6px; box-shadow: 0 8px 22px rgba(0,0,0,.14); }
   .desk-page .notebook.open .cover { transform: rotateY(-178deg); }
-  .desk-page .notebook.open, .desk-page .notebook.open:hover, .desk-page .notebook.open:focus-visible { transform: rotate(var(--r)) scale(1.12); z-index: 20; }
+  /* Opening slides the book right so the open spread is centred where the closed book was: it clears the polaroids and the folder. */
+  .desk-page .notebook.open, .desk-page .notebook.open:hover, .desk-page .notebook.open:focus-visible { transform: translateX(87px) rotate(var(--r)) scale(1.12); z-index: 20; }
   /* What's written on the left page once the cover is open: the essays. */
   .desk-page .notebook .pg { position: absolute; left: -148px; top: 14px; width: 132px; opacity: 0; pointer-events: none; transition: opacity 120ms ease; }
   .desk-page .notebook.open .pg { opacity: 1; pointer-events: auto; transition: opacity 260ms ease 420ms; }
