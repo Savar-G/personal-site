@@ -25,6 +25,15 @@ export type ProjectMedia =
       }[];
     }
   | { kind: "youtube"; id: string; start?: number; title: string }
+  // A photo; `credit` records where a stock photo came from.
+  | {
+      kind: "image";
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      credit?: string;
+    }
   | { kind: "placeholder"; label: string }
   // No media: a small icon tile on a compact card.
   | { kind: "icon"; icon: "tasks" | "heart" };
@@ -234,7 +243,14 @@ export const projects: Project[] = [
     ],
     tools: ["KiCad", "ESP32-S3", "C/C++", "FreeRTOS", "Edge Impulse", "BLE"],
     links: [],
-    media: { kind: "placeholder", label: "Photo coming: PCB and device" },
+    media: {
+      kind: "image",
+      src: "/projects/wearable-pcb.webp",
+      alt: "Close-up of a dark blue printed circuit board",
+      width: 1600,
+      height: 900,
+      credit: "Unsplash photo pfR18JNEMv8 (Unsplash License)",
+    },
   },
   {
     name: "SFU Rocketry",

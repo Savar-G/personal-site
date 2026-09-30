@@ -1723,6 +1723,13 @@ body {
   min-height: 16rem;
 }
 
+.pj-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
 .pj-placeholder {
   display: flex;
   flex-direction: column;

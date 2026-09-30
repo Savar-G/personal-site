@@ -72,6 +72,18 @@ function Media({ media }: { media: ProjectMedia }) {
           />
         </div>
       );
+    case "image":
+      return (
+        <div className="pj-media pj-photo">
+          <Image
+            src={media.src}
+            alt={media.alt}
+            width={media.width}
+            height={media.height}
+            sizes="(max-width: 900px) 92vw, 540px"
+          />
+        </div>
+      );
     case "placeholder":
       return (
         <div className="pj-media pj-placeholder">
