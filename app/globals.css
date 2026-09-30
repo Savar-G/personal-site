@@ -1698,7 +1698,17 @@ body {
     grid-column: 1 / -1;
   }
   .pj-card--tall {
-    grid-row: span 2;
+    grid-row: span 3;
+  }
+  /* A video in a full-width card sits on the tray at a readable size. */
+  .pj-card--feature .pj-media--video {
+    padding: 2.25rem;
+  }
+  .pj-card--feature .pj-media--video .video-embed {
+    max-width: 46rem;
+    margin: 0 auto;
+    border-radius: 0.75rem;
+    overflow: hidden;
   }
 }
 

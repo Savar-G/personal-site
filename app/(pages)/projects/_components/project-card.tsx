@@ -62,7 +62,7 @@ function Media({ media }: { media: ProjectMedia }) {
       );
     case "youtube":
       return (
-        <div className="pj-media">
+        <div className="pj-media pj-media--video">
           <VideoEmbed
             kind="iframe"
             title={media.title}

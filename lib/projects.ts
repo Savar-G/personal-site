@@ -1,6 +1,7 @@
 // Projects for /projects. Facts come from the Sep 2026 resume and Savar's own
 // messages; no invented metrics. Order matters: the desk's folder papers fly
-// into the first three cards.
+// into the first three cards, and the tall Rocketry card sits left of the
+// three small cards after it.
 
 export type Tone =
   "startup" | "product" | "hardware" | "mechanical" | "software" | "plain";
@@ -207,6 +208,7 @@ export const projects: Project[] = [
         ],
       },
     ],
+    layout: "feature",
     tools: ["Google Apps Script", "Gmail API", "Claude Code", "Composio"],
     links: [
       { label: "embedr.app", href: "https://www.embedr.app/", kind: "site" },
@@ -218,32 +220,6 @@ export const projects: Project[] = [
       start: 13,
       title: "This AI Builds PCBs, Firmware & Mechanical Designs",
     },
-  },
-  {
-    name: "Health & Activity Wearable",
-    category: "Hardware · Firmware",
-    tone: "hardware",
-    role: "Hardware & Firmware Engineer",
-    dates: "May 2026 – now",
-    summary:
-      "An ESP32-S3 wearable that senses motion and heart rate and classifies activity on the device.",
-    did: [
-      {
-        lead: "Designed a 2-layer mixed-signal PCB",
-        text: "in KiCad for an ESP32-S3 wearable (IMU, PPG heart rate, LiPo power); fabricated through JLCPCB.",
-      },
-      {
-        lead: "Wrote bare-metal I2C drivers",
-        text: "in C/C++ for the IMU and PPG, scheduled with FreeRTOS, checked with a logic analyzer.",
-      },
-      {
-        lead: "Built an on-device TinyML activity classifier",
-        text: "(Edge Impulse) that streams predictions to a phone app over BLE, with no cloud.",
-      },
-    ],
-    tools: ["KiCad", "ESP32-S3", "C/C++", "FreeRTOS", "Edge Impulse", "BLE"],
-    links: [],
-    media: { kind: "icon", icon: "chip" },
   },
   {
     name: "SFU Rocketry",
@@ -279,6 +255,19 @@ export const projects: Project[] = [
       credit: "SFU Rocketry, sfurocketry.com (GEN3 engine wireframe)",
     },
     layout: "tall",
+  },
+  {
+    name: "Health & Activity Wearable",
+    category: "Hardware · Firmware",
+    tone: "hardware",
+    role: "Hardware & Firmware Engineer",
+    dates: "May 2026 – now",
+    summary:
+      "An ESP32-S3 wearable: a 2-layer KiCad PCB with IMU and heart-rate sensing, bare-metal C/C++ drivers on FreeRTOS, and an on-device activity classifier that streams to a phone over BLE, with no cloud.",
+    did: [],
+    tools: ["KiCad", "ESP32-S3", "C/C++", "FreeRTOS", "Edge Impulse", "BLE"],
+    links: [],
+    media: { kind: "icon", icon: "chip" },
   },
   {
     name: "Taskline",
