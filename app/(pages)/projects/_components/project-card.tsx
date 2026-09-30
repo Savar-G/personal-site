@@ -84,6 +84,19 @@ function Media({ media }: { media: ProjectMedia }) {
   }
 }
 
+function DidList({ items }: { items: Project["did"] }) {
+  return (
+    <ul className="pj-did">
+      {items.map((item) => (
+        <li key={item.text}>
+          {item.lead && <strong>{item.lead} </strong>}
+          {item.text}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function LinkPill({ link }: { link: ProjectLink }) {
   return (
     <a
@@ -142,9 +155,15 @@ export function ProjectCard({
             <strong>{project.role}</strong>
             {project.dates && <span> · {project.dates}</span>}
           </p>
+          {project.tagline && <p className="pj-tagline">{project.tagline}</p>}
           <p className="pj-summary">{project.summary}</p>
           {project.stats && (
-            <dl className="pj-stats">
+            <dl
+              className="pj-stats"
+              style={{
+                gridTemplateColumns: `repeat(${project.stats.length}, minmax(0, 1fr))`,
+              }}
+            >
               {project.stats.map((stat) => (
                 <div key={stat.label}>
                   <dt>{stat.label}</dt>
@@ -156,18 +175,25 @@ export function ProjectCard({
         </div>
 
         <div className="pj-detail">
-          {project.did.length > 0 && (
+          {project.didGroups ? (
             <>
               <h3 className="pj-label">What I did</h3>
-              <ul className="pj-did">
-                {project.did.map((item) => (
-                  <li key={item.text}>
-                    {item.lead && <strong>{item.lead} </strong>}
-                    {item.text}
-                  </li>
+              <div className="pj-did-groups">
+                {project.didGroups.map((group) => (
+                  <div key={group.title}>
+                    <h4 className="pj-group">{group.title}</h4>
+                    <DidList items={group.items} />
+                  </div>
                 ))}
-              </ul>
+              </div>
             </>
+          ) : (
+            project.did.length > 0 && (
+              <>
+                <h3 className="pj-label">What I did</h3>
+                <DidList items={project.did} />
+              </>
+            )
           )}
           {project.tools.length > 0 && (
             <ul className="pj-tools" aria-label="Tools">

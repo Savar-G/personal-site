@@ -1750,6 +1750,9 @@ body {
 }
 .pj-shot figcaption {
   margin-top: 0.625rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 12px;
   color: var(--color-stone-400);
 }
@@ -1857,14 +1860,14 @@ body {
   border-radius: 50%;
   background: currentColor;
 }
-.pj-tone--venture { --tone: #ea580c; }
+.pj-tone--startup { --tone: #ea580c; }
 .pj-tone--product { --tone: #7c3aed; }
 .pj-tone--hardware { --tone: #059669; }
 .pj-tone--mechanical { --tone: #e11d48; }
 .pj-tone--software { --tone: #2563eb; }
 .pj-tone--plain { --tone: var(--color-stone-500); }
 @media (prefers-color-scheme: dark) {
-  .pj-tone--venture { --tone: #fb923c; }
+  .pj-tone--startup { --tone: #fb923c; }
   .pj-tone--product { --tone: #a78bfa; }
   .pj-tone--hardware { --tone: #34d399; }
   .pj-tone--mechanical { --tone: #fb7185; }
@@ -1890,6 +1893,16 @@ body {
 .pj-role strong {
   font-weight: 500;
   color: var(--color-stone-900);
+}
+.pj-tagline {
+  margin-top: 0.75rem;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-stone-900);
+}
+.pj-tagline + .pj-summary {
+  margin-top: 0.25rem;
 }
 .pj-summary {
   margin-top: 0.75rem;
@@ -1937,6 +1950,25 @@ body {
   font-size: 14.5px;
   line-height: 1.55;
   color: var(--color-stone-600);
+}
+.pj-did-groups {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+}
+@media (min-width: 640px) {
+  .pj-did-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+.pj-group {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-stone-900);
+}
+.pj-did-groups .pj-did {
+  margin-top: 0.5rem;
 }
 .pj-did li::marker {
   color: var(--color-stone-300);

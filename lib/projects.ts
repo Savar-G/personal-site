@@ -3,7 +3,7 @@
 // into the first three cards.
 
 export type Tone =
-  "venture" | "product" | "hardware" | "mechanical" | "software" | "plain";
+  "startup" | "product" | "hardware" | "mechanical" | "software" | "plain";
 
 export type ProjectLink = {
   label: string;
@@ -35,9 +35,13 @@ export type Project = {
   tone: Tone;
   role: string;
   dates?: string;
+  // Optional first line, set stronger than the summary.
+  tagline?: string;
   summary: string;
-  // "What I did": a short bold lead, then the rest.
+  // "What I did": a short bold lead, then the rest. Either one list, or
+  // groups shown side by side (Unify: Engineering / Business).
   did: { lead?: string; text: string }[];
+  didGroups?: { title: string; items: { lead?: string; text: string }[] }[];
   stats?: { value: string; label: string }[];
   tools: string[];
   links: ProjectLink[];
@@ -49,35 +53,54 @@ export type Project = {
 export const projects: Project[] = [
   {
     name: "Unify",
-    category: "Venture · Software & AI",
-    tone: "venture",
+    category: "Startup · Software & AI",
+    tone: "startup",
     role: "Co-founder",
     dates: "Jul 2024 – now",
+    tagline: "The all-in-one newcomer settlement platform.",
     summary:
-      "Settlement platform for newcomers to Canada: an iOS/Android app and a web app on one shared backend.",
-    did: [
+      "Unify makes settling in Canada simpler, clearer, and more connected.",
+    did: [],
+    didGroups: [
       {
-        lead: "Co-founded Unify:",
-        text: "a React Native iOS/Android app and a React web app on a shared Supabase backend.",
+        title: "Engineering",
+        items: [
+          {
+            lead: "Helped lead the builds",
+            text: "of the React Native iOS/Android app, the React web app, and the landing page, on a shared Supabase backend.",
+          },
+          {
+            lead: "Built the RAG-powered AI Assistant:",
+            text: "OpenAI embeddings and pgvector retrieval with recency-weighted re-ranking, profile-aware context, and streaming answers with sources.",
+          },
+          {
+            lead: "Made it safe to run in production:",
+            text: "rate-limiting and prompt-injection defenses, served through Supabase Edge Functions.",
+          },
+        ],
       },
       {
-        lead: "Helped lead",
-        text: "the landing page, the mobile app, and the web app.",
-      },
-      {
-        lead: "Built the RAG-powered AI Assistant:",
-        text: "OpenAI embeddings + pgvector retrieval, streaming answers with sources, rate-limiting, and prompt-injection defenses.",
-      },
-      {
-        lead: "Secured 16 partnerships and ran 25 community events;",
-        text: "the roadmap came from 51 interviews, 225 surveys, and 73 beta testers.",
+        title: "Business",
+        items: [
+          {
+            lead: "Secured 16 partnerships and ran 35+ community events",
+            text: "that brought newcomers into the app.",
+          },
+          {
+            lead: "Designed a referral revenue model",
+            text: "(3 partners signed) that earns commission on partner sign-ups and keeps the app free.",
+          },
+          {
+            lead: "Drove 2M+ social views",
+            text: "and set the roadmap from 51 interviews, 225 surveys, and 73 beta testers.",
+          },
+        ],
       },
     ],
     stats: [
-      { value: "350+", label: "users" },
+      { value: "450+", label: "users" },
       { value: "16", label: "partnerships" },
-      { value: "25", label: "events" },
-      { value: "73", label: "beta testers" },
+      { value: "35+", label: "events" },
     ],
     tools: ["React Native", "React", "Supabase", "pgvector", "OpenAI"],
     links: [
@@ -125,7 +148,7 @@ export const projects: Project[] = [
         {
           src: "/projects/unify-ai.webp",
           video: "/projects/unify-ai.mp4",
-          caption: "AI Companion (RAG)",
+          caption: "AI Companion",
           width: 380,
           height: 832,
         },
