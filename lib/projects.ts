@@ -36,7 +36,7 @@ export type ProjectMedia =
     }
   | { kind: "placeholder"; label: string }
   // No media: a small icon tile on a compact card.
-  | { kind: "icon"; icon: "tasks" | "heart" };
+  | { kind: "icon"; icon: "tasks" | "heart" | "chip" };
 
 export type Project = {
   name: string;
@@ -243,14 +243,7 @@ export const projects: Project[] = [
     ],
     tools: ["KiCad", "ESP32-S3", "C/C++", "FreeRTOS", "Edge Impulse", "BLE"],
     links: [],
-    media: {
-      kind: "image",
-      src: "/projects/wearable-pcb.webp",
-      alt: "Close-up of a dark blue printed circuit board",
-      width: 1600,
-      height: 900,
-      credit: "Unsplash photo pfR18JNEMv8 (Unsplash License)",
-    },
+    media: { kind: "icon", icon: "chip" },
   },
   {
     name: "SFU Rocketry",

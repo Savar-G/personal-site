@@ -2,7 +2,7 @@ type IconProps = { className?: string };
 
 /**
  * Monochrome brand + UI glyphs (Phosphor for the UI ones: camera, list-checks,
- * heartbeat), used on /projects and in the social footer. Each renders at the parent's `currentColor`, so color/hover lives on
+ * heartbeat, cpu), used on /projects and in the social footer. Each renders at the parent's `currentColor`, so color/hover lives on
  * the wrapping link. Brand marks are the official simple-icons paths; the mail
  * glyph is a matching solid envelope so the row reads as one weight.
  */
@@ -60,6 +60,14 @@ export function HeartbeatIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" className={className}>
       <path d="M72,144H32a8,8,0,0,1,0-16H67.72l13.62-20.44a8,8,0,0,1,13.32,0l25.34,38,9.34-14A8,8,0,0,1,136,128h24a8,8,0,0,1,0,16H140.28l-13.62,20.44a8,8,0,0,1-13.32,0L88,126.42l-9.34,14A8,8,0,0,1,72,144ZM178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,.75,0,1.5,0,2.25a8,8,0,1,0,16-.5c0-.58,0-1.17,0-1.75A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46c0,53.61-77.76,102.15-96,112.8-10.83-6.31-42.63-26-66.68-52.21a8,8,0,1,0-11.8,10.82c31.17,34,72.93,56.68,74.69,57.63a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40Z" />
+    </svg>
+  );
+}
+
+export function CpuIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" className={className}>
+      <path d="M152,96H104a8,8,0,0,0-8,8v48a8,8,0,0,0,8,8h48a8,8,0,0,0,8-8V104A8,8,0,0,0,152,96Zm-8,48H112V112h32Zm88,0H216V112h16a8,8,0,0,0,0-16H216V56a16,16,0,0,0-16-16H160V24a8,8,0,0,0-16,0V40H112V24a8,8,0,0,0-16,0V40H56A16,16,0,0,0,40,56V96H24a8,8,0,0,0,0,16H40v32H24a8,8,0,0,0,0,16H40v40a16,16,0,0,0,16,16H96v16a8,8,0,0,0,16,0V216h32v16a8,8,0,0,0,16,0V216h40a16,16,0,0,0,16-16V160h16a8,8,0,0,0,0-16Zm-32,56H56V56H200v95.87s0,.09,0,.13,0,.09,0,.13V200Z" />
     </svg>
   );
 }

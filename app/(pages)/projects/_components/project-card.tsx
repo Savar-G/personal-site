@@ -2,6 +2,7 @@ import Image from "next/image";
 import { VideoEmbed } from "@/app/_components/video-embed";
 import {
   CameraIcon,
+  CpuIcon,
   GitHubIcon,
   HeartbeatIcon,
   ListChecksIcon,
@@ -136,9 +137,9 @@ export function ProjectCard({
   const compact = media.kind === "icon";
   const Icon =
     media.kind === "icon"
-      ? media.icon === "tasks"
-        ? ListChecksIcon
-        : HeartbeatIcon
+      ? { tasks: ListChecksIcon, heart: HeartbeatIcon, chip: CpuIcon }[
+          media.icon
+        ]
       : null;
 
   return (
