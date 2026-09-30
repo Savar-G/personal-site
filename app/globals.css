@@ -1670,3 +1670,370 @@ body {
     animation-delay: 0s !important;
   }
 }
+
+/* ---------- Projects: media-led case cards (R-70) ---------- */
+/* /projects is wider than the other inner pages: the shell's column grows when the page asks. */
+.pages-shell:has(.page-wide) {
+  --page-w: 70rem;
+}
+
+.pj-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+}
+@media (min-width: 900px) {
+  .pj-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pj-card--feature {
+    grid-column: 1 / -1;
+  }
+  .pj-card--tall {
+    grid-row: span 2;
+  }
+}
+
+.pj-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.5rem 1.5rem;
+  border: 1px solid var(--color-stone-200);
+  border-radius: 1.25rem;
+  background: var(--color-stone-50);
+}
+.pj-card--compact {
+  padding-top: 0.25rem;
+  background: color-mix(in oklab, var(--color-stone-100) 45%, var(--color-stone-50));
+}
+
+/* Media sits inset in the card, on a soft tray. */
+.pj-media {
+  overflow: hidden;
+  border-radius: 0.875rem;
+  background: var(--color-stone-100);
+}
+.pj-media .video-embed {
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.pj-card--tall .pj-media {
+  flex: 1 1 auto;
+  min-height: 16rem;
+}
+
+.pj-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  aspect-ratio: 16 / 9;
+  color: var(--color-stone-400);
+  font-size: 13px;
+}
+.pj-card--tall .pj-placeholder {
+  aspect-ratio: auto;
+}
+
+/* Flagship showcase: the site in a browser frame, then phone screens. */
+.pj-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) repeat(3, minmax(0, 0.26fr));
+  align-items: end;
+  gap: 1.25rem;
+  padding: 2.25rem 2.25rem 1.25rem;
+}
+.pj-shot {
+  margin: 0;
+}
+.pj-shot figcaption {
+  margin-top: 0.625rem;
+  font-size: 12px;
+  color: var(--color-stone-400);
+}
+.pj-browser {
+  overflow: hidden;
+  border-radius: 0.625rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--shadow) 8%, transparent),
+    0 12px 32px -12px color-mix(in oklab, var(--shadow) 22%, transparent);
+}
+.pj-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 1.5rem;
+  padding: 0 0.625rem;
+  border-bottom: 1px solid #ececef;
+  background: #f7f7f8;
+}
+.pj-browser-bar span {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #d9d9de;
+}
+.pj-browser-bar em {
+  flex: 1;
+  margin-right: 1.4rem;
+  text-align: center;
+  font-style: normal;
+  font-size: 10px;
+  color: #9a9aa3;
+}
+.pj-browser img,
+.pj-phone img,
+.pj-phone video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.pj-phone {
+  overflow: hidden;
+  border: 0.3rem solid #111113;
+  border-radius: 1.4rem;
+  background: #111113;
+  box-shadow: 0 14px 30px -12px color-mix(in oklab, var(--shadow) 35%, transparent);
+}
+.pj-phone img,
+.pj-phone video {
+  border-radius: 1.1rem;
+}
+
+.pj-body {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.25rem 1rem 0;
+}
+.pj-card--feature .pj-body {
+  padding: 1.5rem 1.25rem 0;
+}
+@media (min-width: 900px) {
+  .pj-card--feature .pj-body {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 3rem;
+  }
+}
+
+.pj-overline {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.pj-num {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-stone-400);
+}
+.pj-icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  margin-left: auto;
+  border: 1px solid var(--color-stone-200);
+  border-radius: 0.5rem;
+  color: var(--color-stone-600);
+}
+
+/* Category chip: a dot and a tint of the discipline's colour. */
+.pj-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--tone);
+  background: color-mix(in oklab, var(--tone) 11%, transparent);
+}
+.pj-chip::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.pj-tone--venture { --tone: #ea580c; }
+.pj-tone--product { --tone: #7c3aed; }
+.pj-tone--hardware { --tone: #059669; }
+.pj-tone--mechanical { --tone: #e11d48; }
+.pj-tone--software { --tone: #2563eb; }
+.pj-tone--plain { --tone: var(--color-stone-500); }
+@media (prefers-color-scheme: dark) {
+  .pj-tone--venture { --tone: #fb923c; }
+  .pj-tone--product { --tone: #a78bfa; }
+  .pj-tone--hardware { --tone: #34d399; }
+  .pj-tone--mechanical { --tone: #fb7185; }
+  .pj-tone--software { --tone: #60a5fa; }
+}
+
+.pj-name {
+  margin-top: 0.75rem;
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--color-stone-900);
+}
+.pj-card--feature .pj-name {
+  font-size: 2rem;
+}
+.pj-role {
+  margin-top: 0.25rem;
+  font-size: 14px;
+  color: var(--color-stone-400);
+}
+.pj-role strong {
+  font-weight: 500;
+  color: var(--color-stone-900);
+}
+.pj-summary {
+  margin-top: 0.75rem;
+  max-width: 34rem;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-stone-600);
+}
+
+.pj-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-stone-200);
+}
+.pj-stats div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.pj-stats dd {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-stone-900);
+}
+.pj-stats dt {
+  font-size: 12px;
+  color: var(--color-stone-400);
+}
+
+.pj-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-stone-400);
+}
+.pj-did {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.625rem;
+  padding-left: 1rem;
+  list-style: disc;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--color-stone-600);
+}
+.pj-did li::marker {
+  color: var(--color-stone-300);
+}
+.pj-did strong {
+  font-weight: 500;
+  color: var(--color-stone-900);
+}
+
+.pj-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 1rem;
+}
+.pj-tools li {
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--color-stone-200);
+  border-radius: 0.375rem;
+  font-size: 12px;
+  color: var(--color-stone-600);
+}
+
+.pj-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.pj-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--color-stone-200);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-stone-900);
+}
+.pj-link:hover {
+  border-color: var(--color-stone-300);
+  background: var(--color-stone-100);
+}
+.pj-link--site {
+  border-color: transparent;
+  color: #2f66f0;
+  background: #e3ecfd;
+}
+.pj-link--site:hover {
+  border-color: transparent;
+  background: #d3e1fc;
+}
+@media (prefers-color-scheme: dark) {
+  .pj-link--site {
+    color: #86a8ff;
+    background: #1c2b4d;
+  }
+  .pj-link--site:hover {
+    background: #26396a;
+  }
+}
+
+/* A video's caption on its poster ("Demo · title"). */
+.video-embed-label {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  max-width: calc(100% - 1.5rem);
+  overflow: hidden;
+  padding: 0.3rem 0.625rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ffffff;
+  background: rgb(0 0 0 / 0.62);
+}
+
+/* Phones: the showcase scrolls sideways instead of shrinking the screens. */
+@media (max-width: 899px) {
+  .pj-showcase {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 1.25rem;
+    scroll-snap-type: x mandatory;
+  }
+  .pj-shot {
+    flex: none;
+    scroll-snap-align: start;
+  }
+  .pj-shot--site {
+    width: 82%;
+  }
+  .pj-shot--phone {
+    width: 36%;
+  }
+}

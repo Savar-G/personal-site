@@ -1,68 +1,249 @@
-export type ProjectLink = { label: string; href: string };
+// Projects for /projects. Facts come from the Sep 2026 resume and Savar's own
+// messages; no invented metrics. Order matters: the desk's folder papers fly
+// into the first three cards.
+
+export type Tone =
+  "venture" | "product" | "hardware" | "mechanical" | "software" | "plain";
+
+export type ProjectLink = {
+  label: string;
+  href: string;
+  kind?: "site" | "github";
+};
+
+export type ProjectMedia =
+  // A site in a browser frame with phone screens beside it (the flagship).
+  | {
+      kind: "showcase";
+      site: { src: string; url: string; width: number; height: number };
+      screens: {
+        src: string;
+        caption: string;
+        width: number;
+        height: number;
+        video?: string;
+      }[];
+    }
+  | { kind: "youtube"; id: string; start?: number; title: string }
+  | { kind: "placeholder"; label: string }
+  // No media: a small icon tile on a compact card.
+  | { kind: "icon"; icon: "tasks" | "heart" };
 
 export type Project = {
   name: string;
-  role?: string;
-  description: string;
-  tags?: string;
+  category: string;
+  tone: Tone;
+  role: string;
+  dates?: string;
+  summary: string;
+  // "What I did": a short bold lead, then the rest.
+  did: { lead?: string; text: string }[];
+  stats?: { value: string; label: string }[];
+  tools: string[];
   links: ProjectLink[];
-  video?: { youtubeId: string; start?: number; title: string };
+  media: ProjectMedia;
+  // The flagship spans the full width; a tall card spans two grid rows.
+  layout?: "feature" | "tall";
 };
 
-// Facts come from the resume (Sep 2026). No invented metrics.
 export const projects: Project[] = [
   {
     name: "Unify",
+    category: "Venture · Software & AI",
+    tone: "venture",
     role: "Co-founder",
-    description:
-      "Settlement platform for newcomers to Canada. 350+ users and 16 partnerships. I helped lead the landing page, the mobile app, and the web app.",
-    tags: "React Native · React · Supabase · RAG",
+    dates: "Jul 2024 – now",
+    summary:
+      "Settlement platform for newcomers to Canada: an iOS/Android app and a web app on one shared backend.",
+    did: [
+      {
+        lead: "Co-founded Unify:",
+        text: "a React Native iOS/Android app and a React web app on a shared Supabase backend.",
+      },
+      {
+        lead: "Helped lead",
+        text: "the landing page, the mobile app, and the web app.",
+      },
+      {
+        lead: "Built the RAG-powered AI Assistant:",
+        text: "OpenAI embeddings + pgvector retrieval, streaming answers with sources, rate-limiting, and prompt-injection defenses.",
+      },
+      {
+        lead: "Secured 16 partnerships and ran 25 community events;",
+        text: "the roadmap came from 51 interviews, 225 surveys, and 73 beta testers.",
+      },
+    ],
+    stats: [
+      { value: "350+", label: "users" },
+      { value: "16", label: "partnerships" },
+      { value: "25", label: "events" },
+      { value: "73", label: "beta testers" },
+    ],
+    tools: ["React Native", "React", "Supabase", "pgvector", "OpenAI"],
     links: [
-      { label: "unifysocial.ca", href: "https://unifysocial.ca" },
+      { label: "unifysocial.ca", href: "https://unifysocial.ca", kind: "site" },
       {
         label: "Landing page",
         href: "https://github.com/UnifyCN/landing-page",
+        kind: "github",
       },
-      { label: "Mobile app", href: "https://github.com/UnifyCN/mobile-app" },
-      { label: "Web app", href: "https://github.com/UnifyCN/web-app" },
+      {
+        label: "Mobile app",
+        href: "https://github.com/UnifyCN/mobile-app",
+        kind: "github",
+      },
+      {
+        label: "Web app",
+        href: "https://github.com/UnifyCN/web-app",
+        kind: "github",
+      },
     ],
-  },
-  {
-    name: "Taskline",
-    description:
-      "Obsidian task dashboard that turns agent-extracted action items into one execution queue.",
-    tags: "Obsidian · AI agents",
-    links: [{ label: "GitHub", href: "https://github.com/Savar-G/taskline" }],
+    media: {
+      kind: "showcase",
+      site: {
+        src: "/projects/unify-site.webp",
+        url: "unifysocial.ca",
+        width: 1600,
+        height: 900,
+      },
+      screens: [
+        {
+          src: "/projects/unify-feed.webp",
+          caption: "Community feed",
+          width: 480,
+          height: 1044,
+        },
+        {
+          src: "/projects/unify-onboard.webp",
+          caption: "Onboarding",
+          width: 480,
+          height: 1044,
+        },
+        {
+          src: "/projects/unify-rag.webp",
+          caption: "AI Companion (RAG)",
+          width: 460,
+          height: 952,
+          video: "/projects/unify-rag.mp4",
+        },
+      ],
+    },
+    layout: "feature",
   },
   {
     name: "Embedr",
+    category: "Product · AI",
+    tone: "product",
     role: "Product & GTM",
-    description:
-      "I worked on the landing page and on the product, Embedr Studio.",
+    dates: "Now",
+    summary:
+      "An AI engineering environment for hardware: datasheets, KiCad schematics, and firmware bring-up.",
+    did: [
+      { text: "Worked on the landing page." },
+      { text: "Worked on the product, Embedr Studio." },
+    ],
+    tools: [],
     links: [
-      { label: "embedr.app", href: "https://www.embedr.app/" },
+      { label: "embedr.app", href: "https://www.embedr.app/", kind: "site" },
       { label: "Embedr Studio", href: "https://studio.embedr.app/home" },
     ],
-    video: {
-      youtubeId: "ZQaxrc0SsEA",
+    media: {
+      kind: "youtube",
+      id: "ZQaxrc0SsEA",
       start: 13,
       title: "This AI Builds PCBs, Firmware & Mechanical Designs",
     },
   },
   {
     name: "Health & Activity Wearable",
-    description:
-      "ESP32-S3 wearable with IMU and heart-rate sensing: a 2-layer PCB, bare-metal sensor drivers, and an on-device activity classifier.",
-    tags: "KiCad · ESP32-S3 · C/C++ · FreeRTOS",
+    category: "Hardware · Firmware",
+    tone: "hardware",
+    role: "Hardware & Firmware Engineer",
+    dates: "May 2026 – now",
+    summary:
+      "An ESP32-S3 wearable that senses motion and heart rate and classifies activity on the device.",
+    did: [
+      {
+        lead: "Designed a 2-layer mixed-signal PCB",
+        text: "in KiCad for an ESP32-S3 wearable (IMU, PPG heart rate, LiPo power); fabricated through JLCPCB.",
+      },
+      {
+        lead: "Wrote bare-metal I2C drivers",
+        text: "in C/C++ for the IMU and PPG, scheduled with FreeRTOS, checked with a logic analyzer.",
+      },
+      {
+        lead: "Built an on-device TinyML activity classifier",
+        text: "(Edge Impulse) that streams predictions to a phone app over BLE, with no cloud.",
+      },
+    ],
+    tools: ["KiCad", "ESP32-S3", "C/C++", "FreeRTOS", "Edge Impulse", "BLE"],
     links: [],
+    media: { kind: "placeholder", label: "Photo coming: PCB and device" },
+  },
+  {
+    name: "SFU Rocketry",
+    category: "Hardware · Mechanical",
+    tone: "mechanical",
+    role: "Propulsion & Mechanical Engineer",
+    dates: "Oct 2022 – May 2024",
+    summary: "A student team building liquid-fuelled rockets.",
+    did: [
+      {
+        lead: "Designed, validated, and hot-fired a LOX/Ethanol liquid rocket engine:",
+        text: "a full design-to-test cycle with thermal and structural analysis (SolidWorks, FEA).",
+      },
+      {
+        lead: "Designed and built an automated pneumatic valve system",
+        text: "for the LOX/Ethanol tanks, for precise flow control.",
+      },
+    ],
+    tools: ["SolidWorks", "FEA", "Pneumatics"],
+    links: [],
+    media: {
+      kind: "placeholder",
+      label: "Photo and video coming: hot-fire test",
+    },
+    layout: "tall",
+  },
+  {
+    name: "Taskline",
+    category: "Software · AI tools",
+    tone: "software",
+    role: "Solo builder",
+    summary:
+      "An Obsidian plugin that turns agent-extracted action items from meetings and notes into one execution queue.",
+    did: [],
+    tools: ["TypeScript", "Obsidian", "AI agents"],
+    links: [
+      {
+        label: "GitHub",
+        href: "https://github.com/Savar-G/taskline",
+        kind: "github",
+      },
+    ],
+    media: { kind: "icon", icon: "tasks" },
   },
   {
     name: "HealthOS",
-    description: "Personal health dashboard.",
-    tags: "Next.js",
+    category: "Software",
+    tone: "plain",
+    role: "Solo builder",
+    summary:
+      "A personal health dashboard that tracks strength training, running, sleep, recovery, and body composition.",
+    did: [],
+    tools: ["Next.js"],
     links: [
-      { label: "health.savargupta.com", href: "https://health.savargupta.com" },
-      { label: "GitHub", href: "https://github.com/Savar-G/HealthOS" },
+      {
+        label: "health.savargupta.com",
+        href: "https://health.savargupta.com",
+        kind: "site",
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/Savar-G/HealthOS",
+        kind: "github",
+      },
     ],
+    media: { kind: "icon", icon: "heart" },
   },
 ];

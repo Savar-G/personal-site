@@ -1,0 +1,59 @@
+{
+  "round": "projects-r1",
+  "date": "2026-09-29",
+  "decision": "How should /projects present each project so a visitor sees role, what Savar did, category, and media within seconds?",
+  "primary_axis": "page structure / information hierarchy",
+  "invariants": [
+    "same six projects in the same order (Unify, Embedr, Health & Activity Wearable, SFU Rocketry, Taskline, HealthOS)",
+    "facts from the Sep 2026 resume and Savar's own messages only; no invented metrics",
+    "Inter + zinc tokens, light mode, 1440 px desktop frame",
+    "'back to the desk' corner and site header",
+    "first three projects are card-like (desk folder papers fly into them)",
+    "real media only: Unify site + app screens + RAG chat crop, Embedr site + demo video; marked placeholders elsewhere"
+  ],
+  "canvas": "Brilliant project 'Personal Website', canvas main, frames at y=8700",
+  "options": [
+    {
+      "id": "A",
+      "frame": "P1-A \u00b7 Projects: media-led case cards",
+      "bet": "Large media cards; Unify as a full-width hero",
+      "benefit": "Fastest scan; media sells the work",
+      "cost": "Projects without media look weaker",
+      "risk": "Placeholders dominate until photos arrive"
+    },
+    {
+      "id": "B",
+      "frame": "P1-B \u00b7 Projects: role-first index",
+      "bet": "Typeset index (project, category, role, years, tools) with expandable rows",
+      "benefit": "Role and category legible in seconds; scales",
+      "cost": "Less visual",
+      "risk": "Reads like a resume"
+    },
+    {
+      "id": "C",
+      "frame": "P1-C \u00b7 Projects: editorial case studies",
+      "bet": "Each project is a chapter: hero media + role / what I did / tools band",
+      "benefit": "Depth and story",
+      "cost": "Long scroll",
+      "risk": "Later projects are never reached"
+    },
+    {
+      "id": "D",
+      "frame": "P1-D \u00b7 Projects: split by discipline",
+      "bet": "Sections for Ventures & product, Hardware, Software & AI",
+      "benefit": "Range is the headline",
+      "cost": "Sorting splits the flagship story",
+      "risk": "A section feels thin"
+    },
+    {
+      "id": "E",
+      "frame": "P1-E \u00b7 Projects: spec-sheet papers",
+      "bet": "Each project is a datasheet-style paper with clipped photos",
+      "benefit": "Memorable; continues the desk",
+      "cost": "Lower density",
+      "risk": "Gimmick"
+    }
+  ],
+  "note": "Five options at Savar's request (the skill default is 2-4); each varies the structure, not decoration.",
+  "selected": "A"
+}
