@@ -270,10 +270,20 @@ export const projects: Project[] = [
       },
     ],
     tools: ["SolidWorks", "FEA", "Pneumatics"],
-    links: [],
+    links: [
+      {
+        label: "sfurocketry.com",
+        href: "https://www.sfurocketry.com/",
+        kind: "site",
+      },
+    ],
     media: {
-      kind: "placeholder",
-      label: "Photo and video coming: hot-fire test",
+      kind: "image",
+      src: "/projects/rocketry-gen3.webp",
+      alt: "CAD wireframe of the SFU Rocketry GEN3 liquid rocket engine",
+      width: 1068,
+      height: 786,
+      credit: "SFU Rocketry, sfurocketry.com (GEN3 engine wireframe)",
     },
     layout: "tall",
   },

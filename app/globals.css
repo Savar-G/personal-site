@@ -1730,6 +1730,16 @@ body {
   aspect-ratio: 16 / 9;
   object-fit: cover;
 }
+/* In the tall card the photo fills the tray; the whole drawing stays in view. */
+.pj-card--tall .pj-photo {
+  display: flex;
+  background: #ffffff;
+}
+.pj-card--tall .pj-photo img {
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
 .pj-placeholder {
   display: flex;
   flex-direction: column;
