@@ -18,7 +18,7 @@ export default function ProjectsPage() {
       <header className="pt-2 pb-9 sm:pb-11">
         <h1 className="page-title">Projects</h1>
         <p className="mt-3 max-w-prose text-stone-500">
-          Things I&apos;ve built, from firmware to phones.
+          Things I&apos;ve built.
         </p>
       </header>
 
