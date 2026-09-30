@@ -184,6 +184,47 @@ export function mountDesk(root, router) {
   }
   FLIGHTS.forEach(href => session.remove('from:' + href));
 
+  // ---------- The greeting types itself on the first visit of a session ----------
+  // Every letter is laid out from the start (hidden), so the centred line never shifts.
+  // A caret leads; at the end a highlighter sweeps in behind the name. Then the
+  // original text nodes come back (the ghost measures them with a Range).
+  const h1 = $('.greet h1'), hl = h1.querySelector('.hl');
+  let typing = false;
+  function typeGreeting(done) {
+    const lead = h1.firstChild, name = hl.firstChild, chars = [];
+    const split = (node, parent) => {
+      [...node.textContent].forEach(c => { const el = document.createElement('span'); el.className = 'ch'; el.textContent = c; parent.insertBefore(el, node); chars.push(el); });
+      node.remove();
+    };
+    split(lead, h1); split(name, hl);
+    typing = true; h1.classList.add('typing');
+    let i = 0;
+    const step = () => {
+      if (i) chars[i - 1].classList.remove('at');
+      const el = chars[i++]; el.classList.add('on', 'at');
+      if (i < chars.length) {
+        const c = el.textContent;
+        return later(step, c === ',' ? 240 : c === ' ' ? 110 : 55 + Math.random() * 50);
+      }
+      later(() => {                                     // the caret blinks at the end, then the name is highlighted
+        chars.forEach(x => x.remove()); h1.insertBefore(lead, hl); hl.appendChild(name);
+        h1.classList.remove('typing'); typing = false;
+        hl.classList.add('sweep'); later(() => hl.classList.remove('sweep'), 420);
+        done();
+      }, 1000);
+    };
+    later(step, 380);
+  }
+
+  // ---------- The name beckons until someone finds it ----------
+  // Every few seconds "Savar." lifts, tilts, and a sheen crosses the highlight: it is a link (About).
+  function beckon() {
+    if (still || session.get('name-found')) return;
+    later(() => { if (!session.get('name-found')) hl.classList.add('beckon'); }, 2200);
+  }
+  ['pointerenter', 'focus'].forEach(t => on(hl, t, () => { session.set('name-found'); hl.classList.remove('beckon'); }));
+  if (!still && firstLanding) typeGreeting(beckon); else beckon();
+
   // ---------- Polaroids develop the first time someone visits ----------
   if (!still && !store.get('developed', false)) {
     const travel = $('.travel'); travel.classList.add('developing');
@@ -543,7 +584,7 @@ export function mountDesk(root, router) {
     every(() => {
       if (small.matches) return;
       const t = performance.now();
-      if (state === 'off' && t > Math.max(until, 1500)) {
+      if (state === 'off' && !typing && t > Math.max(until, 1500)) {
         spawnFromName();
       } else if (state === 'hide' && t > until) {
         if (home.classList.contains('dragging')) return flee();

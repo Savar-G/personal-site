@@ -352,3 +352,29 @@
 .desk-page #sheet .sbtns a.primary { color: var(--bg); background: var(--ink); }
 .desk-page #sheet .sbtns svg { width: 18px; height: 18px; flex: none; }
 .desk-page #sheet .shint { margin: 16px 0 0; text-align: center; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 12px; color: var(--muted); }
+
+/* ---------- Greeting: typed on the first visit, then the name beckons ---------- */
+.desk-page .greet h1.typing .ch { visibility: hidden; }
+.desk-page .greet h1.typing .ch.on { visibility: visible; }
+.desk-page .greet h1 .ch { position: relative; }
+.desk-page .greet h1 .ch.at::after { content: ''; position: absolute; right: -0.09em; top: .12em; bottom: .06em; width: .06em; min-width: 2px;
+                                     border-radius: 2px; background: currentColor; animation: desk-caret 1s steps(1) infinite; }
+@keyframes desk-caret { 50% { opacity: 0; } }
+/* No highlight while typing; it sweeps in from the left when the name is done. */
+.desk-page .greet h1.typing .hl { background: transparent; text-shadow: none; }
+.desk-page .greet h1 .hl.sweep { background: linear-gradient(var(--hl-bg), var(--hl-bg)) no-repeat 0 0 / 0% 100%; text-shadow: none;
+                                 animation: desk-sweep 380ms cubic-bezier(0.3, 0.7, 0.3, 1) forwards; }
+@keyframes desk-sweep { to { background-size: 100% 100%; } }
+/* The beckon: a small lift and tilt, and a sheen across the highlight, every 5.5 s. */
+.desk-page .greet h1 .hl { position: relative; overflow: hidden; }
+.desk-page .greet h1 .hl.beckon { animation: desk-beckon 5.5s ease-in-out infinite; }
+.desk-page .greet h1 .hl.beckon::after { content: ''; position: absolute; inset: 0; pointer-events: none; translate: -130% 0;
+                                         background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.8) 50%, transparent 70%);
+                                         animation: desk-sheen 5.5s ease-in-out infinite; }
+@media (prefers-color-scheme: dark) { .desk-page .greet h1 .hl.beckon::after { background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.22) 50%, transparent 70%); } }
+@keyframes desk-beckon { 0%, 78%, 100% { translate: 0 0; rotate: 0deg; }
+                         83% { translate: 0 -4px; rotate: -3deg; } 88% { translate: 0 0; rotate: 1.5deg; } 92% { rotate: -.8deg; } 96% { rotate: 0deg; } }
+@keyframes desk-sheen { 0%, 76% { translate: -130% 0; } 90%, 100% { translate: 130% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .desk-page .greet h1 .hl.beckon, .desk-page .greet h1 .hl.beckon::after, .desk-page .greet h1 .hl.sweep { animation: none; }
+}

@@ -17,6 +17,8 @@
 ## Greeting (centre of the desk)
 
 - "Hi, I'm Savar." Inter 64px, 600, tracking -2.4px, `#18181B`; "Savar." in `#2F66F0` on a `#E3ECFD` highlight (12px radius).
+- On the first visit of a session the headline types itself (55-105 ms per letter, longer after "," and spaces; letters hold their final place; a caret leads and blinks at the end), then a highlighter sweeps in behind "Savar." (380 ms). Site only; the prototype is unchanged (R-68).
+- "Savar." beckons every 5.5 s (lifts 4px, tilts -3deg, settles, and a sheen crosses the highlight) until the visitor hovers or focuses it once per session (R-68).
 - "Savar." is a link to `/about`. Hover and focus: the highlight darkens to `#D3E1FC` and the name lifts 2px and turns -2°.
 - "Studying Mechatronics Engineering and Business @ SFU. Building at the intersection of hardware, software, and AI." Inter 17px, `#52525B`, max 500px.
 - "Click anything to learn more about me." Inter 14px, `#A1A1AA`, with a hand icon that taps three times (fingertip ripple), rests, and stops after the first object hover. Phone: "Tap anything…".
