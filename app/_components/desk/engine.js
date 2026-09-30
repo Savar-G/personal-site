@@ -111,7 +111,7 @@ export function mountDesk(root, router) {
     let start = null;
     on(el, 'pointerdown', e => {
       if (!small.matches && (e.target.closest('#contacts') || e.target.closest('.pg a'))) return;
-      start = { x: e.clientX, y: e.clientY, left: el.offsetLeft, top: el.offsetTop, moved: false };
+      start = { x: e.clientX, y: e.clientY, left: el.offsetLeft, top: el.offsetTop, moved: false, target: e.target };
       if (!small.matches) el.setPointerCapture(e.pointerId);     // phones scroll instead of dragging
     });
     on(el, 'pointermove', e => {
@@ -124,9 +124,12 @@ export function mountDesk(root, router) {
     });
     on(el, 'pointerup', () => {
       if (!start) return;
-      const moved = start.moved; start = null; el.classList.remove('dragging');
+      const moved = start.moved, target = start.target; start = null; el.classList.remove('dragging');
       if (moved && !small.matches) { if (!still) el.animate([{ scale: '1.04' }, { scale: '.97' }, { scale: '1' }], { duration: 320, easing: 'ease-out' }); messy(); }
-      if (!moved) { if (el !== phone) go(el); else if (small.matches) openSheet(); }
+      if (moved) return;
+      if (el !== phone) go(el);
+      else if (small.matches) openSheet();
+      else if (phone.classList.contains('ringing') && !target.closest('#answer, #ignore')) answerCall();   // a click anywhere on a ringing phone picks up
     });
     on(el, 'pointercancel', () => { start = null; el.classList.remove('dragging'); });
     on(el, 'keydown', e => {
@@ -270,13 +273,14 @@ export function mountDesk(root, router) {
     phone.classList.remove('ringing'); if (ringAnim) ringAnim.cancel(); ringAnim = null; cancel(ringStop);
     phoneCap.textContent = 'Socials'; $('#missed').hidden = !missed;
   }
-  function answerCall() { stopRing(false); window.open($('#coffee').dataset.href, '_blank'); }
+  // Answering the call is the coffee chat: it opens the booking page.
+  function answerCall() { stopRing(false); say('Picking up… grab a time to talk'); window.open($('#coffee').dataset.href, '_blank'); }
   function ignoreCall() { stopRing(false); }
   on($('#answer'), 'click', e => { e.stopPropagation(); answerCall(); });
   on($('#ignore'), 'click', e => { e.stopPropagation(); ignoreCall(); });
   every(() => {
     if (rang || overlayOpen() || small.matches || phone.classList.contains('active') || performance.now() - lastAct < 20000) return;
-    rang = true; phone.classList.add('ringing'); phoneCap.textContent = 'Savar is calling…'; callSel = 0; paintCall();
+    rang = true; phone.classList.add('ringing'); phoneCap.textContent = 'Savar is calling… click to answer'; callSel = 0; paintCall();
     if (!still) ringAnim = phone.animate([{ rotate: '0deg' }, { rotate: '-3deg', offset: .05 }, { rotate: '3deg', offset: .1 }, { rotate: '-3deg', offset: .15 },
                                           { rotate: '3deg', offset: .2 }, { rotate: '0deg', offset: .25 }, { rotate: '0deg' }], { duration: 1400, iterations: Infinity });
     ringStop = later(() => stopRing(true), 14000);
