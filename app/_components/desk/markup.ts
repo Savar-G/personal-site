@@ -58,13 +58,13 @@ export function deskMarkup(essays: DeskEssay[]) {
     </g>
   </svg></div></div></div>
 
-  <div class="obj travel" tabindex="0" role="link" aria-label="Travel" data-vis="0 .02 .98 .96" data-open="/travel" style="left:78px;top:80px;width:230px;height:200px;--r:-3deg;--cy:212px">
+  <div class="obj travel" tabindex="0" role="link" aria-label="Travel" data-vis="0 .02 .98 .96" data-open="/travel" style="left:78px;top:126px;width:230px;height:200px;--r:-3deg;--cy:206px">
     <div class="pola" style="--dd:900ms;--x:0px;--y:22px;--pr:-11deg;--hx:-46px;--hy:10px;--hr:-17deg;view-transition-name:polaroid-japan;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_japan.webp)"></div><span>japan</span></div>
     <div class="pola" style="--dd:1400ms;--x:86px;--y:28px;--pr:9deg;--hx:58px;--hy:16px;--hr:16deg;view-transition-name:polaroid-indonesia;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_bali.webp)"></div><span>indonesia</span></div>
     <div class="pola" style="--dd:1900ms;--x:44px;--y:4px;--pr:-2deg;--hx:4px;--hy:-16px;--hr:-1deg;view-transition-name:polaroid-turkey;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_cappadocia.webp)"></div><span>turkey</span></div>
     <span class="cap">Travel</span></div>
 
-  <div class="obj notebook" tabindex="0" role="link" aria-label="Writing" data-vis="0 0 1 1" data-open="/writing" style="view-transition-name:notebook;view-transition-class:flight;left:610px;top:70px;--r:4deg;--cy:254px">
+  <div class="obj notebook" tabindex="0" role="link" aria-label="Writing" data-vis="0 0 1 1" data-open="/writing" style="view-transition-name:notebook;view-transition-class:flight;left:505px;top:74px;--r:4deg;--cy:258px">
     <div class="book"><div class="page-r"></div><div class="cover"><div class="face front"></div><div class="face back"></div></div></div>
     <div class="hit"></div>
     <div class="pg">
@@ -72,7 +72,7 @@ ${notebookPage(essays)}
     </div>
     <span class="cap">Writing</span></div>
 
-  <div class="obj folder" tabindex="0" role="link" aria-label="Projects" data-vis=".08 .09 .92 .91" data-open="/projects" style="left:860px;top:70px;width:230px;height:197px;--r:-4deg;--cy:184px">
+  <div class="obj folder" tabindex="0" role="link" aria-label="Projects" data-vis=".08 .09 .92 .91" data-open="/projects" style="left:827px;top:139px;width:230px;height:197px;--r:-4deg;--cy:193px">
     <div class="fold">
       <img decoding="async" src="/desk/folder.webp" alt="">
       <div class="doc sheet" style="view-transition-name:paper-1;view-transition-class:flight;--l:30px;--t:28px;--dr:-5deg;--dr2:-13deg;--up:-44px;--ux:-30px;--d:0ms"><i></i><i style="--w:62%"></i><i style="--w:74%"></i><i style="--w:50%"></i></div>
