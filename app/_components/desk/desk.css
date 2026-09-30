@@ -382,3 +382,28 @@
 @media (prefers-reduced-motion: reduce) {
   .desk-page .greet h1 .hl.beckon, .desk-page .greet h1 .hl.beckon::after, .desk-page .greet h1 .hl.sweep { animation: none; }
 }
+
+/* ---------- Landing (first visit of a session) ---------- */
+/* CSS so it can start on the first paint: the pre-paint script in markup.ts (or the engine,
+   after a client-side navigation) adds .landing to the stage. Individual translate/scale compose
+   with each object's own transform. */
+@keyframes desk-rise { from { opacity: 0; translate: 0 10px; } }
+@keyframes desk-land { 0% { opacity: 0; translate: 0 -38px; scale: 1.06; } 70% { opacity: 1; translate: 0 5px; scale: 1; } 100% { translate: 0 0; scale: 1; } }
+@keyframes desk-drop { 0% { opacity: 0; translate: 0 -24px; } 70% { opacity: 1; translate: 0 3px; } 100% { translate: 0 0; } }
+.desk-page .stage.landing .greet { animation: desk-rise 600ms ease-out backwards; }
+.desk-page .stage.landing .obj { animation: desk-land 620ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
+.desk-page .stage.landing .travel { animation-delay: 120ms; }
+.desk-page .stage.landing .notebook { animation-delay: 195ms; }
+.desk-page .stage.landing .folder { animation-delay: 270ms; }
+.desk-page .stage.landing #phone { animation-delay: 345ms; }
+.desk-page .stage.landing .books { animation-delay: 420ms; }
+.desk-page .stage.landing .food { animation-delay: 495ms; }
+.desk-page .stage.landing #coffee { animation-delay: 570ms; }
+.desk-page .stage.landing #resume { animation-delay: 645ms; }
+.desk-page .stage.landing .cube { animation: desk-drop 480ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--ld, 780ms) backwards; }
+/* Before the typing starts, the headline is laid out but not shown. */
+.desk-page .greet h1.pretype, .desk-page .greet h1.pretype .hl { color: transparent; text-shadow: none; }
+.desk-page .greet h1.pretype .hl { background: transparent; }
+@media (prefers-reduced-motion: reduce) {
+  .desk-page .stage.landing .greet, .desk-page .stage.landing .obj, .desk-page .stage.landing .cube { animation: none; }
+}

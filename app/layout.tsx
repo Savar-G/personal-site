@@ -10,6 +10,8 @@ const inter = Inter({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  // Only code blocks in essays use it.
+  preload: false,
   subsets: ["latin"],
 });
 

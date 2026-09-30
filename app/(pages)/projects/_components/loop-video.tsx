@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 
 // A short, silent screen recording that loops while it is on screen. It loads
-// only when it scrolls into view, and it stays on its poster with reduced motion.
+// only after the page has loaded and it is in view, and it stays on its poster
+// with reduced motion.
 export function LoopVideo({
   src,
   poster,
@@ -30,8 +31,15 @@ export function LoopVideo({
       },
       { threshold: 0.3 },
     );
-    observer.observe(video);
-    return () => observer.disconnect();
+    // Start only after the page has loaded, so the videos never compete with
+    // the first paint.
+    const start = () => observer.observe(video);
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+    return () => {
+      window.removeEventListener("load", start);
+      observer.disconnect();
+    };
   }, []);
 
   return (

@@ -4,20 +4,25 @@ import { deskMarkup, type DeskEssay } from "@/app/_components/desk/markup";
 import { getAllPosts } from "@/lib/posts";
 
 // Small instructional text, the polaroid handwriting, and the RAZR screen.
+// Not preloaded: they are decorative and small, and they swap in; the page's
+// own text (Inter) and scripts get the bandwidth first.
 const courierPrime = Courier_Prime({
   weight: "700",
   subsets: ["latin"],
   variable: "--font-courier-prime",
+  preload: false,
 });
 const reenieBeanie = Reenie_Beanie({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-reenie-beanie",
+  preload: false,
 });
 const pixelifySans = Pixelify_Sans({
   weight: ["400", "600"],
   subsets: ["latin"],
   variable: "--font-pixelify-sans",
+  preload: false,
 });
 
 // The open notebook shows the first sentence of an essay's first paragraph.

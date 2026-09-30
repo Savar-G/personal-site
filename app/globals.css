@@ -1559,7 +1559,15 @@ body {
   cursor: pointer;
   background: center / cover no-repeat var(--color-stone-100);
 }
+.video-embed-poster-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .video-embed-play {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;

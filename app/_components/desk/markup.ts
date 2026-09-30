@@ -1,6 +1,28 @@
 // Desk markup, ported from mockups/desk-prototype/index.html. It is static,
 // trusted HTML (no user input); essay fields are escaped. engine.js drives it.
 
+import { CUBE_SCALE, POCKET, POCKET_CUBES, POCKET_QUERY } from "./pocket.js";
+
+// Runs during HTML parsing, before the first paint, on a full page load (React
+// does not run it again on hydration or client navigation; engine.js covers
+// those). It scales the stage, applies the phone layout, and starts the landing,
+// so the desk is visible on the first paint instead of after hydration.
+const PREPAINT = `(function(){try{
+var st=document.getElementById("stage");
+var small=matchMedia(${JSON.stringify(POCKET_QUERY)}).matches,still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+var s=small?Math.min(innerWidth/390,1.25):Math.min(innerWidth/1440,innerHeight/900);
+st.style.setProperty("--s",s);st.style.setProperty("--ts",small?1:Math.min(1.3,Math.max(1,.92/s)).toFixed(3));
+if(small){var keep=function(el){if(el.dataset.deskStyle==null)el.dataset.deskStyle=el.getAttribute("style")||"";};
+${JSON.stringify(POCKET)}.forEach(function(p){var el=st.querySelector(p[0]);if(!el)return;keep(el);var w=el.offsetWidth,h=el.offsetHeight;
+el.style.left=p[1]-w/2+"px";el.style.top=p[2]-h/2+"px";el.style.setProperty("--r",p[3]+"deg");el.style.setProperty("--ms",p[4]);el.style.setProperty("--cy",(p[5]-p[2])/p[4]+h/2+"px");});
+var cs=st.querySelectorAll(".cube");${JSON.stringify(POCKET_CUBES)}.forEach(function(c,i){var el=cs[i];if(!el)return;keep(el);
+el.style.left=c[0]-el.offsetWidth/2+"px";el.style.top=c[1]-el.offsetHeight/2+"px";el.style.setProperty("--cr",c[2]+"deg");el.style.setProperty("--ms",${CUBE_SCALE});});}
+var landed=null,dev=null;try{landed=sessionStorage.getItem("desk.landed");}catch(e){}try{dev=localStorage.getItem("desk.developed");}catch(e){}
+if(!still&&!landed){st.classList.add("landing");st.querySelector(".greet h1").classList.add("pretype");}
+if(!still&&dev===null)st.querySelector(".travel").classList.add("developing");
+st.classList.add("ready");
+}catch(e){}})();`;
+
 export type DeskEssay = {
   slug: string;
   title: string;
@@ -74,16 +96,16 @@ ${notebookPage(essays)}
 
   <div class="obj folder" tabindex="0" role="link" aria-label="Projects" data-vis=".08 .09 .92 .91" data-open="/projects" style="left:827px;top:139px;width:230px;height:197px;--r:-4deg;--cy:193px">
     <div class="fold">
-      <img decoding="async" src="/desk/folder.webp" alt="">
+      <img decoding="async" fetchpriority="low" src="/desk/folder.webp" alt="">
       <div class="doc sheet" style="view-transition-name:paper-1;view-transition-class:flight;--l:30px;--t:28px;--dr:-5deg;--dr2:-13deg;--up:-44px;--ux:-30px;--d:0ms"><i></i><i style="--w:62%"></i><i style="--w:74%"></i><i style="--w:50%"></i></div>
       <div class="doc sheet" style="view-transition-name:paper-2;view-transition-class:flight;--l:60px;--t:24px;--dr:1deg;--dr2:1deg;--up:-60px;--ux:0px;--d:60ms"><i style="--w:70%"></i><i></i><i style="--w:58%"></i><i style="--w:66%"></i></div>
       <div class="doc sheet" style="view-transition-name:paper-3;view-transition-class:flight;--l:90px;--t:30px;--dr:6deg;--dr2:14deg;--up:-46px;--ux:30px;--d:120ms"><i style="--w:76%"></i><i style="--w:54%"></i><i></i><i style="--w:62%"></i></div>
-      <img decoding="async" class="front" src="/desk/folder.webp" alt="">
+      <img decoding="async" fetchpriority="low" class="front" src="/desk/folder.webp" alt="">
     </div>
     <span class="cap">Projects</span></div>
 
   <div class="obj phone" id="phone" tabindex="0" role="group" aria-label="Socials. Use arrow keys and Enter." data-vis=".22 .11 .77 .89" style="left:1170px;top:30px;--r:10deg;--cy:382px">
-    <img decoding="async" src="/desk/razr.webp" alt="">
+    <img decoding="async" fetchpriority="low" src="/desk/razr.webp" alt="">
     <div class="screen">
       <div class="lock"><b><span id="ltime">7:41</span><i id="lampm">PM</i></b><span id="ldate">MON SEP 28</span><span class="lcity">VANCOUVER</span><span class="missed" id="missed" hidden>1 MISSED CALL</span></div>
       <div class="call"><small>INCOMING CALL</small><b>Savar</b><div class="keys"><span class="ans on" id="answer">Answer</span><span class="ign" id="ignore">Ignore</span></div></div>
@@ -103,43 +125,44 @@ ${notebookPage(essays)}
     <span class="cap">Socials</span></div>
 
   <div class="obj paper" id="resume" tabindex="0" role="link" aria-label="Resume" data-vis="0 0 1 1" style="left:70px;top:560px;width:176px;height:228px;--r:-6deg;--cy:238px">
-    <div class="sheet"><img decoding="async" src="/desk/resume_desk.webp" alt=""></div><span class="cap">Resume</span></div>
+    <div class="sheet"><img decoding="async" fetchpriority="low" src="/desk/resume_desk.webp" alt=""></div><span class="cap">Resume</span></div>
 
   <div class="obj books" tabindex="0" role="link" aria-label="Bookshelf" data-vis=".04 .1 .96 .92" data-open="/bookshelf" style="left:1180px;top:668px;width:190px;height:204px;--cy:206px">
-    <img decoding="async" class="bk" src="/desk/the-everything-store.webp" alt="" style="view-transition-name:book-the-everything-store;view-transition-class:flight;left:0;top:18px;--br:-12deg;--hx:-34px;--hy:-4px;--hr:-21deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
-    <img decoding="async" class="bk" src="/desk/build.webp" alt="" style="view-transition-name:book-build;view-transition-class:flight;left:78px;top:24px;--br:9deg;--hx:30px;--hy:-2px;--hr:18deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
-    <img decoding="async" class="bk" src="/desk/chip-war.webp" alt="" style="view-transition-name:book-chip-war;view-transition-class:flight;left:40px;top:40px;--br:-2deg;--hx:-2px;--hy:-18px;--hr:-1deg;box-shadow:0 8px 18px rgba(0,0,0,.22)">
+    <img decoding="async" fetchpriority="low" class="bk" src="/desk/the-everything-store.webp" alt="" style="view-transition-name:book-the-everything-store;view-transition-class:flight;left:0;top:18px;--br:-12deg;--hx:-34px;--hy:-4px;--hr:-21deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
+    <img decoding="async" fetchpriority="low" class="bk" src="/desk/build.webp" alt="" style="view-transition-name:book-build;view-transition-class:flight;left:78px;top:24px;--br:9deg;--hx:30px;--hy:-2px;--hr:18deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
+    <img decoding="async" fetchpriority="low" class="bk" src="/desk/chip-war.webp" alt="" style="view-transition-name:book-chip-war;view-transition-class:flight;left:40px;top:40px;--br:-2deg;--hx:-2px;--hy:-18px;--hr:-1deg;box-shadow:0 8px 18px rgba(0,0,0,.22)">
     <span class="cap">Bookshelf</span></div>
 
   <div class="obj" id="coffee" tabindex="0" role="link" aria-label="Book a coffee chat" data-vis=".07 .07 .85 .83" data-href="https://cal.com/savar-gupta/embedr?user=savar-gupta&amp;overlayCalendar=true" style="left:405px;top:585px;width:260px;height:267px;--r:-10deg;--cy:246px">
-    <img decoding="async" src="/desk/coffee.webp" alt=""><div class="liquid" id="liquid"></div>
+    <img decoding="async" fetchpriority="low" src="/desk/coffee.webp" alt=""><div class="liquid" id="liquid"></div>
     <div class="steam cup"><span style="position:absolute;left:0;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" stroke-linecap="round"/></svg></span><span style="position:absolute;left:24px;bottom:6px"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" stroke-linecap="round"/></svg></span><span style="position:absolute;left:46px;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" stroke-linecap="round"/></svg></span></div>
     <span class="cap" id="coffeecap">Coffee chat</span><span class="coldnote">gone cold · grab a fresh one with me →</span></div>
 
-  <div class="cube" style="left:676px;top:688px;--cr:-8deg"><img decoding="async" src="/desk/sugar.webp" alt=""></div>
-  <div class="cube" style="left:712px;top:716px;--cr:14deg"><img decoding="async" src="/desk/sugar.webp" alt=""></div>
-  <div class="cube" style="left:680px;top:742px;--cr:3deg"><img decoding="async" src="/desk/sugar.webp" alt=""></div>
+  <div class="cube" style="--ld:780ms;left:676px;top:688px;--cr:-8deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
+  <div class="cube" style="--ld:870ms;left:712px;top:716px;--cr:14deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
+  <div class="cube" style="--ld:960ms;left:680px;top:742px;--cr:3deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
   <div class="cubehint" id="cubehint">psst, drop one in</div>
 
   <div class="obj food" tabindex="0" role="link" aria-label="Food on Beli" data-vis=".25 .24 .77 .75" data-href="https://beliapp.co/app/savargupta" style="left:790px;top:560px;width:300px;height:309px;--r:6deg;--cy:266px">
-    <img decoding="async" src="/desk/ramen.webp" alt="">
+    <img decoding="async" fetchpriority="low" src="/desk/ramen.webp" alt="">
     <div class="steam"><span style="position:absolute;left:0;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span><span style="position:absolute;left:30px;bottom:6px"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span><span style="position:absolute;left:58px;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span></div>
     <span class="cap">Food</span></div>
   <p class="pocket-only pocket-note"><span><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24h72v16H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V200h72a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40ZM48,56H208a8,8,0,0,1,8,8v80H40V64A8,8,0,0,1,48,56ZM208,184H48a8,8,0,0,1-8-8V160H216v16A8,8,0,0,1,208,184Z"/></svg>This desk is more fun on a desktop.</span></p>
   <p class="pocket-only pocket-foot">Vancouver, BC · <span id="ftime">7:41 PM</span></p>
 </div>
 
+<script>${PREPAINT}</script>
 <div id="iris"></div>
 <canvas id="stars"></canvas>
-<img decoding="async" id="flyer" data-src="/desk/resume_full.webp" alt="">
+<img decoding="async" fetchpriority="low" id="flyer" data-src="/desk/resume_full.webp" alt="">
 <div id="viewer" aria-hidden="true">
   <div class="vbar"><button type="button" id="back">← back to desk</button><a href="/Savar_Gupta_Resume.pdf" download>download pdf ↓</a></div>
-  <img decoding="async" id="page" data-src="/desk/resume_full.webp" alt="Savar Gupta, resume" width="1720" height="2226">
+  <img decoding="async" fetchpriority="low" id="page" data-src="/desk/resume_full.webp" alt="Savar Gupta, resume" width="1720" height="2226">
 </div>
 
 <div id="sheet" role="dialog" aria-modal="true" aria-label="Socials" aria-hidden="true">
   <div class="shead"><h2>Socials</h2><button type="button" id="sheetclose" aria-label="Close"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div>
-  <div class="big"><div class="bigphone"><img decoding="async" src="/desk/razr.webp" alt="">
+  <div class="big"><div class="bigphone"><img decoding="async" fetchpriority="low" src="/desk/razr.webp" alt="">
     <div class="screen"><div class="menu">
       <div class="bar"><span>▮▮▮</span><span class="mtime">7:41</span><span>▭</span></div>
       <div class="head">Contacts</div>

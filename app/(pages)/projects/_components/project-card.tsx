@@ -26,6 +26,7 @@ function Media({ media }: { media: ProjectMedia }) {
               <Image
                 src={media.site.src}
                 alt={`${media.site.url} landing page`}
+                preload
                 width={media.site.width}
                 height={media.site.height}
                 sizes="(max-width: 900px) 85vw, 560px"
@@ -66,7 +67,7 @@ function Media({ media }: { media: ProjectMedia }) {
             kind="iframe"
             title={media.title}
             label={`Demo · ${media.title}`}
-            poster={`https://i.ytimg.com/vi/${media.id}/maxresdefault.jpg`}
+            poster={`https://i.ytimg.com/vi_webp/${media.id}/maxresdefault.webp`}
             src={`https://www.youtube-nocookie.com/embed/${media.id}?autoplay=1&rel=0${
               media.start ? `&start=${media.start}` : ""
             }`}

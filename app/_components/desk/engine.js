@@ -8,9 +8,13 @@
 //   (named elements in markup.ts, <ViewTransition> on the page); elsewhere the
 //   object lifts and the desk fades.
 // - Every listener, timer, and animation loop stops when the desk unmounts.
-// - The landing animation plays once per browser session.
+// - The landing animation plays once per browser session. It is CSS (class
+//   "landing" on the stage), started before the first paint by the inline
+//   script in markup.ts on a full page load, or here after a client-side one.
 // - Phones and short screens get the pocket desk (M3): the same objects laid out
 //   from the POCKET table, tap instead of drag, and a contact sheet for Socials.
+
+import { POCKET, POCKET_CUBES, CUBE_SCALE, POCKET_QUERY } from './pocket.js';
 
 /**
  * @param {HTMLElement} root the .desk-page element
@@ -36,7 +40,7 @@ export function mountDesk(root, router) {
   let scale = 1, z = 10, sel = 0, toastTimer;
 
   // Same query as the pocket-desk block in desk.css.
-  const small = matchMedia('(max-width: 767px), (max-height: 520px)');
+  const small = matchMedia(POCKET_QUERY);
   function fit() {
     if (small.matches) {                                   // pocket desk: 390 px wide, scrolls down
       scale = Math.min(innerWidth / 390, 1.25);
@@ -58,8 +62,7 @@ export function mountDesk(root, router) {
   };
   const session = {
     get(k) { try { return sessionStorage.getItem('desk.' + k); } catch { return null; } },
-    set(k) { try { sessionStorage.setItem('desk.' + k, '1'); } catch {} },
-    remove(k) { try { sessionStorage.removeItem('desk.' + k); } catch {} }
+    set(k) { try { sessionStorage.setItem('desk.' + k, '1'); } catch {} }
   };
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -76,8 +79,7 @@ export function mountDesk(root, router) {
   // Other pages: the object lifts toward you and the desk fades, then the route changes.
   const FLIGHTS = new Set(['/travel', '/writing', '/projects', '/bookshelf']);
   const flies = href => 'startViewTransition' in document && FLIGHTS.has(href);
-  // Remember the page, so the desk knows on return whether a flight brings it back.
-  const navigate = href => { session.set('from:' + href); router.navigate(href); };
+  const navigate = href => router.navigate(href);
   let leaving = false;
   function leave(el, href) {
     if (leaving) return; leaving = true;
@@ -176,16 +178,9 @@ export function mountDesk(root, router) {
   const objsAll = $$('.obj'), cubes = $$('.cube');
   const firstLanding = !session.get('landed'); session.set('landed');
   if (!still && firstLanding) {
-    $('.greet').animate([{ opacity: 0, translate: '0 10px' }, { opacity: 1, translate: '0 0' }], { duration: 600, easing: 'ease-out', fill: 'backwards' });
-    const order = ['.travel', '.notebook', '.folder', '#phone', '.books', '.food', '#coffee', '#resume'].map(s => $(s));
-    order.forEach((o, i) => o.animate([{ opacity: 0, translate: '0 -38px', scale: '1.06' }, { opacity: 1, translate: '0 5px', scale: '1', offset: .7 }, { opacity: 1, translate: '0 0', scale: '1' }],
-                                        { duration: 620, delay: 120 + i * 75, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'backwards' }));
-    cubes.forEach((c, i) => c.animate([{ opacity: 0, translate: '0 -24px' }, { opacity: 1, translate: '0 3px', offset: .7 }, { opacity: 1, translate: '0 0' }],
-                                      { duration: 480, delay: 780 + i * 90, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)', fill: 'backwards' }));
-  } else if (!still && ![...FLIGHTS].some(href => session.get('from:' + href) && flies(href))) {
-    stage.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: 'ease-out' });   // back from a page without a flight
+    stage.classList.add('landing');                    // desk.css: the greeting rises, objects drop in, cubes last
+    later(() => stage.classList.remove('landing'), 2200);
   }
-  FLIGHTS.forEach(href => session.remove('from:' + href));
 
   // ---------- The greeting types itself on the first visit of a session ----------
   // Every letter is laid out from the start (hidden), so the centred line never shifts.
@@ -200,7 +195,7 @@ export function mountDesk(root, router) {
       node.remove();
     };
     split(lead, h1); split(name, hl);
-    typing = true; h1.classList.add('typing');
+    typing = true; h1.classList.add('typing'); h1.classList.remove('pretype');
     let i = 0;
     const step = () => {
       if (i) chars[i - 1].classList.remove('at');
@@ -704,16 +699,9 @@ export function mountDesk(root, router) {
   on($('#back'), 'click', warpOut);
   on(window, 'keydown', e => { if (e.key === 'Escape' && viewer.classList.contains('show')) warpOut(); });
 
-  // ---------- Pocket desk (M3): where each object sits on a phone ----------
-  // From the Brilliant frame "M3 · Pocket desk" (390 x 844): each object's centre, rotation (deg),
-  // scale, and caption row. Captions line up per row at y = 340, 524, and 736.
-  const POCKET = [
-    ['.travel', 102, 274, -3, .6, 340], ['.notebook', 240, 268, 4, .509, 340], ['#phone', 341, 267, 8, .347, 340],
-    ['.folder', 93.5, 459, -4, .62, 524], ['#resume', 223, 458.5, -6, .511, 524], ['.books', 334, 454, 0, .47, 524],
-    ['#coffee', 102, 652.5, -10, .646, 736], ['.food', 299, 647.5, 6, .567, 736],
-  ];
-  const POCKET_CUBES = [[196, 640.5, -8], [208, 660.5, 14], [194, 678.5, 3]], CUBE_SCALE = .6;
-  const deskStyle = new Map([...objsAll, ...cubes].map(el => [el, el.getAttribute('style')]));
+  // ---------- Pocket desk (M3): where each object sits on a phone (table in pocket.js) ----------
+  // The markup's own (desk) positions; the pre-paint script keeps a copy before it applies the pocket layout.
+  const deskStyle = new Map([...objsAll, ...cubes].map(el => [el, el.dataset.deskStyle ?? el.getAttribute('style')]));
   function layout() {
     deskStyle.forEach((style, el) => el.setAttribute('style', style));      // the desk: positions from the markup
     if (small.matches) {

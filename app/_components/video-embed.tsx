@@ -41,9 +41,18 @@ export function VideoEmbed({ title, poster, label, kind, src }: Props) {
         <button
           type="button"
           className="video-embed-poster"
-          style={poster ? { backgroundImage: `url(${poster})` } : undefined}
           onClick={() => setPlaying(true)}
         >
+          {poster && (
+            // eslint-disable-next-line @next/next/no-img-element -- a remote poster; lazy so it never competes with the page
+            <img
+              src={poster}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="video-embed-poster-img"
+            />
+          )}
           <span className="video-embed-play" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M8 5.5v13l10.5-6.5z" />
