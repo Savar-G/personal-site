@@ -1,6 +1,11 @@
 "use client";
 
-import { ViewTransition, type CSSProperties, type KeyboardEvent } from "react";
+import {
+  ViewTransition,
+  type CSSProperties,
+  type KeyboardEvent,
+  type PointerEvent,
+} from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import type { BookItem } from "./bookshelf";
@@ -65,6 +70,15 @@ function onArrowKey(e: KeyboardEvent<HTMLButtonElement>) {
   }
 }
 
+/** The cover catches the light where the pointer is (R-78): globals.css draws .shelf-gloss from --gx and --gy. */
+function shine(e: PointerEvent<HTMLButtonElement>) {
+  if (e.pointerType !== "mouse") return;
+  const el = e.currentTarget;
+  const r = el.getBoundingClientRect();
+  el.style.setProperty("--gx", `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`);
+  el.style.setProperty("--gy", `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`);
+}
+
 export function BookCover({
   book,
   onSelect,
@@ -84,11 +98,13 @@ export function BookCover({
         aria-label={`${book.title} by ${book.author}`}
         onClick={() => onSelect(book.slug)}
         onKeyDown={onArrowKey}
+        onPointerMove={shine}
         whileHover={{ y: -6, scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 340, damping: 26 }}
       >
         <BookCoverFace book={book} sizes="(max-width: 640px) 88px, 104px" />
+        <span className="shelf-gloss" aria-hidden="true" />
       </motion.button>
     </ViewTransition>
   );

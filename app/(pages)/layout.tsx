@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeaderName } from "@/app/_components/header-name";
 
 // Every page except the desk. No menu: the way out is back to the desk, and
 // the name opens About.
@@ -13,12 +14,7 @@ export default function PagesLayout({
         </Link>
       </div>
       <header className="mx-auto w-full max-w-[var(--page-w,44rem)] px-5 pt-8 pb-10 sm:px-8 sm:pt-12 sm:pb-14 animate-fade-in">
-        <Link
-          href="/about"
-          className="press text-base font-medium tracking-tight text-stone-900 hover:text-stone-600"
-        >
-          Savar Gupta
-        </Link>
+        <HeaderName />
       </header>
       <main className="mx-auto w-full max-w-[var(--page-w,44rem)] flex-1 px-5 pb-20 sm:px-8 sm:pb-28">
         {children}

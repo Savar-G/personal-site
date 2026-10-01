@@ -1,3 +1,6 @@
+import type { CSSProperties } from "react";
+import { GraphReveal } from "./graph-reveal";
+
 const GITHUB_USERNAME = "Savar-G";
 const GITHUB_PROFILE_URL = `https://github.com/${GITHUB_USERNAME}`;
 const GITHUB_CONTRIBUTIONS_URL = `https://github.com/users/${GITHUB_USERNAME}/contributions`;
@@ -97,18 +100,22 @@ export async function GitHubContributions() {
         }
       >
         <div className="contribution-card-inner">
-          <div className="contribution-grid-viewport" aria-hidden="true">
-            <div className="contribution-grid">
-              {days.map((day) => (
-                <span
-                  key={day.date}
-                  className="contribution-day"
-                  data-level={day.level}
-                  title={day.label}
-                />
-              ))}
+          <GraphReveal>
+            <div className="contribution-grid-viewport" aria-hidden="true">
+              <div className="contribution-grid">
+                {days.map((day, i) => (
+                  <span
+                    key={day.date}
+                    className="contribution-day"
+                    data-level={day.level}
+                    title={day.label}
+                    // Fill-in delay: one week (column) after another, top to bottom within it.
+                    style={{ "--d": `${Math.floor(i / 7) * 14 + (i % 7) * 4}ms` } as CSSProperties}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          </GraphReveal>
 
           <div className="contribution-summary">
             <span>

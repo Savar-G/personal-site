@@ -8,6 +8,7 @@ import {
   ListChecksIcon,
 } from "@/app/_components/icons";
 import type { Project, ProjectLink, ProjectMedia } from "@/lib/projects";
+import { CountUp } from "./count-up";
 import { LoopVideo } from "./loop-video";
 
 function Media({ media }: { media: ProjectMedia }) {
@@ -181,7 +182,9 @@ export function ProjectCard({
               {project.stats.map((stat) => (
                 <div key={stat.label}>
                   <dt>{stat.label}</dt>
-                  <dd>{stat.value}</dd>
+                  <dd>
+                    <CountUp value={stat.value} />
+                  </dd>
                 </div>
               ))}
             </dl>

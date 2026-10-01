@@ -6,7 +6,8 @@
 // - Travel, Writing, Projects, and Bookshelf open real routes (router.navigate).
 //   Where the browser has view transitions, the object flies into its page
 //   (named elements in markup.ts, <ViewTransition> on the page); elsewhere the
-//   object lifts and the desk fades.
+//   object lifts and the desk fades. The name ("Savar.") flies into the name in
+//   the header on /about the same way.
 // - Every listener, timer, and animation loop stops when the desk unmounts.
 // - The landing animation plays once per browser session. It is CSS (class
 //   "landing" on the stage), started before the first paint by the inline
@@ -77,7 +78,7 @@ export function mountDesk(root, router) {
   // ---------- Leaving for a page ----------
   // Pages with a flight: the view transition carries the object, so only lift it.
   // Other pages: the object lifts toward you and the desk fades, then the route changes.
-  const FLIGHTS = new Set(['/travel', '/writing', '/projects', '/bookshelf']);
+  const FLIGHTS = new Set(['/travel', '/writing', '/projects', '/bookshelf', '/about']);
   const flies = href => 'startViewTransition' in document && FLIGHTS.has(href);
   const navigate = href => router.navigate(href);
   let leaving = false;
@@ -108,6 +109,61 @@ export function mountDesk(root, router) {
   new Set([...$$('[data-open]').map(el => el.dataset.open), ...$$('a[href^="/"]:not([download]):not([target])').map(a => a.getAttribute('href'))])
     .forEach(href => router.prefetch(href));
 
+  // ---------- Travel: grab the polaroids by a corner and throw them (desk only) ----------
+  // Pulled by a corner, the stack swings so its centre trails the grip, the way paper does on a desk.
+  // Let go while moving and it slides on, slows down, and bumps softly off the edges of the desk.
+  const polaroids = $('.travel');
+  const throws = el => el === polaroids && !still && !small.matches;
+  const toRad = d => d * Math.PI / 180;
+  const angleOf = el => parseFloat(el.style.getPropertyValue('--r')) || 0;
+  let slideId = 0;
+  function setPose(el, x, y, ang) { el.style.left = x + 'px'; el.style.top = y + 'px'; el.style.setProperty('--r', ang.toFixed(2) + 'deg'); }
+  function throwGrab(el, e) {
+    ++slideId; el.classList.remove('sliding');
+    const p = toStage(e.clientX, e.clientY), a = toRad(-angleOf(el));
+    const dx = p.x - (el.offsetLeft + el.offsetWidth / 2), dy = p.y - (el.offsetTop + el.offsetHeight / 2);
+    return { gx: dx * Math.cos(a) - dy * Math.sin(a), gy: dx * Math.sin(a) + dy * Math.cos(a),     // the grip, in the stack's own frame
+             ang: angleOf(el), w: 0, px: p.x, py: p.y, t: e.timeStamp, trail: [[p.x, p.y, e.timeStamp]] };
+  }
+  function throwMove(el, g, e) {
+    const p = toStage(e.clientX, e.clientY), dt = Math.max(4, e.timeStamp - g.t) / 1000;
+    const vx = (p.x - g.px) / dt, vy = (p.y - g.py) / dt;
+    g.px = p.x; g.py = p.y; g.t = e.timeStamp;
+    g.trail.push([p.x, p.y, e.timeStamp]);
+    while (g.trail.length > 2 && e.timeStamp - g.trail[0][2] > 90) g.trail.shift();
+    let a = toRad(g.ang);
+    const rx = -(g.gx * Math.cos(a) - g.gy * Math.sin(a)), ry = -(g.gx * Math.sin(a) + g.gy * Math.cos(a));   // grip → centre
+    const spin = -(rx * vy - ry * vx) / (rx * rx + ry * ry + 900) * 57.3 * .75;                              // deg/s that lets the centre trail
+    g.w += (spin - g.w) * Math.min(1, dt * 16); g.ang += g.w * dt; a = toRad(g.ang);
+    setPose(el, p.x - (g.gx * Math.cos(a) - g.gy * Math.sin(a)) - el.offsetWidth / 2,
+                p.y - (g.gx * Math.sin(a) + g.gy * Math.cos(a)) - el.offsetHeight / 2, g.ang);
+  }
+  function throwRelease(el, g, e) {
+    const [x0, y0, t0] = g.trail[0], [x1, y1, t1] = g.trail[g.trail.length - 1], span = (t1 - t0) / 1000;
+    if (span < .008 || e.timeStamp - t1 > 70) return;                  // it was set down, not thrown
+    let vx = (x1 - x0) / span, vy = (y1 - y0) / span, w = g.w * .6;
+    const speed = Math.hypot(vx, vy);
+    if (speed < 60) return;
+    if (speed > 2200) { vx *= 2200 / speed; vy *= 2200 / speed; }
+    const id = ++slideId, W = el.offsetWidth, H = el.offsetHeight;
+    let x = el.offsetLeft, y = el.offsetTop, ang = g.ang, last = performance.now();
+    el.classList.add('sliding');
+    raf(function slide(t) {
+      if (id !== slideId) return;
+      const dt = Math.min(.032, Math.max(.001, (t - last) / 1000)); last = t;
+      x += vx * dt; y += vy * dt;
+      const f = Math.exp(-5 * dt); vx *= f; vy *= f;          // paper on wood: it slides v/5 px, ~440 px at most
+      ang += w * dt; w *= Math.exp(-6 * dt);
+      // The edges of the desk: a soft bump and a little spin. Room is left under the stack for its caption.
+      if (x < 8) { x = 8; vx = Math.abs(vx) * .45; w -= vy * .04; }
+      if (x > 1432 - W) { x = 1432 - W; vx = -Math.abs(vx) * .45; w += vy * .04; }
+      if (y < 8) { y = 8; vy = Math.abs(vy) * .45; w += vx * .04; }
+      if (y > 878 - H) { y = 878 - H; vy = -Math.abs(vy) * .45; w -= vx * .04; }
+      setPose(el, x, y, ang);
+      if (Math.hypot(vx, vy) > 12 || Math.abs(w) > 1) raf(slide); else el.classList.remove('sliding');
+    });
+  }
+
   // Drag anywhere; a press that moves < 4px is a click.
   $$('.obj').forEach(el => {
     let start = null;
@@ -115,6 +171,7 @@ export function mountDesk(root, router) {
       if (!small.matches && (e.target.closest('#contacts') || e.target.closest('.pg a'))) return;
       start = { x: e.clientX, y: e.clientY, left: el.offsetLeft, top: el.offsetTop, moved: false, target: e.target };
       if (!small.matches) el.setPointerCapture(e.pointerId);     // phones scroll instead of dragging
+      if (throws(el)) start.grip = throwGrab(el, e);
     });
     on(el, 'pointermove', e => {
       if (!start) return;
@@ -122,12 +179,17 @@ export function mountDesk(root, router) {
       if (!start.moved && Math.hypot(dx, dy) < 4) return;
       if (small.matches) { start.moved = true; return; }         // a swipe, not a tap
       if (!start.moved) { start.moved = true; el.classList.add('dragging'); el.style.zIndex = ++z; }
+      if (start.grip) return throwMove(el, start.grip, e);
       el.style.left = start.left + dx + 'px'; el.style.top = start.top + dy + 'px';
     });
-    on(el, 'pointerup', () => {
+    on(el, 'pointerup', e => {
       if (!start) return;
-      const moved = start.moved, target = start.target; start = null; el.classList.remove('dragging');
-      if (moved && !small.matches) { if (!still) el.animate([{ scale: '1.04' }, { scale: '.97' }, { scale: '1' }], { duration: 320, easing: 'ease-out' }); messy(); }
+      const moved = start.moved, target = start.target, grip = start.grip; start = null; el.classList.remove('dragging');
+      if (moved && !small.matches) {
+        if (!still) el.animate([{ scale: '1.04' }, { scale: '.97' }, { scale: '1' }], { duration: 320, easing: 'ease-out' });
+        if (grip) throwRelease(el, grip, e);
+        messy();
+      }
       if (moved) return;
       if (el !== phone) go(el);
       else if (small.matches) openSheet();
@@ -231,21 +293,45 @@ export function mountDesk(root, router) {
     later(() => travel.classList.remove('developing'), 6800); store.set('developed', true);
   }
 
+  // ---------- Glossy things: polaroid photos and book covers catch the light ----------
+  // Under the pointer each one tips a few degrees toward it, and a soft highlight follows it across the
+  // photo or the cover (.gl in markup.ts). The white polaroid frames stay matte. Desk only.
+  if (!still) [[polaroids, $$('.travel .pola')], [$('.books'), $$('.books .bk')]].forEach(([obj, items]) => {
+    const glosses = items.map(it => it.querySelector('.gl'));
+    on(obj, 'pointermove', e => {
+      if (small.matches || e.pointerType === 'touch') return;
+      items.forEach((it, i) => {
+        const g = glosses[i], r = g.parentElement.getBoundingClientRect();
+        const mx = (e.clientX - r.left) / r.width, my = (e.clientY - r.top) / r.height;
+        const near = Math.max(0, 1 - Math.hypot(mx - .5, my - .5) / 1.2);
+        const tx = Math.max(-1, Math.min(1, (mx - .5) * 2)) * near, ty = Math.max(-1, Math.min(1, (my - .5) * 2)) * near;
+        g.style.setProperty('--gx', (mx * 100).toFixed(1) + '%'); g.style.setProperty('--gy', (my * 100).toFixed(1) + '%');
+        g.style.setProperty('--go', near.toFixed(2));
+        it.style.transform = `perspective(600px) rotateY(${(tx * 4).toFixed(2)}deg) rotateX(${(-ty * 4).toFixed(2)}deg)`;
+      });
+    });
+    on(obj, 'pointerleave', () => items.forEach((it, i) => { it.style.transform = ''; glosses[i].style.setProperty('--go', 0); }));
+  });
+
   // ---------- Coffee steams for a minute, then goes cold ----------
   later(() => $('#coffee').classList.add('cold'), 60000);
 
   // ---------- Tidy up: put everything back where it started ----------
   const tidyBtn = $('#tidy');
   let homes;
-  const rememberHomes = () => { homes = new Map([...objsAll, ...cubes].map(o => [o, [o.offsetLeft, o.offsetTop]])); };
+  const rememberHomes = () => { homes = new Map([...objsAll, ...cubes].map(o => [o, [o.offsetLeft, o.offsetTop, angleOf(o)]])); };
   function messy() { tidyBtn.classList.add('show'); }
   on(tidyBtn, 'click', () => {
-    let i = 0;
-    homes.forEach(([hx, hy], o) => {
-      const dx = o.offsetLeft - hx, dy = o.offsetTop - hy;
-      if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+    let i = 0; ++slideId;
+    homes.forEach(([hx, hy, hr], o) => {
+      const dx = o.offsetLeft - hx, dy = o.offsetTop - hy, dr = ((angleOf(o) - hr) % 360 + 540) % 360 - 180;   // a thrown stack may have turned
+      const turned = Math.abs(dr) >= .5;
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && !turned) return;
+      o.classList.remove('sliding');
       o.style.left = hx + 'px'; o.style.top = hy + 'px';
-      if (!still) o.animate([{ translate: `${dx}px ${dy}px` }, { translate: `${-dx * .04}px ${-dy * .04}px`, offset: .8 }, { translate: '0 0' }],
+      if (turned) o.style.setProperty('--r', hr + 'deg');
+      const k = (t, r) => turned ? { translate: t, rotate: r } : { translate: t };     // cubes keep their own rotate
+      if (!still) o.animate([k(`${dx}px ${dy}px`, `${dr}deg`), { ...k(`${-dx * .04}px ${-dy * .04}px`, `${-dr * .04}deg`), offset: .8 }, k('0 0', '0deg')],
                             { duration: 620, delay: i++ * 45, easing: 'cubic-bezier(0.3, 0.8, 0.3, 1)' });
     });
     tidyBtn.classList.remove('show');
@@ -646,7 +732,7 @@ export function mountDesk(root, router) {
       later(() => { lids.getAnimations().forEach(a => a.cancel()); if (state === 'notice') flee(); }, 550);
     }
     async function flee() {
-      const cands = objs.filter(o => o !== home && !o.classList.contains('dragging')).map(o => {
+      const cands = objs.filter(o => o !== home && !o.matches('.dragging, .sliding')).map(o => {
         const R = rect(o), dC = Math.hypot(R.cx - px, R.cy - py), dMe = Math.hypot(R.cx - x, R.cy - y);
         const t = Math.max(0, Math.min(1, ((px - x) * (R.cx - x) + (py - y) * (R.cy - y)) / (dMe * dMe || 1)));
         const pass = Math.hypot(x + (R.cx - x) * t - px, y + (R.cy - y) * t - py);
@@ -743,10 +829,10 @@ export function mountDesk(root, router) {
       if (state === 'off' && !typing && t > Math.max(until, 1500)) {
         spawnFromName();
       } else if (state === 'hide' && t > until) {
-        if (home.classList.contains('dragging')) return flee();
+        if (home.matches('.dragging, .sliding')) return flee();
         if (!near(rect(home), 140)) peekOut();
       } else if (state === 'peek') {
-        if (home && home.classList.contains('dragging')) return notice();
+        if (home && home.matches('.dragging, .sliding')) return notice();
         if (t > until) { if (Math.random() < .5) flee(); else tuck(); }
       }
     }, 150);
