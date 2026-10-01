@@ -34,6 +34,55 @@ export type DeskEssay = {
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
+// The Muji gel ink pen that rests on the notebook's right page (and the copy that
+// follows the pointer once it is picked up). Drawn in millimetres: the tip is at
+// (0, 0) and the pen points up. The barrel is frosted, so the refill shows through.
+// `p` prefixes the gradient ids so the two copies never share one.
+function penSvg(p: string) {
+  const ridges = Array.from({ length: 9 }, (_, i) => -9.2 - i * 1.15)
+    .map((y) => `<path d="M-1.35 ${y.toFixed(2)}h2.7"/>`).join('');
+  const bars = [0, .5, .8, 1.5, 1.8, 2.4, 3.1, 3.4, 4.1, 4.7, 5, 5.6, 6.3, 6.6, 7.3, 7.9, 8.2, 8.9, 9.5, 9.8, 10.5, 11.1, 11.4]
+    .map((d, i) => `<rect x="1" y="${(-125.4 + d).toFixed(2)}" width="2.6" height="${i % 3 ? .22 : .38}"/>`).join('');
+  return `<svg viewBox="-7 -144 14 144" aria-hidden="true">
+<defs>
+<linearGradient id="${p}b" x1="-5.2" x2="5.2" y1="0" y2="0" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#8b929c" stop-opacity=".88"/><stop offset=".1" stop-color="#ccd1d8" stop-opacity=".78"/>
+<stop offset=".27" stop-color="#fbfcfd" stop-opacity=".9"/><stop offset=".42" stop-color="#eef1f4" stop-opacity=".42"/>
+<stop offset=".7" stop-color="#e2e6eb" stop-opacity=".46"/><stop offset=".9" stop-color="#b9c0c9" stop-opacity=".78"/>
+<stop offset="1" stop-color="#848b95" stop-opacity=".92"/></linearGradient>
+<linearGradient id="${p}c" x1="0" x2="1" y1="0" y2="0">
+<stop offset="0" stop-color="#8b929c" stop-opacity=".8"/><stop offset=".12" stop-color="#d4d8de" stop-opacity=".7"/>
+<stop offset=".3" stop-color="#fbfcfd" stop-opacity=".85"/><stop offset=".5" stop-color="#eef1f4" stop-opacity=".4"/>
+<stop offset=".88" stop-color="#bcc2ca" stop-opacity=".7"/><stop offset="1" stop-color="#848b95" stop-opacity=".88"/></linearGradient>
+<linearGradient id="${p}i" x1="0" x2="1" y1="0" y2="0">
+<stop offset="0" stop-color="#1d2024"/><stop offset=".35" stop-color="#474c55"/><stop offset="1" stop-color="#1a1c20"/></linearGradient>
+<linearGradient id="${p}m" x1="0" x2="1" y1="0" y2="0">
+<stop offset="0" stop-color="#6f747b"/><stop offset=".35" stop-color="#f1f3f5"/><stop offset=".6" stop-color="#b4b9bf"/><stop offset="1" stop-color="#5e6369"/></linearGradient>
+<linearGradient id="${p}l" x1="0" x2="1" y1="0" y2="0">
+<stop offset="0" stop-color="#efe5cb"/><stop offset=".6" stop-color="#e3d6b6"/><stop offset="1" stop-color="#b9ab8a"/></linearGradient>
+<linearGradient id="${p}h" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".08" stop-color="#fff" stop-opacity=".75"/>
+<stop offset=".92" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+</defs>
+<path d="M-.8-5.4 L-1.45-24 H1.45 L.8-5.4Z" fill="#8f959e" fill-opacity=".75"/>
+<g stroke="#4a4f57" stroke-opacity=".45" stroke-width=".28">${ridges}</g>
+<rect x="-1.95" y="-38" width="3.9" height="14.2" rx=".6" fill="url(#${p}i)"/>
+<rect x="-1.7" y="-124" width="3.4" height="86.4" fill="url(#${p}i)" opacity=".92"/>
+<rect x="-1.7" y="-128.6" width="3.4" height="4.8" rx=".5" fill="#a7adb5"/>
+<circle cx="0" cy="-.45" r=".42" fill="#34363a"/>
+<path d="M-.42-.75 L-.95-4.5 H.95 L.42-.75Z" fill="url(#${p}m)"/>
+<rect x="-1.05" y="-6.1" width="2.1" height="1.75" rx=".3" fill="url(#${p}m)"/>
+<path d="M-1.5-5.2 C-2.6-10 -4.6-21 -5-27.5 L-5-31 H5 L5-27.5 C4.6-21 2.6-10 1.5-5.2Z" fill="url(#${p}c)"/>
+<path d="M-5.2-31 V-139.4 Q-5.2-141.2 -3.4-141.2 H3.4 Q5.2-141.2 5.2-139.4 V-31Z" fill="url(#${p}b)"/>
+<path d="M-5.1-31.2 H5.1" stroke="#7d848e" stroke-opacity=".55" stroke-width=".35"/>
+<path d="M-5.1-140 H5.1" stroke="#8d949e" stroke-opacity=".45" stroke-width=".5"/>
+<rect x="-3.1" y="-138.6" width=".75" height="106.4" rx=".35" fill="url(#${p}h)"/>
+<rect x=".7" y="-127" width="3.6" height="31" rx=".25" fill="url(#${p}l)" opacity=".96"/>
+<g fill="#2f2b24" opacity=".8">${bars}</g>
+<text transform="translate(3.25 -97.2) rotate(-90)" font-family="Helvetica, Arial, sans-serif" font-size="2.15" font-weight="700" fill="#2f2b24" letter-spacing=".05">MUJI <tspan font-weight="400" font-size="1.95">無印良品</tspan></text>
+</svg>`;
+}
+
 function notebookPage(essays: DeskEssay[]) {
   const [latest] = essays;
   if (!latest)
@@ -87,7 +136,7 @@ export function deskMarkup(essays: DeskEssay[]) {
     <span class="cap">Travel</span></div>
 
   <div class="obj notebook" tabindex="0" role="link" aria-label="Writing" data-vis="0 0 1 1" data-open="/writing" style="view-transition-name:notebook;view-transition-class:flight;left:505px;top:74px;--r:4deg;--cy:258px">
-    <div class="book"><div class="page-r"></div><div class="cover"><div class="face front"></div><div class="face back"></div></div></div>
+    <div class="book"><div class="page-r"><canvas class="ink" width="660" height="976"></canvas><div class="pen" style="left:44px;top:214px;--a:30deg">${penSvg("pr")}</div></div><div class="cover"><div class="face front"></div><div class="face back"></div></div></div>
     <div class="hit"></div>
     <div class="pg">
 ${notebookPage(essays)}
@@ -186,6 +235,8 @@ ${notebookPage(essays)}
   </div>
   <p class="shint">tap a contact, or the phone's screen</p>
 </div>
+<div id="pen" aria-hidden="true"><div class="nib">${penSvg("ph")}</div></div>
+<div class="hint" id="penhint"></div>
 <div class="hint" id="hint"><kbd>↑</kbd> <kbd>↓</kbd> to move · <kbd>enter</kbd> to open</div>
 <div class="toast" id="toast"></div>
 <a class="corner" id="listlink" href="#list">prefer a list? →</a>

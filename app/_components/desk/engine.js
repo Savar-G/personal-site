@@ -141,11 +141,13 @@ export function mountDesk(root, router) {
   });
 
   // Notebook: the cover opens while the pointer is on it.
+  // It stays open while someone holds the pen (below).
   const nb = $('.notebook');
+  let holding = false;
   on(nb.querySelector('.hit'), 'pointerenter', () => { if (!small.matches) nb.classList.add('open'); });
-  on(nb, 'pointerleave', () => nb.classList.remove('open'));
+  on(nb, 'pointerleave', () => { if (!holding) nb.classList.remove('open'); });
   on(nb, 'focus', () => { if (!small.matches) nb.classList.add('open'); });
-  on(nb, 'blur', () => nb.classList.remove('open'));
+  on(nb, 'blur', () => { if (!holding) nb.classList.remove('open'); });
 
   // RAZR: wake on hover or focus, arrows move, Enter opens.
   function paint() { rows.forEach((r, i) => r.classList.toggle('on', i === sel)); }
@@ -247,6 +249,7 @@ export function mountDesk(root, router) {
                             { duration: 620, delay: i++ * 45, easing: 'cubic-bezier(0.3, 0.8, 0.3, 1)' });
     });
     tidyBtn.classList.remove('show');
+    wipeInk();
   });
 
   // ---------- Plain list for skimmers and screen readers (and the whole page on phones) ----------
@@ -390,6 +393,160 @@ export function mountDesk(root, router) {
       }, 1400);
     });
   });
+
+  // ---------- The Muji pen: pick it up and write in the notebook ----------
+  // On the open notebook, a press on the pen picks it up: a copy (#pen) lifts off the page and follows the
+  // pointer, tip first, and the cursor hides. Press and drag on the right page to write. A press anywhere off
+  // the page, or Esc, puts the pen back. The ink stays in this browser until "tidy up" wipes the page.
+  const restPen = nb.querySelector('.pen'), pageR = nb.querySelector('.page-r'), inkCvs = nb.querySelector('.ink');
+  const heldPen = $('#pen'), nib = heldPen.querySelector('.nib'), penHint = $('#penhint');
+  const ink = inkCvs.getContext('2d');
+  const PW = 165, PH = 244, RES = inkCvs.width / PW;          // the page in desk px; canvas px per page px
+  const PAPER = [3, 3, 160, 241];                              // where ink can go: inside the page's edges
+  const NIB = 1.15, INK = '#222026', MAX_POINTS = 6000;         // line width (page px), gel ink, what we keep
+  const HOLD_ANGLE = 26;                                       // leaning right, like a hand writing
+  const rest = { x: parseFloat(restPen.style.left), y: parseFloat(restPen.style.top), a: parseFloat(restPen.style.getPropertyValue('--a')) };
+  let strokes = store.get('ink', []), stroke = null, following = false, glideId = 0, pose = null, ptr = { x: 0, y: 0 }, swallow = false;
+  strokes = Array.isArray(strokes) ? strokes.filter(s => Array.isArray(s) && s.length >= 2 && s.length % 2 === 0 && s.every(Number.isFinite)) : [];
+
+  // The right page's frame on screen: its centre, rotation, and scale (stage × open book × pocket).
+  function pageFrame() {
+    const r = pageR.getBoundingClientRect(), th = (parseFloat(nb.style.getPropertyValue('--r')) || 0) * Math.PI / 180;
+    const k = r.width / (PW * Math.abs(Math.cos(th)) + PH * Math.abs(Math.sin(th))) || 1;
+    return { cx: r.left + r.width / 2, cy: r.top + r.height / 2, th, k };
+  }
+  function toPage(f, x, y) {
+    const dx = (x - f.cx) / f.k, dy = (y - f.cy) / f.k, c = Math.cos(f.th), s = Math.sin(f.th);
+    return { x: PW / 2 + dx * c + dy * s, y: PH / 2 - dx * s + dy * c };
+  }
+  function fromPage(f, x, y) {
+    const dx = (x - PW / 2) * f.k, dy = (y - PH / 2) * f.k, c = Math.cos(f.th), s = Math.sin(f.th);
+    return { x: f.cx + dx * c - dy * s, y: f.cy + dx * s + dy * c };
+  }
+  const onPaper = p => p.x > PAPER[0] && p.x < PAPER[2] && p.y > PAPER[1] && p.y < PAPER[3];
+
+  // Where the pen is drawn: its tip on screen, its angle, its scale.
+  function place(p) {
+    pose = p;
+    heldPen.style.transform = `translate(${p.x}px, ${p.y}px)`;
+    nib.style.transform = `rotate(${p.a}deg) scale(${p.k})`;
+  }
+  function restPose() { const f = pageFrame(), t = fromPage(f, rest.x, rest.y); return { x: t.x, y: t.y, a: rest.a + f.th * 180 / Math.PI, k: f.k }; }
+  function holdPose() { return { x: ptr.x, y: ptr.y, a: HOLD_ANGLE, k: pageFrame().k * 1.04 }; }
+  const easeOutPen = k => 1 - Math.pow(1 - k, 3);
+  function glide(target, ms, done) {
+    const id = ++glideId, from = pose, t0 = performance.now();
+    (function f(now) {
+      if (id !== glideId) return;
+      const e = easeOutPen(Math.min((now - t0) / ms, 1)), to = target();
+      place({ x: from.x + (to.x - from.x) * e, y: from.y + (to.y - from.y) * e, a: from.a + (to.a - from.a) * e, k: from.k + (to.k - from.k) * e });
+      if (e < 1) raf(f); else done();
+    })(t0);
+  }
+  function penSay(html) { penHint.innerHTML = html; penHint.classList.toggle('show', !!html); }
+
+  function pickUp(e) {
+    holding = true; ptr = { x: e.clientX, y: e.clientY };
+    place(restPose());
+    restPen.style.visibility = 'hidden'; heldPen.classList.add('show'); root.classList.add('inking'); nb.classList.add('open');
+    penSay('write on the page · <kbd>esc</kbd> to put it down');
+    if (still) { following = true; return place(holdPose()); }
+    following = false; glide(holdPose, 220, () => { following = true; });
+  }
+  function putDown() {
+    if (!holding) return;
+    endStroke(); holding = false; following = false; penSay('');
+    root.classList.remove('inking'); heldPen.classList.remove('down');
+    const settle = () => {
+      heldPen.classList.remove('show'); restPen.style.visibility = '';
+      if (!nb.matches(':hover') && document.activeElement !== nb) nb.classList.remove('open');
+    };
+    if (still) return settle();
+    glide(restPose, 300, settle);
+  }
+
+  // Ink: smooth curves through the midpoints, one canvas, page units scaled up for a sharp line.
+  function pen0() {
+    if (!ink) return false;
+    ink.restore(); ink.save();                  // one clip at a time: the paper, so a line runs off the edge, not along it
+    ink.setTransform(RES, 0, 0, RES, 0, 0);
+    ink.beginPath(); ink.rect(PAPER[0], PAPER[1], PAPER[2] - PAPER[0], PAPER[3] - PAPER[1]); ink.clip();
+    ink.lineWidth = NIB; ink.lineCap = 'round'; ink.lineJoin = 'round'; ink.strokeStyle = ink.fillStyle = INK;
+    return true;
+  }
+  function segment(pts, i) {                   // draws the curve that point i completes
+    const n = pts.length / 2, x = j => pts[j * 2], y = j => pts[j * 2 + 1];
+    ink.beginPath();
+    if (i === 0) { ink.arc(x(0), y(0), NIB / 2, 0, Math.PI * 2); ink.fill(); return; }
+    if (i === 1) { ink.moveTo(x(0), y(0)); ink.lineTo((x(0) + x(1)) / 2, (y(0) + y(1)) / 2); }
+    else {
+      ink.moveTo((x(i - 2) + x(i - 1)) / 2, (y(i - 2) + y(i - 1)) / 2);
+      ink.quadraticCurveTo(x(i - 1), y(i - 1), (x(i - 1) + x(i)) / 2, (y(i - 1) + y(i)) / 2);
+    }
+    ink.stroke();
+    if (i === n - 1 && i > 0 && !stroke) { ink.beginPath(); ink.moveTo((x(i - 1) + x(i)) / 2, (y(i - 1) + y(i)) / 2); ink.lineTo(x(i), y(i)); ink.stroke(); }
+  }
+  function redraw() {
+    if (!pen0()) return;
+    ink.clearRect(-1, -1, PW + 2, PH + 2);
+    strokes.forEach(pts => { for (let i = 0; i < pts.length / 2; i++) segment(pts, i); });
+  }
+  function addPoint(p) {
+    const pts = stroke, n = pts.length / 2;
+    if (n && Math.hypot(p.x - pts[n * 2 - 2], p.y - pts[n * 2 - 1]) < .35) return;
+    pts.push(Math.round(p.x * 10) / 10, Math.round(p.y * 10) / 10);
+    if (pen0()) segment(pts, n);
+  }
+  function endStroke() {
+    if (!stroke) return;
+    const pts = stroke; stroke = null; heldPen.classList.remove('down');
+    if (pen0() && pts.length >= 4) segment(pts, pts.length / 2 - 1);      // the last half-segment, to the tip
+    strokes.push(pts);
+    let total = strokes.reduce((t, s) => t + s.length / 2, 0);
+    while (total > MAX_POINTS && strokes.length > 1) total -= strokes.shift().length / 2;
+    store.set('ink', strokes); messy();
+  }
+  function wipeInk() {
+    if (!strokes.length) return;
+    strokes = []; store.set('ink', strokes);
+    if (still) return redraw();
+    inkCvs.classList.add('wipe'); later(() => { redraw(); inkCvs.classList.remove('wipe'); }, 380);
+  }
+  redraw();
+
+  on(restPen, 'pointerdown', e => {
+    if (holding || small.matches || !nb.classList.contains('open') || e.button !== 0) return;
+    e.preventDefault(); e.stopPropagation(); pickUp(e);
+  });
+  on(restPen, 'pointerenter', () => { if (!holding && nb.classList.contains('open')) penSay('click the pen to write'); });
+  on(restPen, 'pointerleave', () => { if (!holding) penSay(''); });
+  // While the pen is held, presses belong to it: on the page they write, anywhere else they put it down.
+  on(window, 'pointerdown', e => {
+    if (!holding) { swallow = false; return; }
+    e.preventDefault(); e.stopPropagation(); swallow = true;
+    const p = toPage(pageFrame(), e.clientX, e.clientY);
+    if (e.button !== 0 || !onPaper(p)) return putDown();
+    ptr = { x: e.clientX, y: e.clientY }; if (following) place(holdPose());
+    stroke = []; heldPen.classList.add('down'); addPoint(p);
+  }, { capture: true });
+  on(window, 'pointermove', e => {
+    if (!holding) return;
+    ptr = { x: e.clientX, y: e.clientY };
+    if (following) place(holdPose());
+    if (!stroke) return;
+    if (!(e.buttons & 1)) return endStroke();
+    const f = pageFrame();
+    (e.getCoalescedEvents ? e.getCoalescedEvents() : []).concat(e).forEach(ev => {
+      const p = toPage(f, ev.clientX, ev.clientY);
+      if (p.x > -20 && p.x < PW + 20 && p.y > -20 && p.y < PH + 20) addPoint(p);
+    });
+  });
+  on(window, 'pointerup', e => { if (stroke) { e.stopPropagation(); endStroke(); } }, { capture: true });
+  on(window, 'pointercancel', endStroke);
+  on(window, 'click', e => { if (holding || swallow) { e.preventDefault(); e.stopPropagation(); swallow = false; } }, { capture: true });
+  on(window, 'keydown', e => { if (e.key === 'Escape' && holding) putDown(); });
+  on(window, 'blur', putDown);
+  on(small, 'change', putDown);
 
   // ---------- RAZR shows Savar's local time (Vancouver) ----------
   function vancouverNow() {
@@ -717,7 +874,7 @@ export function mountDesk(root, router) {
         c.style.setProperty('--cr', r + 'deg'); c.style.setProperty('--ms', CUBE_SCALE);
       });
     }
-    rememberHomes(); tidyBtn.classList.remove('show');
+    rememberHomes(); tidyBtn.classList.toggle('show', strokes.length > 0 && !small.matches);   // ink on the page from last time can be tidied
   }
   layout();
   on(small, 'change', () => { closeSheet(); layout(); fit(); });
