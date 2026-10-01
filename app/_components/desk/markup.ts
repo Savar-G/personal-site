@@ -112,7 +112,7 @@ export function deskMarkup(essays: DeskEssay[]) {
 <div class="stage" id="stage">
 
   <div class="greet">
-    <h1>Hi, I'm <a class="hl" href="/about">Savar.</a></h1>
+    <h1>Hi, I'm <a class="hl" href="/about" style="view-transition-name:savar-name;view-transition-class:flight;">Savar.</a></h1>
     <p>Studying Mechatronics Engineering and Business @ SFU. Building at the intersection of hardware, software, and AI.</p>
     <span class="cta" id="cta"><span class="tap"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M220 112h-4a28 28 0 0 0-44-18 28 28 0 0 0-40-10V44a28 28 0 0 0-56 0v84.8l-8.4-13.5A28 28 0 0 0 19.4 144l33 58.5A76 76 0 0 0 184 240h8a60 60 0 0 0 60-60v-36a32 32 0 0 0-32-32Zm16 68a44 44 0 0 1-44 44h-8a60 60 0 0 1-52.4-30.6l-33-58.5a12 12 0 0 1 20.7-12.1L102.8 153a8 8 0 0 0 14.8-4.2V44a12 12 0 0 1 24 0v64a8 8 0 0 0 16 0v-8a12 12 0 0 1 24 0v16a8 8 0 0 0 16 0 12 12 0 0 1 24 0v8a8 8 0 0 0 16 0 16 16 0 0 1 16 16Z"/></svg><i></i></span><span class="desk-only">Click</span><span class="pocket-only">Tap</span> anything to learn more about me.</span>
   </div>
@@ -130,9 +130,9 @@ export function deskMarkup(essays: DeskEssay[]) {
   </svg></div></div></div>
 
   <div class="obj travel" tabindex="0" role="link" aria-label="Travel" data-vis="0 .02 .98 .96" data-open="/travel" style="left:78px;top:126px;width:230px;height:200px;--r:-3deg;--cy:206px">
-    <div class="pola" style="--dd:900ms;--x:0px;--y:22px;--pr:-11deg;--hx:-46px;--hy:10px;--hr:-17deg;view-transition-name:polaroid-japan;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_japan.webp)"></div><span>japan</span></div>
-    <div class="pola" style="--dd:1400ms;--x:86px;--y:28px;--pr:9deg;--hx:58px;--hy:16px;--hr:16deg;view-transition-name:polaroid-indonesia;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_bali.webp)"></div><span>indonesia</span></div>
-    <div class="pola" style="--dd:1900ms;--x:44px;--y:4px;--pr:-2deg;--hx:4px;--hy:-16px;--hr:-1deg;view-transition-name:polaroid-turkey;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_cappadocia.webp)"></div><span>turkey</span></div>
+    <div class="pola" style="--dd:900ms;--x:0px;--y:22px;--pr:-11deg;--hx:-46px;--hy:10px;--hr:-17deg;view-transition-name:polaroid-japan;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_japan.webp)"><i class="gl"></i></div><span>japan</span></div>
+    <div class="pola" style="--dd:1400ms;--x:86px;--y:28px;--pr:9deg;--hx:58px;--hy:16px;--hr:16deg;view-transition-name:polaroid-indonesia;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_bali.webp)"><i class="gl"></i></div><span>indonesia</span></div>
+    <div class="pola" style="--dd:1900ms;--x:44px;--y:4px;--pr:-2deg;--hx:4px;--hy:-16px;--hr:-1deg;view-transition-name:polaroid-turkey;view-transition-class:flight;"><div class="ph" style="background-image:url(/desk/trip_cappadocia.webp)"><i class="gl"></i></div><span>turkey</span></div>
     <span class="cap">Travel</span></div>
 
   <div class="obj notebook" tabindex="0" role="link" aria-label="Writing" data-vis="0 0 1 1" data-open="/writing" style="view-transition-name:notebook;view-transition-class:flight;left:505px;top:74px;--r:4deg;--cy:258px">
@@ -177,9 +177,9 @@ ${notebookPage(essays)}
     <div class="sheet"><img decoding="async" fetchpriority="low" src="/desk/resume_desk.webp" alt=""></div><span class="cap">Resume</span></div>
 
   <div class="obj books" tabindex="0" role="link" aria-label="Bookshelf" data-vis=".04 .1 .96 .92" data-open="/bookshelf" style="left:1180px;top:668px;width:190px;height:204px;--cy:206px">
-    <img decoding="async" fetchpriority="low" class="bk" src="/desk/the-everything-store.webp" alt="" style="view-transition-name:book-the-everything-store;view-transition-class:flight;left:0;top:18px;--br:-12deg;--hx:-34px;--hy:-4px;--hr:-21deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
-    <img decoding="async" fetchpriority="low" class="bk" src="/desk/build.webp" alt="" style="view-transition-name:book-build;view-transition-class:flight;left:78px;top:24px;--br:9deg;--hx:30px;--hy:-2px;--hr:18deg;box-shadow:0 6px 14px rgba(0,0,0,.18)">
-    <img decoding="async" fetchpriority="low" class="bk" src="/desk/chip-war.webp" alt="" style="view-transition-name:book-chip-war;view-transition-class:flight;left:40px;top:40px;--br:-2deg;--hx:-2px;--hy:-18px;--hr:-1deg;box-shadow:0 8px 18px rgba(0,0,0,.22)">
+    <span class="bk" style="view-transition-name:book-the-everything-store;view-transition-class:flight;left:0;top:18px;--br:-12deg;--hx:-34px;--hy:-4px;--hr:-21deg;box-shadow:0 6px 14px rgba(0,0,0,.18)"><img decoding="async" fetchpriority="low" src="/desk/the-everything-store.webp" alt=""><i class="gl"></i></span>
+    <span class="bk" style="view-transition-name:book-build;view-transition-class:flight;left:78px;top:24px;--br:9deg;--hx:30px;--hy:-2px;--hr:18deg;box-shadow:0 6px 14px rgba(0,0,0,.18)"><img decoding="async" fetchpriority="low" src="/desk/build.webp" alt=""><i class="gl"></i></span>
+    <span class="bk" style="view-transition-name:book-chip-war;view-transition-class:flight;left:40px;top:40px;--br:-2deg;--hx:-2px;--hy:-18px;--hr:-1deg;box-shadow:0 8px 18px rgba(0,0,0,.22)"><img decoding="async" fetchpriority="low" src="/desk/chip-war.webp" alt=""><i class="gl"></i></span>
     <span class="cap">Bookshelf</span></div>
 
   <div class="obj" id="coffee" tabindex="0" role="link" aria-label="Book a coffee chat" data-vis=".07 .07 .85 .83" data-href="https://cal.com/savar-gupta/coffee-chat" style="left:405px;top:585px;width:260px;height:267px;--r:-10deg;--cy:246px">

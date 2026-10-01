@@ -142,15 +142,21 @@
   /* ---------- travel: three polaroids that fan out ---------- */
   .desk-page .pola { position: absolute; left: var(--x); top: var(--y); width: 140px; padding: 10px 10px 0; background: #fdfdfb;
           box-shadow: 0 1px 1px rgba(0,0,0,.08), 0 6px 14px rgba(0,0,0,.12); rotate: var(--pr); translate: 0 0;
-          transition: translate 380ms cubic-bezier(0.2, 0.9, 0.25, 1.2), rotate 380ms cubic-bezier(0.2, 0.9, 0.25, 1.2); }
-  .desk-page .pola .ph { width: 120px; height: 120px; background: center / cover; box-shadow: inset 0 0 0 1px rgba(0,0,0,.05); }
+          transition: translate 380ms cubic-bezier(0.2, 0.9, 0.25, 1.2), rotate 380ms cubic-bezier(0.2, 0.9, 0.25, 1.2), transform 200ms var(--ease); }
+  .desk-page .pola .ph { position: relative; overflow: hidden; width: 120px; height: 120px; background: center / cover; box-shadow: inset 0 0 0 1px rgba(0,0,0,.05); }
   .desk-page .pola span { display: block; height: 34px; line-height: 36px; padding-left: 3px; font-family: var(--font-reenie-beanie), cursive; font-size: 21px; color: #27272a; }
   .desk-page .travel:hover .pola, .desk-page .travel:focus-visible .pola { translate: var(--hx) var(--hy); rotate: var(--hr); }
 
   /* ---------- bookshelf: the three books separate ---------- */
-  .desk-page .books .bk { position: absolute; width: 104px; height: 156px; rotate: var(--br); translate: 0 0;
-        transition: translate 360ms cubic-bezier(0.2, 0.9, 0.25, 1.2), rotate 360ms cubic-bezier(0.2, 0.9, 0.25, 1.2); }
+  .desk-page .books .bk { position: absolute; overflow: hidden; width: 104px; height: 156px; rotate: var(--br); translate: 0 0;
+        transition: translate 360ms cubic-bezier(0.2, 0.9, 0.25, 1.2), rotate 360ms cubic-bezier(0.2, 0.9, 0.25, 1.2), transform 200ms var(--ease); }
   .desk-page .books:hover .bk, .desk-page .books:focus-visible .bk { translate: var(--hx) var(--hy); rotate: var(--hr); }
+
+  /* ---------- glossy things: the photos and covers catch the light under the pointer (engine sets --gx, --gy, --go) ---------- */
+  /* The white polaroid frame stays matte; only the photo is glossy. */
+  .desk-page .gl { position: absolute; inset: 0; pointer-events: none; opacity: var(--go, 0); transition: opacity 220ms ease; mix-blend-mode: soft-light;
+        background: radial-gradient(circle at var(--gx, 50%) var(--gy, 30%), rgba(255,255,255,.9), rgba(255,255,255,0) 48%),
+                    linear-gradient(115deg, transparent calc(var(--gx, 50%) - 24%), rgba(255,255,255,.35) var(--gx, 50%), transparent calc(var(--gx, 50%) + 24%)); }
 
   /* ---------- food: steam rises while you look ---------- */
   .desk-page .steam { position: absolute; left: 108px; top: 34px; width: 84px; height: 90px; pointer-events: none; }
@@ -263,6 +269,8 @@
   /* ---------- picking things up ---------- */
   .desk-page .obj.dragging { transform: rotate(var(--r, 0deg)) translateY(-10px) scale(1.06); filter: drop-shadow(0 22px 22px rgba(0,0,0,.22)); }
   .desk-page .obj { transition: transform 180ms var(--ease), filter 180ms var(--ease); }
+  /* A thrown Travel stack slides on the desk; its angle changes every frame, so no transform transition. */
+  .desk-page .obj.sliding { transition: filter 180ms var(--ease); }
 
   /* ---------- corners: plain list, tidy up, facts ---------- */
   .desk-page .corner { position: fixed; z-index: 70; top: 16px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px;
@@ -311,7 +319,7 @@
   @media (prefers-reduced-motion: reduce) {
     .desk-page .greet h1 .hl:hover, .desk-page .greet h1 .hl:focus-visible { transform: none; }
     .desk-page .obj, .desk-page .phone, .desk-page .notebook .cover, .desk-page .hint, .desk-page .toast, .desk-page #iris, .desk-page .folder .doc, .desk-page .pola, .desk-page .bk, .desk-page .notebook .pg,
-    .desk-page .notebook .pen, .desk-page .notebook .ink, .desk-page #pen { transition: none !important; }
+    .desk-page .notebook .pen, .desk-page .notebook .ink, .desk-page #pen, .desk-page .gl { transition: none !important; }
     .desk-page .folder:hover .doc, .desk-page .food:hover .steam svg, .desk-page .greet .tap svg, .desk-page .greet .tap i, .desk-page .steam.cup svg, .desk-page .travel.developing .ph, .desk-page .screen .call small { animation: none; }
     .desk-page .obj:hover, .desk-page .obj:focus-visible { transform: rotate(var(--r, 0deg)); }
   }

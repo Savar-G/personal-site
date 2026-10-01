@@ -314,6 +314,20 @@ body {
   border-radius: 0.125rem;
   background: var(--color-stone-200);
 }
+/* The graph fills in week by week on its first scroll into view (R-79, graph-reveal.tsx). */
+.contribution-reveal[data-reveal="armed"] .contribution-grid .contribution-day {
+  background: var(--color-stone-200);
+  transform: scale(0.4);
+}
+.contribution-reveal[data-reveal="play"] .contribution-grid .contribution-day {
+  animation: contribution-in 0.32s var(--ease-out) var(--d, 0ms) backwards;
+}
+@keyframes contribution-in {
+  from {
+    background: var(--color-stone-200);
+    transform: scale(0.4);
+  }
+}
 .contribution-day[data-level="1"] {
   background: #b7e4c7;
 }
@@ -569,6 +583,27 @@ body {
   background: transparent;
   cursor: pointer;
   border-radius: 2px 4px 4px 2px;
+}
+/* The cover catches the light under the pointer (R-78); book-cover.tsx sets --gx and --gy. */
+.shelf-book {
+  position: relative;
+}
+.shelf-gloss {
+  position: absolute;
+  inset: 0;
+  border-radius: 1px 4px 4px 1px;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  background:
+    radial-gradient(circle at var(--gx, 50%) var(--gy, 30%), rgb(255 255 255 / 0.9), rgb(255 255 255 / 0) 48%),
+    linear-gradient(115deg, transparent calc(var(--gx, 50%) - 24%), rgb(255 255 255 / 0.35) var(--gx, 50%), transparent calc(var(--gx, 50%) + 24%));
+  transition: opacity 0.22s var(--ease-out);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .shelf-book:hover .shelf-gloss {
+    opacity: 1;
+  }
 }
 .shelf-book:focus-visible {
   outline: 2px solid color-mix(in oklab, var(--color-stone-900) 55%, transparent);
@@ -1959,6 +1994,7 @@ body {
   flex-direction: column-reverse;
 }
 .pj-stats dd {
+  font-variant-numeric: tabular-nums;
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.02em;
