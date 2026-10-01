@@ -271,7 +271,7 @@ ${notebookPage(essays)}
       <li><span><a href="/about">About</a></span></li>
       <li><span><a href="/bookshelf">Bookshelf</a></span></li>
       <li><span><a href="/things">Things</a></span></li>
-      <li><span><a href="/travel">Travel</a> · Japan, Turkey, Indonesia, Hawaii</span></li>
+      <li><span><a href="/travel">Travel</a> · Japan, Bali, Maui, Turkey, California, Banff, Joffre Lakes</span></li>
       <li><span><a href="mailto:savar.gupta1922@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/savar-gupta" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://x.com/savar_gupta" target="_blank" rel="noopener">X</a> · <a href="https://github.com/Savar-G" target="_blank" rel="noopener">GitHub</a> · <a href="https://beliapp.co/app/savargupta" target="_blank" rel="noopener">Beli</a> · <a href="https://cal.com/savar-gupta/coffee-chat" target="_blank" rel="noopener">Book a call</a></span></li>
     </ul>
   </div>
