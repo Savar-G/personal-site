@@ -84,6 +84,27 @@
   .desk-page .pg .ex { margin-top: 4px; font-size: 8.5px; line-height: 1.45; color: #52525b; }
   .desk-page .pg .more { margin-top: 5px; font-size: 8.5px; font-weight: 500; color: #2f66f0; }
   .desk-page .notebook:hover { transform: rotate(var(--r)); } /* the flip is the hover; no extra lift */
+  /* The Muji pen lies on the right page; the open book's pen is the only part of the book that takes the pointer
+     (the book sits above the hit area for that, and the essay page above the book). Ink goes on a canvas under it. */
+  .desk-page .notebook .book { z-index: 1; }
+  .desk-page .notebook .pg { z-index: 2; }
+  .desk-page .notebook .ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity 360ms ease; }
+  .desk-page .notebook .ink.wipe { opacity: 0; }
+  .desk-page .pen, .desk-page #pen .nib { position: absolute; width: 15.4px; height: 158.4px; margin: -158.4px 0 0 -7.7px; transform-origin: 50% 100%; }
+  .desk-page .pen svg, .desk-page #pen svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .desk-page .notebook .pen { rotate: var(--a); pointer-events: none; cursor: grab; filter: drop-shadow(1px 2px 1.2px rgba(0,0,0,.2));
+                              transition: translate 160ms var(--ease), filter 160ms var(--ease); }
+  .desk-page .notebook.open .pen { pointer-events: auto; }
+  .desk-page .notebook.open .pen:hover { translate: -1px -3px; filter: drop-shadow(3px 5px 2.5px rgba(0,0,0,.16)); }
+  /* Picked up: a copy follows the pointer, tip first, above everything. The shadow stays in screen space
+     (filter here, rotation on .nib) and tightens when the tip touches the paper. */
+  .desk-page #pen { position: fixed; left: 0; top: 0; z-index: 95; pointer-events: none; visibility: hidden;
+                    filter: drop-shadow(8px 12px 5px rgba(0,0,0,.15)); transition: filter 110ms ease; }
+  .desk-page #pen.show { visibility: visible; }
+  .desk-page #pen.down { filter: drop-shadow(2px 3px 1.5px rgba(0,0,0,.22)); }
+  .desk-page.inking, .desk-page.inking * { cursor: none !important; }
+  /* With the pen in hand, the rest of the desk does not react as it passes over. */
+  .desk-page.inking .stage > :not(.notebook), .desk-page.inking .corner { pointer-events: none; }
   /* ---------- RAZR (live contacts) ---------- */
   .desk-page .phone { width: 202px; height: 420px; transform-origin: 50% 22%; transition: transform 260ms var(--ease); }
   .desk-page .phone:hover, .desk-page .phone:focus-visible, .desk-page .phone.active { transform: translateY(30px) rotate(0deg) scale(1.5); z-index: 30; }
@@ -289,7 +310,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     .desk-page .greet h1 .hl:hover, .desk-page .greet h1 .hl:focus-visible { transform: none; }
-    .desk-page .obj, .desk-page .phone, .desk-page .notebook .cover, .desk-page .hint, .desk-page .toast, .desk-page #iris, .desk-page .folder .doc, .desk-page .pola, .desk-page .bk, .desk-page .notebook .pg { transition: none !important; }
+    .desk-page .obj, .desk-page .phone, .desk-page .notebook .cover, .desk-page .hint, .desk-page .toast, .desk-page #iris, .desk-page .folder .doc, .desk-page .pola, .desk-page .bk, .desk-page .notebook .pg,
+    .desk-page .notebook .pen, .desk-page .notebook .ink, .desk-page #pen { transition: none !important; }
     .desk-page .folder:hover .doc, .desk-page .food:hover .steam svg, .desk-page .greet .tap svg, .desk-page .greet .tap i, .desk-page .steam.cup svg, .desk-page .travel.developing .ph, .desk-page .screen .call small { animation: none; }
     .desk-page .obj:hover, .desk-page .obj:focus-visible { transform: rotate(var(--r, 0deg)); }
   }

@@ -30,7 +30,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 | Object | Caption | Opens | Hover |
 |---|---|---|---|
 | Three CSS polaroids with Savar's photos (sushi, Cappadocia balloons, Indonesian sea cliffs), handwritten japan / turkey / indonesia | Travel | `/travel` | polaroids fan out |
-| Closed black notebook (165×244) | Writing | `/writing`, then `/<essay-slug>` | cover flips open in 3D into empty space; pen on the page |
+| Closed black notebook (165×244) | Writing | `/writing`, then `/<essay-slug>` | cover flips open in 3D into empty space; a Muji gel pen (clear frosted barrel, drawn in SVG) lies on the right page. Click the pen to pick it up: it follows the pointer, tip first, and the cursor hides. Press and drag on the right page to write in black gel ink. A press off the page, or Esc, puts it back. The ink stays in the browser; "tidy up" wipes the page (R-75) |
 | Blue folder with three blank papers | Projects | `/projects` (HealthOS there is the way to Health) | papers rise, fan out, and float |
 | Silver Motorola RAZR V3, own right-hand column | Socials | contacts | lifts, straightens, scales 1.5×; lock screen wakes to Contacts; ↑/↓ + Enter or click a row (LinkedIn, X, GitHub, Email, Beli, Book a call); hint bottom-right |
 | Paper render of the resume | Resume | resume page | lift; click plays the hyperspace zoom |
@@ -69,7 +69,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 - Socials opens a contact sheet: the RAZR large with its Contacts screen, plus six 44px buttons (LinkedIn, X, GitHub, Email, Beli, Book a call) and a close button.
 - Resume keeps the hyperspace zoom.
 - Sugar cubes still drag into the coffee.
-- Desktop-only: fan-outs, notebook flip, floating papers, steam, phone zoom, keyboard hint.
+- Desktop-only: fan-outs, notebook flip, the pen, floating papers, steam, phone zoom, keyboard hint.
 
 ## Type and colour
 
