@@ -664,7 +664,7 @@ export function mountDesk(root, router) {
       'Savar has hot-fired a liquid rocket engine (LOX and ethanol) with SFU Rocketry.',
       'He takes his coffee black.',
       'He has placed 1st in four case competitions and hackathons.',
-      'He co-founded Unify, a settlement app used by 350+ newcomers to Canada.',
+      'He co-founded Unify, a settlement app used by 450+ newcomers to Canada.',
       "He's studying two degrees at once: Mechatronics Engineering and Business.",
       'He designed a 2-layer PCB for an ESP32-S3 wearable.',
       'He rates everything he eats on Beli.',
