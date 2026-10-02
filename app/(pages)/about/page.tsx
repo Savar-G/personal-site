@@ -38,7 +38,7 @@ export default function AboutPage() {
             logo="/app-icon.png"
           />, a mobile app that helps newcomers settle in Canada — community,
           settlement guidance, and a RAG-powered AI companion that keeps
-          itself current by scraping Government of Canada sources daily. 350+
+          itself current by scraping Government of Canada sources daily. 450+
           users, 16 partnerships, and a few million social impressions in.
         </p>
 
