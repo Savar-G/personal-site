@@ -192,7 +192,7 @@ ${notebookPage(essays)}
   <div class="cube" style="--ld:960ms;left:680px;top:742px;--cr:3deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
   <div class="cubehint" id="cubehint">psst, drop one in</div>
 
-  <div class="obj food" tabindex="0" role="link" aria-label="Food on Beli" data-vis=".25 .24 .77 .75" data-href="https://beliapp.co/app/savargupta" style="left:790px;top:560px;width:300px;height:309px;--r:6deg;--cy:266px">
+  <div class="obj food" tabindex="0" role="link" aria-label="Food" data-vis=".25 .24 .77 .75" data-open="/food" style="left:790px;top:560px;width:300px;height:309px;--r:6deg;--cy:266px">
     <img decoding="async" fetchpriority="low" src="/desk/ramen.webp" alt="">
     <div class="steam"><span style="position:absolute;left:0;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span><span style="position:absolute;left:30px;bottom:6px"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span><span style="position:absolute;left:58px;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span></div>
     <span class="cap">Food</span></div>
@@ -272,6 +272,7 @@ ${notebookPage(essays)}
       <li><span><a href="/bookshelf">Bookshelf</a></span></li>
       <li><span><a href="/things">Things</a></span></li>
       <li><span><a href="/travel">Travel</a> · Japan, Bali, Maui, Turkey, California, Banff, Joffre Lakes</span></li>
+      <li><span><a href="/food">Food</a> · restaurants I've ranked on Beli</span></li>
       <li><span><a href="mailto:savar.gupta1922@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/savar-gupta" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://x.com/savar_gupta" target="_blank" rel="noopener">X</a> · <a href="https://github.com/Savar-G" target="_blank" rel="noopener">GitHub</a> · <a href="https://beliapp.co/app/savargupta" target="_blank" rel="noopener">Beli</a> · <a href="https://cal.com/savar-gupta/coffee-chat" target="_blank" rel="noopener">Book a call</a></span></li>
     </ul>
   </div>

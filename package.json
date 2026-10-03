@@ -9,7 +9,8 @@
     "dev:cleanup-test": "node scripts/test-dev-agent-cleanup.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "food:import": "node scripts/import-food.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
