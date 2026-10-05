@@ -7,7 +7,7 @@ import { ProjectCard } from "./_components/project-card";
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Projects by Savar Gupta: Unify, Embedr, a health and activity wearable, SFU Rocketry, Taskline, and HealthOS.",
+    "Projects by Savar Gupta: Unify, Embedr, Podcast Sync, SFU Rocketry, a health and activity wearable, Taskline, and HealthOS.",
 };
 
 // Media-led case cards (decision R-70): the flagship spans the full width,
