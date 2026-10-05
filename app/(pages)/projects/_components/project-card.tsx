@@ -11,7 +11,7 @@ import type { Project, ProjectLink, ProjectMedia } from "@/lib/projects";
 import { CountUp } from "./count-up";
 import { LoopVideo } from "./loop-video";
 
-function Media({ media }: { media: ProjectMedia }) {
+function Media({ media, wide }: { media: ProjectMedia; wide: boolean }) {
   switch (media.kind) {
     case "showcase":
       return (
@@ -83,7 +83,8 @@ function Media({ media }: { media: ProjectMedia }) {
             alt={media.alt}
             width={media.width}
             height={media.height}
-            sizes="(max-width: 900px) 92vw, 540px"
+            // A full-width card shows the image up to 46rem wide.
+            sizes={wide ? "(max-width: 900px) 92vw, 736px" : "(max-width: 900px) 92vw, 540px"}
           />
         </div>
       );
@@ -150,7 +151,7 @@ export function ProjectCard({
         compact ? " pj-card--compact" : ""
       }`}
     >
-      <Media media={media} />
+      <Media media={media} wide={project.layout === "feature"} />
 
       <div className="pj-body">
         <div className="pj-intro">
