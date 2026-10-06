@@ -222,6 +222,54 @@ export const projects: Project[] = [
     },
   },
   {
+    name: "Podcast Sync",
+    category: "Software · Open source",
+    tone: "software",
+    role: "Solo builder",
+    dates: "Oct 2026",
+    // Leads with why (Savar, 2026-10-05).
+    summary:
+      "I like watching the video versions of podcasts on YouTube, at my desk or while I eat. On the go, I switch to Apple Podcasts on my iPhone and listen, no video. The two apps never knew where I was in the other one, so every switch meant scrubbing to find my spot again. I built Podcast Sync so they always stay in sync, both ways.",
+    did: [
+      {
+        lead: "Matched each YouTube video to its podcast episode with no setup,",
+        text: "using length, publish date, and the guest's name, because the two titles often differ. It matched 33 of 33 test episodes and skipped every clip.",
+      },
+      {
+        lead: "Made the handoff to my iPhone take zero taps:",
+        text: "when I pause YouTube, a small macOS helper moves Apple Podcasts on my Mac to the same second, and iCloud carries it to my iPhone.",
+      },
+      {
+        lead: "Built the YouTube side as a Chrome extension:",
+        text: "it jumps to where I stopped on my iPhone, marks that spot on the progress bar, learns each show's timing from ±15 s nudges, and shows podcast progress on thumbnails.",
+      },
+      {
+        lead: "Kept it private:",
+        text: "everything runs on my Mac and in my own iCloud, with read-only access to the Podcasts library and no servers or accounts.",
+      },
+      {
+        lead: "Shipped it as open source",
+        text: "with 128 tests and CI, built with four Claude Code agents working in parallel git worktrees.",
+      },
+    ],
+    layout: "feature",
+    tools: ["Python", "Chrome extension", "macOS MediaRemote", "SQLite", "iCloud", "Claude Code"],
+    links: [
+      {
+        label: "GitHub",
+        href: "https://github.com/Savar-G/podcast-sync",
+        kind: "github",
+      },
+    ],
+    media: {
+      kind: "image",
+      src: "/projects/podcast-sync-player.webp",
+      alt: "A YouTube player with the Podcast Sync message: Resumed at 40:30 from Apple Podcasts, with −15 s, +15 s, and Undo buttons",
+      width: 880,
+      height: 125,
+    },
+  },
+  {
     name: "SFU Rocketry",
     category: "Hardware · Mechanical",
     tone: "mechanical",
