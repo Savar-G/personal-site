@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
     // dev server is OOM-killed. Keep the watch scope on this repo only.
     root: __dirname,
   },
+  images: {
+    // YouTube posters for the video embeds go through the image optimizer, so
+    // they arrive sized to the screen and from this site.
+    remotePatterns: [new URL("https://i.ytimg.com/vi_webp/**")],
+  },
   experimental: {
     // Desk objects fly into their pages (React <ViewTransition>, see
     // app/_components/desk and the flights section in globals.css).

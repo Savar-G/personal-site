@@ -12,6 +12,11 @@ import { CountUp } from "./count-up";
 import { LoopVideo } from "./loop-video";
 
 function Media({ media, wide }: { media: ProjectMedia; wide: boolean }) {
+  // A full-width card shows its media up to 46rem wide.
+  const sizes = wide
+    ? "(max-width: 900px) 92vw, 736px"
+    : "(max-width: 900px) 92vw, 540px";
+
   switch (media.kind) {
     case "showcase":
       return (
@@ -69,9 +74,23 @@ function Media({ media, wide }: { media: ProjectMedia; wide: boolean }) {
             title={media.title}
             label={`Demo · ${media.title}`}
             poster={`https://i.ytimg.com/vi_webp/${media.id}/maxresdefault.webp`}
+            sizes={sizes}
             src={`https://www.youtube-nocookie.com/embed/${media.id}?autoplay=1&rel=0${
               media.start ? `&start=${media.start}` : ""
             }`}
+          />
+        </div>
+      );
+    case "video":
+      return (
+        <div className="pj-media pj-media--video">
+          <VideoEmbed
+            kind="video"
+            title={media.title}
+            label={`Demo · ${media.title}`}
+            poster={media.poster}
+            sizes={sizes}
+            src={media.src}
           />
         </div>
       );
@@ -83,8 +102,7 @@ function Media({ media, wide }: { media: ProjectMedia; wide: boolean }) {
             alt={media.alt}
             width={media.width}
             height={media.height}
-            // A full-width card shows the image up to 46rem wide.
-            sizes={wide ? "(max-width: 900px) 92vw, 736px" : "(max-width: 900px) 92vw, 540px"}
+            sizes={sizes}
           />
         </div>
       );

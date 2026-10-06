@@ -26,6 +26,8 @@ export type ProjectMedia =
       }[];
     }
   | { kind: "youtube"; id: string; start?: number; title: string }
+  // A video file this site hosts; it loads only when played.
+  | { kind: "video"; src: string; poster: string; title: string }
   // A photo; `credit` records where a stock photo came from.
   | {
       kind: "image";
@@ -261,12 +263,13 @@ export const projects: Project[] = [
         kind: "github",
       },
     ],
+    // The launch video (R-86): 1080p, compressed for the web; the poster is
+    // its "Same podcast. Same second." frame.
     media: {
-      kind: "image",
-      src: "/projects/podcast-sync-player.webp",
-      alt: "A YouTube player with the Podcast Sync message: Resumed at 40:30 from Apple Podcasts, with −15 s, +15 s, and Undo buttons",
-      width: 880,
-      height: 125,
+      kind: "video",
+      src: "/projects/podcast-sync-launch.mp4",
+      poster: "/projects/podcast-sync-launch.webp",
+      title: "Podcast Sync launch video",
     },
   },
   {
