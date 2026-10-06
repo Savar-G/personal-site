@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 type Props = {
@@ -10,11 +11,28 @@ type Props = {
   // "iframe": a third-party player URL. "video": a file this site hosts.
   kind: "iframe" | "video";
   src: string;
+  // The poster's rendered width, so a phone fetches a smaller copy.
+  sizes?: string;
 };
 
+// Starts the video as it mounts, still inside the click, so iOS lets it play
+// with sound. A stable function, so React calls it once.
+function playOnMount(video: HTMLVideoElement | null) {
+  video?.play().catch(() => {});
+}
+
 // A poster with a play button. The player (or the video file) loads only on
-// click, so the page stays fast and sets no video cookies until then.
-export function VideoEmbed({ title, poster, label, kind, src }: Props) {
+// click, so the page stays fast and sets no video cookies until then. The
+// poster goes through the image optimizer: it is sized to the screen and
+// served from this site, even for a YouTube video.
+export function VideoEmbed({
+  title,
+  poster,
+  label,
+  kind,
+  src,
+  sizes = "100vw",
+}: Props) {
   const [playing, setPlaying] = useState(false);
 
   return (
@@ -22,6 +40,7 @@ export function VideoEmbed({ title, poster, label, kind, src }: Props) {
       {playing ? (
         kind === "video" ? (
           <video
+            ref={playOnMount}
             src={src}
             poster={poster}
             title={title}
@@ -44,12 +63,11 @@ export function VideoEmbed({ title, poster, label, kind, src }: Props) {
           onClick={() => setPlaying(true)}
         >
           {poster && (
-            // eslint-disable-next-line @next/next/no-img-element -- a remote poster; lazy so it never competes with the page
-            <img
+            <Image
               src={poster}
               alt=""
-              loading="lazy"
-              decoding="async"
+              fill
+              sizes={sizes}
               className="video-embed-poster-img"
             />
           )}

@@ -1773,22 +1773,6 @@ body {
   aspect-ratio: auto;
   object-fit: contain;
 }
-/* In a full-width card a wide strip (Podcast Sync's player) sits on the tray at a
-   readable size, like the Embedr video. */
-.pj-card--feature .pj-photo {
-  padding: 1.25rem;
-}
-.pj-card--feature .pj-photo img {
-  max-width: 46rem;
-  margin: 0 auto;
-  aspect-ratio: auto;
-  border-radius: 0.75rem;
-}
-@media (min-width: 900px) {
-  .pj-card--feature .pj-photo {
-    padding: 2.25rem;
-  }
-}
 .pj-placeholder {
   display: flex;
   flex-direction: column;
