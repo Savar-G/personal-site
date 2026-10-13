@@ -21,7 +21,7 @@
 - "Savar." beckons every 5.5 s (lifts 4px, tilts -3deg, settles, and a sheen crosses the highlight) until the visitor hovers or focuses it once per session (R-68).
 - "Savar." is a link to `/about`. Hover and focus: the highlight darkens to `#D3E1FC` and the name lifts 2px and turns -2°. Where the browser has view transitions, the name flies into the "Savar Gupta" name in the page header on `/about`, and "back to the desk" flies it back (R-76).
 - "Studying Mechatronics Engineering and Business @ SFU. Building at the intersection of hardware, software, and AI." Inter 17px, `#52525B`, max 500px.
-- "Click anything to learn more about me." Inter 14px, `#A1A1AA`, with a hand icon that taps three times (fingertip ripple), rests, and stops after the first object hover. Phone: "Tap anything…".
+- "Click my name to learn more about me." Inter 14px, `#A1A1AA`, with a hand icon that points up at the name and taps three times (fingertip ripple), rests, and stops once the name is hovered or focused (or was found earlier in the session). Phone: "Tap my name…". Site only; the prototype still says "Click anything…" (R-87).
 
 ## The desk (desktop, 1440×900 stage scaled to fit)
 

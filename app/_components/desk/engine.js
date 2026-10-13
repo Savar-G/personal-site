@@ -235,8 +235,10 @@ export function mountDesk(root, router) {
   });
   paint();
 
-  // The hint has done its job once a visitor finds an object.
-  $$('.obj').forEach(o => on(o, 'pointerenter', () => $('#cta').classList.add('learned'), { once: true }));
+  // The hint points at the name; it has done its job once a visitor finds the name.
+  const cta = $('#cta'), nameLink = $('.greet h1 .hl');
+  if (session.get('name-found')) cta.classList.add('learned');
+  ['pointerenter', 'focus'].forEach(t => on(nameLink, t, () => cta.classList.add('learned'), { once: true }));
 
   // ---------- Objects land on the desk, one after another (once per session) ----------
   const objsAll = $$('.obj'), cubes = $$('.cube');
