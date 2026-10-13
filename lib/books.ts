@@ -19,6 +19,16 @@ export type Book = {
   spineColor: string;
   /** Optional override for ink color on the fallback cover (defaults to stone). */
   inkColor?: string;
+  /** Page count; sets the book's thickness on the 3D shelf. */
+  pages: number;
+  /** Trim height in cm (default 23.5); sets the book's height on the shelf. */
+  heightCm: number;
+  /** Spine lettering, "<Google font> <weight>[ caps]", e.g. "Cinzel 600 caps". */
+  spineType: string;
+  /** Series name, e.g. "Mistborn"; books in a series stand together. */
+  series?: string;
+  /** Position in the series (1, 2, 3...). */
+  seriesOrder?: number;
   /** Optional short topic label, e.g. "Investing". */
   category?: string;
   dateRead?: string; // ISO YYYY-MM-DD
@@ -116,7 +126,7 @@ export function getAllBooks(): Book[] {
     return [];
   }
 
-  return files
+  const sorted = files
     .map((filename): Book => {
       const slug = filename.replace(/\.mdx$/, "");
       const raw = readFileSync(join(BOOKS_DIR, filename), "utf8");
@@ -137,6 +147,11 @@ export function getAllBooks(): Book[] {
         coverImage: data.coverImage ? String(data.coverImage) : undefined,
         spineColor: String(data.spineColor ?? "#5f5b54"),
         inkColor: data.inkColor ? String(data.inkColor) : undefined,
+        pages: typeof data.pages === "number" ? data.pages : 320,
+        heightCm: typeof data.heightCm === "number" ? data.heightCm : 23.5,
+        spineType: String(data.spineType ?? "Inter 600"),
+        series: data.series ? String(data.series) : undefined,
+        seriesOrder: typeof data.seriesOrder === "number" ? data.seriesOrder : undefined,
         category: data.category ? String(data.category) : undefined,
         dateRead,
         dateStarted,
@@ -160,9 +175,39 @@ export function getAllBooks(): Book[] {
       if (aDate && bDate) return bDate.localeCompare(aDate);
       if (aDate) return -1;
       if (bDate) return 1;
-      // …then alphabetical as a stable fallback.
-      return a.title.localeCompare(b.title);
+      // …then undated books in a fixed shuffle: same order on every build, and
+      // a new book lands at a random spot instead of by title.
+      return shuffleKey(a.slug) - shuffleKey(b.slug);
     });
+
+  // A series stands together, in series order, where its first-sorted book
+  // (the one read or started most recently) would stand.
+  const out: Book[] = [];
+  const placed = new Set<string>();
+  for (const book of sorted) {
+    if (!book.series) {
+      out.push(book);
+      continue;
+    }
+    if (placed.has(book.series)) continue;
+    placed.add(book.series);
+    out.push(
+      ...sorted
+        .filter((b) => b.series === book.series)
+        .sort((a, b) => (a.seriesOrder ?? 0) - (b.seriesOrder ?? 0)),
+    );
+  }
+  return out;
+}
+
+/** FNV-1a hash of the slug: a stable pseudo-random sort key. */
+function shuffleKey(slug: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < slug.length; i++) {
+    h ^= slug.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
 }
 
 export type Shelf = { status: ReadingStatus; label: string; books: Book[] };

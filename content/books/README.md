@@ -1,57 +1,47 @@
 # Bookshelf content
 
 Each book on `/bookshelf` is one `.mdx` file in this folder, parsed by [`lib/books.ts`](../../lib/books.ts).
-It mirrors how blog posts work in `content/posts/` — frontmatter for structured fields, the body for prose.
+The page is a 3D wall shelf ([`shelf-engine.js`](../../app/(pages)/bookshelf/_components/shelf-engine.js)): every book is a hardcover, spine out. Click one and it comes off the shelf to show its cover, with a card for the description and takeaways. Full notes live in the Obsidian vault, not here.
 
 ## Add a book
 
-Create `content/books/<slug>.mdx`. The filename (minus `.mdx`) becomes the slug. Example:
+1. Create `content/books/<slug>.mdx`. The filename (minus `.mdx`) becomes the slug:
 
 ```mdx
 ---
 title: "The Title"
 author: "Author Name"
-coverImage: "/books/the-title.jpg"  # real cover in /public/books (see below)
-status: "read"            # "read" | "reading"  (groups it into a shelf; default "read")
+coverImage: "/books/the-title.jpg"
+status: "read"             # "read" | "reading" (reading books stand first on the shelf)
 category: "Investing"      # optional short topic label
-spineColor: "#5a6470"      # accent color for the fallback cover + modal details
-dateRead: "2026-04-29"     # optional ISO date; used to sort newest-first
-dateStarted: "2026-10-12"  # optional ISO date; sorts the "reading" shelf newest-first
-rating: 5                  # optional 1–5; only shown when present
-summary: "One-line thesis shown at the top of the right page."
-takeaways:                 # optional bullet list — the "Key takeaways" section
+spineColor: "#5a6470"      # fallback colour when there is no cover
+pages: 320                 # page count; sets the book's thickness
+heightCm: 23.5             # trim height in cm; sets the book's height
+spineType: "Inter 700 caps" # spine lettering, see below
+series: "Mistborn"         # optional; books in a series stand together
+seriesOrder: 1             # position in the series; printed at the foot of the spine
+dateRead: "2026-04-29"     # optional ISO date; read books sort newest first
+dateStarted: "2026-10-12"  # optional ISO date; reading books sort newest first
+summary: "One or two sentences on what the book is about."
+takeaways:                 # 3-5 short bullets in my voice; the card hides the section when empty
   - "First takeaway."
-  - "Second takeaway."
-quotes:                    # optional — the "Favorite quotes" section
-  - "“A quote, with curly quotes so the YAML stays clean.”"
 ---
-
-Everything below the frontmatter is your long-form notes. Plain Markdown —
-### headings, lists, and > blockquotes — rendered with the site's `.prose-site` styling.
 ```
 
-### Field notes
+2. Add two cover files, both JPEG from the same front-cover image (hardcover art if it exists):
+   - `public/books/<slug>.jpg`, at most 1400 px tall. Loads when the book is opened.
+   - `public/books/sm/<slug>.jpg`, 420 px tall. Paints the shelf and sets the spine colour.
 
-- **coverImage** — the real book cover. Save the image in `/public/books/` (e.g. `the-title.jpg` or `.png`) and point `coverImage` at `/books/the-title.jpg`. It's rendered with `next/image` on the shelf and in the reader, with alt text `Cover of <title> by <author>`. Aim for a portrait image around 300–600px wide (roughly 2:3); larger is fine, `next/image` resizes it.
-- **no coverImage** — omit the field and the book shows a clearly-marked stone "No cover" fallback (title + author). Tasteful, but obviously a placeholder — add real art when you have it.
-- **status** — `reading` books appear under "Currently reading"; everything else under "Read". A book with no takeaways/quotes/body (e.g. one you've just started) renders a clean "currently reading" state in the reader.
-- **spineColor** — no longer paints the cover (the real artwork does). It's the accent for the fallback cover and small reader details (takeaway bullets, the quote rule). Keep it muted and stone-friendly.
-- **quotes** — wrap each in straight double quotes and use curly `“ ” ’` *inside* so the YAML never needs escaping.
+   ```sh
+   sips -s format jpeg -s formatOptions 80 -Z 1400 cover.jpg --out public/books/<slug>.jpg
+   sips -s format jpeg -s formatOptions 76 -Z 420 cover.jpg --out public/books/sm/<slug>.jpg
+   ```
 
-### Accent palette (`spineColor`)
+## Field notes
 
-A muted, stone-friendly set already in use — reuse or extend:
-
-| Tone | Hex | Used for |
-|------|-----|----------|
-| Ochre / tan | `#6f6244` | Investing |
-| Bronze | `#6d5a3a` | Investing |
-| Blue-gray | `#5a6470` | Investing |
-| Slate | `#54606a` | Business |
-| Deep slate | `#46535f` | Tech |
-| Teal-green | `#4f635d` | Finance |
-| Sage | `#5f6a57` | Habits |
-| Olive | `#5c5d44` | Psychology |
-| Plum | `#5f5160` | Psychology |
-| Clay | `#7e5544` | Communication |
-| Oxblood | `#7c473c` | Fiction |
+- **Order** - reading books first (newest `dateStarted`), then read books by `dateRead`, newest first. Undated books follow in a fixed shuffle keyed on the slug, so a new undated book lands at a random spot.
+- **Series** - books with the same `series` stand together in `seriesOrder`, at the spot where the series' most recent book would stand. A flat stack never splits a series.
+- **Spine colour** - sampled at runtime from the left edge of the small cover, where a jacket's art wraps onto the spine.
+- **spineType** - `"<family> <weight>[ caps]"`. Pick the family closest to the cover lettering. Families: Inter, Oswald, Bebas Neue, Cinzel, Cormorant Garamond, Playfair Display, Libre Baskerville, DM Serif Display ([`spine-fonts.ts`](../../app/(pages)/bookshelf/_components/spine-fonts.ts)). To add a family, add it there with its weights.
+- **takeaways** - at most 5 are shown. Wrap each in straight double quotes; use curly quotes inside so the YAML never needs escaping.
+- **Body** - anything below the frontmatter is not shown on the site.

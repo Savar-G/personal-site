@@ -1,0 +1,259 @@
+/* /bookshelf: the 3D wall shelf (shelf-engine.js) and its detail card.
+   The stage runs edge to edge under the page header; the canvas paints the
+   wall, so the stage background is the wall colour while the books load. */
+
+.pages-shell:has(.shelf-stage) {
+  overflow-x: clip;
+}
+
+.shelf-wrap {
+  --wall: #ebe4d8;
+  --card-bg: #fbf8f2;
+  --card-ink: #26221d;
+  --card-muted: #7a7266;
+  --card-line: rgba(60, 45, 30, 0.14);
+  margin-top: 0.5rem;
+}
+@media (prefers-color-scheme: dark) {
+  .shelf-wrap {
+    --wall: #2a2520;
+    --card-bg: #24201b;
+    --card-ink: #efe7da;
+    --card-muted: #a89c8a;
+    --card-line: rgba(255, 240, 220, 0.12);
+  }
+}
+
+.shelf-stage {
+  position: relative;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  height: clamp(440px, 66vh, 700px);
+  background: var(--wall);
+  overflow: hidden;
+  outline: none;
+  touch-action: pan-y;
+  scroll-margin-top: 56px; /* the sticky "back to the desk" bar */
+}
+.shelf-stage:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--card-ink) 45%, transparent);
+}
+.shelf-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease-out);
+}
+.shelf-stage.is-ready .shelf-canvas {
+  opacity: 1;
+}
+
+.shelf-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: var(--card-muted);
+  font: 500 12px var(--font-mono), ui-monospace, monospace;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.shelf-stage.is-ready .shelf-loading,
+.shelf-stage.is-failed .shelf-loading {
+  opacity: 0;
+}
+.shelf-stage.is-failed {
+  display: none;
+}
+
+/* ----- detail card ----- */
+
+.shelf-card {
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  right: 24px;
+  bottom: 24px;
+  width: min(420px, 42%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--card-ink);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.08);
+  transform: translateX(calc(100% + 40px));
+  transition: transform 0.65s var(--ease-out);
+}
+.shelf-card.is-open {
+  transform: none;
+}
+.shelf-card-body {
+  position: relative;
+  padding: 48px 36px 36px;
+  animation: shelf-in 0.5s var(--ease-out) both;
+}
+@keyframes shelf-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.shelf-eyebrow {
+  margin: 0;
+  font: 500 11.5px var(--font-mono), ui-monospace, monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--card-muted);
+}
+.shelf-title {
+  margin: 12px 0 4px;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.shelf-author {
+  margin: 0;
+  color: var(--card-muted);
+  font-size: 15px;
+}
+.shelf-desc {
+  margin: 22px 0 0;
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+.shelf-sub {
+  margin-top: 28px;
+  padding-bottom: 8px;
+}
+.shelf-takeaways {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.shelf-takeaways li {
+  position: relative;
+  padding: 10px 0 10px 20px;
+  border-top: 1px solid var(--card-line);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+.shelf-takeaways li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 18px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+}
+.shelf-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 28px;
+}
+.shelf-nav button,
+.shelf-close {
+  border: 1px solid var(--card-line);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: var(--card-ink);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.shelf-nav button:hover,
+.shelf-close:hover {
+  background: color-mix(in oklab, var(--card-ink) 7%, transparent);
+}
+.shelf-nav button:focus-visible,
+.shelf-close:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--card-ink) 55%, transparent);
+  outline-offset: 2px;
+}
+.shelf-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px 12px;
+}
+
+/* Phones: the card is a sheet over the bottom of the screen. */
+@media (max-width: 759px) {
+  .shelf-stage {
+    height: clamp(420px, 62svh, 620px);
+  }
+  .shelf-card {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-height: 52svh;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(104%);
+  }
+  .shelf-card-body {
+    padding: 40px 22px 28px;
+  }
+  .shelf-title {
+    font-size: 26px;
+  }
+  .shelf-close {
+    min-height: 44px;
+  }
+  /* room under the stage while a book is open, so the stage can sit under
+     the bar above the sheet (shelf-engine.js) */
+  .shelf-stage.is-open {
+    margin-bottom: 60svh;
+  }
+}
+
+/* ----- the plain list (no WebGL) ----- */
+
+.shelf-list:not(.sr-only) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.shelf-list:not(.sr-only) > li {
+  padding: 1rem 0;
+  border-top: 1px solid var(--color-stone-200);
+}
+.shelf-list:not(.sr-only) button {
+  all: unset;
+  font-weight: 600;
+}
+.shelf-list:not(.sr-only) .shelf-list-author {
+  font-weight: 400;
+  color: var(--color-stone-500);
+}
+.shelf-list:not(.sr-only) p {
+  margin: 0.35rem 0 0;
+  color: var(--color-stone-600);
+}
+.shelf-list:not(.sr-only) ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--color-stone-600);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shelf-card,
+  .shelf-canvas {
+    transition: none;
+  }
+  .shelf-card-body {
+    animation: none;
+  }
+}
