@@ -113,7 +113,7 @@ export function deskMarkup(essays: DeskEssay[]) {
 
   <div class="greet">
     <h1>Hi, I'm <a class="hl" href="/about" style="view-transition-name:savar-name;view-transition-class:flight;">Savar.</a></h1>
-    <p>Studying Mechatronics Engineering and Business @ SFU. Building at the intersection of hardware, software, and AI.</p>
+    <p>Exploring the limits of AI.</p>
     <span class="cta" id="cta"><span class="tap"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M220 112h-4a28 28 0 0 0-44-18 28 28 0 0 0-40-10V44a28 28 0 0 0-56 0v84.8l-8.4-13.5A28 28 0 0 0 19.4 144l33 58.5A76 76 0 0 0 184 240h8a60 60 0 0 0 60-60v-36a32 32 0 0 0-32-32Zm16 68a44 44 0 0 1-44 44h-8a60 60 0 0 1-52.4-30.6l-33-58.5a12 12 0 0 1 20.7-12.1L102.8 153a8 8 0 0 0 14.8-4.2V44a12 12 0 0 1 24 0v64a8 8 0 0 0 16 0v-8a12 12 0 0 1 24 0v16a8 8 0 0 0 16 0 12 12 0 0 1 24 0v8a8 8 0 0 0 16 0 16 16 0 0 1 16 16Z"/></svg><i></i></span><span class="desk-only">Click</span><span class="pocket-only">Tap</span> my name to learn more about me.</span>
   </div>
 
@@ -247,7 +247,7 @@ ${notebookPage(essays)}
   <a class="corner close" href="#" id="listclose">← back to the desk</a>
   <div class="col">
     <h1>Savar Gupta</h1>
-    <p class="lede">Studying Mechatronics Engineering and Business @ SFU. Building at the intersection of hardware, software, and AI. Based in Vancouver.</p>
+    <p class="lede">Exploring the limits of AI. Based in Vancouver.</p>
     <h2>Now</h2>
     <ul>
       <li><span><a href="https://www.telus.com" target="_blank" rel="noopener">TELUS</a> · Technical Product Manager Co-op, Internet Hardware</span><em>Jan 2026 – now</em></li>
