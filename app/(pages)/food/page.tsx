@@ -5,7 +5,7 @@ import { FoodGuide } from "./_components/food-guide";
 export const metadata: Metadata = {
   title: "Food",
   description:
-    "Every place Savar Gupta has ranked on Beli, best first, on a map: Vancouver, Japan, Hawaii, California, Bali, and Türkiye.",
+    "Every place Savar Gupta has ranked on Beli, best first, on a map: Vancouver, Japan, Hawaii, California, Bali, Türkiye, and Hong Kong.",
 };
 
 // The desk's ramen opens this page (F-1). The list is rendered on the server; the map

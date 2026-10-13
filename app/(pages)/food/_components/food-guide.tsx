@@ -239,7 +239,8 @@ export function FoodGuide({ places }: { places: Place[] }) {
         map.addSource("places", {
           type: "geojson",
           cluster: true,
-          clusterRadius: 46,
+          // 56, not 46: with 238 places a "6 places" pill covered the "76 places" one over Vancouver.
+          clusterRadius: 56,
           clusterMaxZoom: 15,
           data: {
             type: "FeatureCollection",
@@ -323,7 +324,9 @@ export function FoodGuide({ places }: { places: Place[] }) {
         const ps = places.filter((p) => p.region === r);
         return { label: ps[0].regionName, n: ps.length, to: { country: scope.country, region: r } as Scope, on: scope.region === r };
       })
-      .sort((a, b) => b.n - a.n);
+      .sort((a, b) => b.n - a.n)
+      // Hong Kong is its own only region; a second "Hong Kong" chip says nothing new.
+      .filter((r) => r.label !== COUNTRY_NAMES[scope.country!]);
     return [
       { label: "← Everywhere", n: 0, to: { country: null, region: null } as Scope, on: false, back: true },
       { label: COUNTRY_NAMES[scope.country], n: count((p) => p.country === scope.country), to: { country: scope.country, region: null } as Scope, on: !scope.region },
