@@ -213,12 +213,16 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
       const t = canvasTex(c); t.wrapS = t.wrapT = THREE.RepeatWrapping;
       return t;
     }
-    function plasterTex(base) {
-      const c = document.createElement("canvas"); c.width = c.height = 512;
-      const x = c.getContext("2d"); x.fillStyle = base; x.fillRect(0, 0, 512, 512);
-      noise(x, 512, 512, 9, rnd);
-      const t = canvasTex(c); t.wrapS = t.wrapT = THREE.RepeatWrapping;
-      return t;
+    // the soft shade a floating shelf throws on the wall just under it
+    function underShadeTex() {
+      const c = document.createElement("canvas"); c.width = 4; c.height = 256;
+      const x = c.getContext("2d");
+      const g = x.createLinearGradient(0, 0, 0, 256);
+      // the plank hides the top ~40% from the camera; the visible part fades out
+      g.addColorStop(0, "rgba(0,0,0,1)"); g.addColorStop(0.42, "rgba(0,0,0,1)");
+      g.addColorStop(0.6, "rgba(0,0,0,.4)"); g.addColorStop(0.8, "rgba(0,0,0,.1)"); g.addColorStop(1, "rgba(0,0,0,0)");
+      x.fillStyle = g; x.fillRect(0, 0, 4, 256);
+      return canvasTex(c, false);
     }
     const pageU = pageTex(true), pageV = pageTex(false);
 
@@ -330,17 +334,24 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
 
     const plankMat = track(new THREE.MeshStandardMaterial({ roughness: 0.62 }));
     const plank = new THREE.Mesh(track(new THREE.BoxGeometry(len + 6, 2.4, 28)), plankMat);
-    plank.position.set(len / 2, -1.2, 0); plank.receiveShadow = plank.castShadow = true;
-    const wallMat = track(new THREE.MeshStandardMaterial({ roughness: 0.95 }));
+    // The plank's own shadow would fill the wall below it to the stage's
+    // bottom edge, so it casts none; a short soft shade stands in for it.
+    plank.position.set(len / 2, -1.2, 0); plank.receiveShadow = true;
+    // The wall is the page itself: it draws only the shadows that fall on it,
+    // so the shelf hangs on the page background with no seam (light or dark).
+    const wallMat = track(new THREE.ShadowMaterial({ opacity: 0.2 }));
     const wall = new THREE.Mesh(track(new THREE.PlaneGeometry(len + 800, 400)), wallMat);
     wall.position.set(len / 2, 40, -14.2); wall.receiveShadow = true;
+    const shadeMat = track(new THREE.MeshBasicMaterial({ color: 0x000000, alphaMap: underShadeTex(), transparent: true, depthWrite: false, toneMapped: false }));
+    const shade = new THREE.Mesh(plane(len + 6, 16), shadeMat);
+    shade.position.set(len / 2, -2.4 - 8, -14.15);
     const endMat = track(new THREE.MeshStandardMaterial({ color: 0x2b2b2b, roughness: 0.35, metalness: 0.6 }));
     for (const ex of [0.6, len - 0.6]) {
       const up = new THREE.Mesh(box(0.35, 16, 13), endMat); up.position.set(ex, 8, 4); up.castShadow = up.receiveShadow = true;
       const base = new THREE.Mesh(box(9, 0.25, 13), endMat); base.position.set(ex < 1 ? ex + 4.5 : ex - 4.5, 0.12, 4); base.receiveShadow = true;
       scene.add(up, base);
     }
-    scene.add(plank, wall);
+    scene.add(plank, wall, shade);
 
     const sun = new THREE.DirectionalLight(0xfff1dc, 2.2);
     sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.radius = 4;
@@ -379,8 +390,9 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
 
     function applyTheme() {
       const isDark = dark.matches;
-      wallMat.map = plasterTex(isDark ? "#2a2520" : "#ebe4d8"); wallMat.needsUpdate = true;
-      plankMat.map = woodTex(isDark); plankMat.map.repeat.set(len / 120, 1); plankMat.needsUpdate = true;
+      wallMat.opacity = isDark ? 0.4 : 0.2;
+      shadeMat.opacity = isDark ? 0.5 : 0.16;
+      plankMat.map?.dispose(); plankMat.map = woodTex(isDark); plankMat.map.repeat.set(len / 120, 1); plankMat.needsUpdate = true;
       sun.intensity = isDark ? 0.12 : 2.3;
       sun.castShadow = !isDark;
       lamp.intensity = isDark ? 2.1 : 0;
