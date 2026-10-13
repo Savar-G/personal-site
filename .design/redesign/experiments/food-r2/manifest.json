@@ -1,0 +1,26 @@
+{
+  "round": 2,
+  "decision": "Is the Airbnb-style real map (F-3) right before it is built into the site?",
+  "direction": "Reference 6 (Airbnb Vancouver map): muted real street map, small labels, white pill markers with the Beli score, list beside the map (reference 5)",
+  "prototype": "mockups/food-map/airbnb.html (gitignored; open as a file)",
+  "stack": "MapLibre GL JS 5 + OpenFreeMap Liberty vector tiles (free, no key), recoloured in the page to Airbnb's palette (water #cae8f2, land #f4f2ef, parks #dbf2c4, white roads with grey casing, grey labels); other restaurants, shops, and bus stops hidden; English place names",
+  "behaviour": [
+    "World view centred on the Pacific (Türkiye to Vancouver)",
+    "Clusters as white pills ('35 places'); click zooms to the group",
+    "Chips: Everywhere / country / region, with counts; the list shows the places in the map view",
+    "Place pin: white pill with the score; black when hovered from the list or open",
+    "Place card: rank of 73, cuisines, name, score, price, area, Google Maps link",
+    "Esc closes the card, then steps back region -> country -> everywhere",
+    "Phone: title, chips, map, then list"
+  ],
+  "evidence": {
+    "vs-airbnb.jpg": "Airbnb's map (left) beside the prototype at the same view and zoom (right)",
+    "levels.jpg": "world, British Columbia, place card (Lunch Lady), Tokyo",
+    "phone.jpg": "phone world view and phone place card (390 x 844, device emulation)",
+    "method": "tools/cdp-shot.mjs: one headless Chrome over DevTools, waits for the map's idle event; file:// pages need --relax (CORS) which the https site does not"
+  },
+  "known_gaps": [
+    "29 of 73 pins approximate (Tokyo pins sit near the Imperial Palace); exact coordinates needed",
+    "places 1-73 only"
+  ]
+}

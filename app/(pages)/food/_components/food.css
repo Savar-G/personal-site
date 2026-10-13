@@ -1,0 +1,179 @@
+/* /food: the ranked list beside a real map (F-3). Pills and card follow Airbnb's map:
+   white pill, bold number, black when active. */
+
+/* The page is wider than the other inner pages, like /projects. */
+.pages-shell:has(.food-page) {
+  --page-w: 84rem;
+}
+/* A shorter shell header here, so the whole map fits on the first screen. */
+.pages-shell:has(.food-page) > header {
+  padding-top: 1rem;
+  padding-bottom: 1.25rem;
+}
+
+.food-page {
+  --food-pill: #ffffff;
+  --food-pill-ink: #222222;
+  --food-pill-on: #222222;
+  --food-pill-on-ink: #ffffff;
+  --food-card: #ffffff;
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.72fr) minmax(0, 1fr);
+  grid-template-areas:
+    "head map"
+    "chips map"
+    "count map"
+    "list map";
+  grid-template-rows: auto auto auto 1fr;
+  column-gap: 2rem;
+  align-items: start;
+}
+@media (prefers-color-scheme: dark) {
+  .food-page {
+    --food-pill: #2a2a2e;
+    --food-pill-ink: #f4f4f5;
+    --food-pill-on: #f4f4f5;
+    --food-pill-on-ink: #121214;
+    --food-card: #1c1c1f;
+  }
+}
+
+.food-head { grid-area: head; padding: 0.5rem 0 1rem; }
+.food-chips {
+  grid-area: chips;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-stone-200);
+}
+.food-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.125rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-stone-300);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-stone-900);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.food-chip:hover { border-color: var(--color-stone-900); }
+.food-chip.is-on { background: var(--color-stone-900); border-color: var(--color-stone-900); color: var(--color-stone-50); }
+.food-chip.is-back { border-style: dashed; }
+.food-chip-n { color: var(--color-stone-500); font-weight: 500; }
+.food-chip.is-on .food-chip-n { color: var(--color-stone-400); }
+
+.food-count { grid-area: count; margin: 0.9rem 0.25rem 0.4rem; font-size: 0.9rem; font-weight: 600; color: var(--color-stone-900); }
+.food-list { grid-area: list; list-style: none; margin: 0; padding: 0; }
+.food-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.7rem 0.6rem;
+  border-radius: 0.75rem;
+  text-align: left;
+  transition: background-color 0.15s;
+}
+.food-row:hover, .food-row:focus-visible, .food-row.is-on { background: var(--color-stone-100); }
+.food-row-rank { font-size: 0.8rem; color: var(--color-stone-500); text-align: right; font-variant-numeric: tabular-nums; }
+.food-row-main { display: flex; flex-direction: column; min-width: 0; }
+.food-row-name { font-size: 0.95rem; font-weight: 600; color: var(--color-stone-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.food-row-sub { font-size: 0.84rem; color: var(--color-stone-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* The map stays in view while the list scrolls. */
+.food-mapwrap {
+  grid-area: map;
+  position: sticky;
+  top: 4.5rem;
+  height: calc(100dvh - 7.75rem);
+  min-height: 26rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #cae8f2;
+}
+@media (prefers-color-scheme: dark) {
+  .food-mapwrap { background: #16242c; }
+}
+.food-map { position: absolute; inset: 0; }
+.food-map .maplibregl-ctrl-attrib { font-size: 10px; }
+
+/* Pills: on the map, in the list, and in the card */
+.food-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: var(--food-pill);
+  color: var(--food-pill-ink);
+  font-size: 14.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.15s, color 0.15s;
+}
+.food-pill-on { background: var(--food-pill-on); color: var(--food-pill-on-ink); box-shadow: none; }
+.food-pill-group { padding: 0 12px; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.18), 3px 3px 0 -1px var(--food-pill), 3px 3px 0 0 rgba(0, 0, 0, 0.1); }
+.food-pill-group span { font-weight: 500; opacity: 0.6; }
+
+.food-marker { cursor: pointer; }
+.food-marker:hover, .food-marker.is-hot, .food-marker.is-on { z-index: 5 !important; }
+.food-marker:hover .food-pill, .food-marker.is-hot .food-pill { transform: scale(1.08); }
+.food-marker.is-hot .food-pill, .food-marker.is-on .food-pill { background: var(--food-pill-on); color: var(--food-pill-on-ink); }
+
+/* The place card that opens from a pin */
+.food-popup { z-index: 10; }
+.food-popup .maplibregl-popup-content { padding: 0; border-radius: 14px; background: var(--food-card); box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18); }
+.food-popup .maplibregl-popup-tip { display: none; }
+.food-card { position: relative; width: 290px; padding: 16px 18px; font-family: var(--font-sans), system-ui, sans-serif; color: var(--color-stone-900); }
+.food-card-kicker { margin: 0 34px 4px 0; font-size: 12.5px; color: var(--color-stone-500); }
+.food-card h2 { margin: 0 34px 8px 0; font-size: 17px; font-weight: 600; line-height: 1.25; }
+.food-card-line { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 4px; }
+.food-card-line .food-pill { height: 26px; padding: 0 9px; font-size: 13.5px; }
+.food-card-area { margin: 0 0 12px; font-size: 14px; color: var(--color-stone-500); }
+.food-card a { font-size: 14px; font-weight: 600; color: var(--color-stone-900); text-decoration: underline; text-underline-offset: 2px; }
+.food-card-x {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+  color: var(--color-stone-900);
+  box-shadow: 0 0 0 1px var(--color-stone-200);
+}
+.food-card-x:hover { background: var(--color-stone-100); }
+@media (prefers-color-scheme: dark) {
+  .food-popup .maplibregl-popup-content { box-shadow: 0 0 0 1px var(--color-stone-200), 0 6px 24px rgba(0, 0, 0, 0.5); }
+  .food-map .maplibregl-ctrl-group { background: #2a2a2e; }
+  .food-map .maplibregl-ctrl-group button + button { border-top-color: #3f3f46; }
+  .food-map .maplibregl-ctrl-icon { filter: invert(1); }
+  .food-map .maplibregl-ctrl-attrib { background: rgba(28, 28, 31, 0.8); color: #a1a1aa; }
+  .food-map .maplibregl-ctrl-attrib a { color: #d4d4d8; }
+}
+
+/* Phones: title, chips, map, then the list */
+@media (max-width: 767px) {
+  .food-page {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "head" "chips" "map" "count" "list";
+    grid-template-rows: none;
+  }
+  .food-chips { border-bottom: 0; }
+  .food-mapwrap { position: relative; top: 0; height: 58vh; min-height: 20rem; border-radius: 0.875rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .food-pill, .food-row, .food-chip { transition: none; }
+  .food-marker:hover .food-pill, .food-marker.is-hot .food-pill { transform: none; }
+}
