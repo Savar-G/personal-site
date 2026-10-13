@@ -1,0 +1,108 @@
+{
+  "round": 1,
+  "decision": "What should the site icon be about, and in what style?",
+  "primary_axis": "subject + rendering style",
+  "invariants": [
+    "site palette (#18181B, #2F66F0, #E3ECFD)",
+    "same sizes: 16, 32, 180",
+    "light + dark tab bars"
+  ],
+  "options": [
+    {
+      "id": "A1",
+      "family": "A \u00b7 Desk object",
+      "name": "Black coffee",
+      "bet": "The coffee-chat cup, top down. Every visitor already meets it on the desk.",
+      "risk": "At 16px it is a white disc with a dark centre; could read as a generic 'record' or 'eye'.",
+      "artifact": "A1.svg"
+    },
+    {
+      "id": "A2",
+      "family": "A \u00b7 Desk object",
+      "name": "Plop",
+      "bet": "The sugar cube mid-drop, drawn in the cartoon style of the splash. Playful and ownable.",
+      "risk": "Cartoon line style is new to the site's photographic desk; the cube alone reads as 'a box'.",
+      "artifact": "A2.svg"
+    },
+    {
+      "id": "A3",
+      "family": "A \u00b7 Desk object",
+      "name": "Polaroid",
+      "bet": "A tilted polaroid holding your own Cappadocia photo. Real media, not an illustration.",
+      "risk": "A photo turns to colour noise at 16px; it only shines at 180px (home screen).",
+      "artifact": "A3.svg"
+    },
+    {
+      "id": "B1",
+      "family": "B \u00b7 Signature",
+      "name": "Savar. highlight",
+      "bet": "Lifts the homepage's one brand moment: blue 'S.' on the highlighter, caught mid-beckon (-3\u00b0).",
+      "risk": "Still a letter in a square. Closest to the current icon in kind, if not in feel.",
+      "artifact": "B1.svg"
+    },
+    {
+      "id": "B2",
+      "family": "B \u00b7 Signature",
+      "name": "Gel-pen s.",
+      "bet": "A handwritten 's' in black gel ink on a notebook page: the pen you can pick up on the desk.",
+      "risk": "Handwriting is thin; it needs a heavy stroke to survive at 16px and may look childish.",
+      "artifact": "B2.svg"
+    },
+    {
+      "id": "B3",
+      "family": "B \u00b7 Signature",
+      "name": "Sticker",
+      "bet": "'S.' as a die-cut vinyl sticker with a peeling corner.",
+      "risk": "Peel detail is lost under 32px; at 16px it is B1 with a white edge.",
+      "artifact": "B3.svg"
+    },
+    {
+      "id": "C1",
+      "family": "C \u00b7 Pixel",
+      "name": "RAZR screen",
+      "bet": "A pixel 'S' with a blinking-cursor bar on the RAZR's navy screen. Built on a 16px grid, so it is the sharpest option in a tab.",
+      "risk": "Retro pixel is a known trope; it carries the RAZR, not Savar.",
+      "artifact": "C1.svg"
+    },
+    {
+      "id": "C2",
+      "family": "C \u00b7 Pixel",
+      "name": "Pixel ramen",
+      "bet": "The Food object as 16x16 pixel art: bowl, egg, nori, chopsticks, steam. Warm and personal.",
+      "risk": "Food icons are common on food sites; may say 'ramen blog' before it says 'Savar'.",
+      "artifact": "C2.svg"
+    },
+    {
+      "id": "C3",
+      "family": "C \u00b7 Pixel",
+      "name": "Pixel coffee",
+      "bet": "The coffee cup as pixel art with rising steam: the coffee-chat invite in a 16px tile.",
+      "risk": "Coffee-cup favicons exist (cafes, Java). Less unique than the top-down A1.",
+      "artifact": "C3.svg"
+    },
+    {
+      "id": "D1",
+      "family": "D \u00b7 Hidden mark",
+      "name": "Desk from above",
+      "bet": "The whole homepage in miniature: notebook, folder, polaroid, and coffee scattered on a white desk.",
+      "risk": "At 16px it is confetti. Meaning only lands for people who have seen the homepage.",
+      "artifact": "D1.svg"
+    },
+    {
+      "id": "D2",
+      "family": "D \u00b7 Hidden mark",
+      "name": "Coffee ring",
+      "bet": "A coffee ring left on paper: proof someone sat and worked here. Quiet, editorial, unlike any other favicon.",
+      "risk": "Could read as a stain or a broken circle; brown on cream has low contrast in dark tab bars.",
+      "artifact": "D2.svg"
+    },
+    {
+      "id": "D3",
+      "family": "D \u00b7 Hidden mark",
+      "name": "Stirred S",
+      "bet": "Black coffee from above with the spoon's stir trail forming an 'S'. A monogram you notice second.",
+      "risk": "If the swirl is too subtle it is just a coffee; too strong and it is latte art (and you take it black).",
+      "artifact": "D3.svg"
+    }
+  ]
+}
