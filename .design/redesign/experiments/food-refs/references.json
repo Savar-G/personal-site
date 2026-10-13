@@ -1,0 +1,29 @@
+{
+  "captured": "2026-10-13",
+  "purpose": "Reference lab after food-r1 was rejected (F-2): the food map must look like a real map (Google Maps, or something cleaner).",
+  "board": "mockups/food-map/refs/index.html (gitignored; images in refs/img/01-14.jpg)",
+  "method": "Headless Chrome one-shot screenshots of public pages (Google and Apple render; MapLibre/Mapbox vector maps did not render headless except the Mapbox playground), Esri raster tiles stitched without a browser, OpenFreeMap's own sample image, Beli App Store screenshot.",
+  "references": [
+    { "n": 1, "source": "https://www.google.com/maps/search/restaurants/@49.2768,-123.1120,14z", "author": "agent", "family": "A real map app", "annotation": "Standard Google look: red food pins with names, list panel with photos", "take": ["familiar realism", "pins with names"], "avoid": ["busy POI clutter"], "use_on_site": "Google Maps JS API: key + billing account, free monthly allowance" },
+    { "n": 2, "source": "https://www.google.com/maps/@30,-150,22000000m", "author": "agent", "family": "A", "annotation": "Pacific-centred world view as a first screen (Vancouver, Japan, Bali in one frame)", "take": ["world start view"], "avoid": [], "use_on_site": "as 1" },
+    { "n": 3, "source": "https://maps.apple.com/?ll=49.2768,-123.112&z=14", "author": "agent", "family": "A", "annotation": "Apple Maps web: softer, cleaner than Google. Labels had not loaded in the capture", "take": ["calm palette", "realism"], "avoid": [], "use_on_site": "MapKit JS: Apple Developer account (Unify has one), free daily limit" },
+    { "n": 4, "source": "https://apps.apple.com/us/app/beli/id1478375386", "author": "existing-product", "family": "A", "annotation": "Beli's own map: Apple Maps with green score bubbles", "take": ["score on the pin"], "avoid": ["copying Beli's brand"], "use_on_site": "look buildable via 3" },
+    { "n": 5, "source": "https://sf.eater.com/maps/best-restaurants-san-francisco-38", "author": "agent", "family": "A", "annotation": "Food guide: article + list left, Apple-style map right, red dots", "take": ["list beside map", "editorial framing"], "avoid": [], "use_on_site": "as 3" },
+    { "n": 6, "source": "https://www.airbnb.ca/s/Vancouver--BC/homes", "author": "agent", "family": "A", "annotation": "Google Maps restyled quieter with white pill markers", "take": ["pill markers carrying a value", "muted Google style"], "avoid": [], "use_on_site": "as 1 with a custom map style" },
+    { "n": 7, "source": "https://docs.mapbox.com/playground/standard-style/", "author": "agent", "family": "B cleaner real map", "annotation": "Mapbox Standard: clean, 3D buildings, light presets, faded/monochrome themes", "take": ["modern clean real map", "3D option"], "avoid": [], "use_on_site": "Mapbox token, free monthly allowance" },
+    { "n": 8, "source": "https://www.maptiler.com/maps/#style=streets-v2&mode=2d&position=13.5/49.2768/-123.1120", "author": "agent", "family": "B", "annotation": "MapTiler Streets: Google-level detail, warmer flatter colours", "take": ["detail with calmer colour"], "avoid": [], "use_on_site": "MapTiler key, free plan" },
+    { "n": 9, "source": "https://openfreemap.org/", "author": "agent", "family": "B", "annotation": "OpenFreeMap Liberty (their Berlin sample): classic road map, fully recolourable", "take": ["free, no key", "restyle freedom"], "avoid": [], "use_on_site": "free, no key, no limits per their page" },
+    { "n": 10, "source": "https://www.arcgis.com/home/item.html?id=291da5eab3a0412593b66d384379f89f", "author": "agent", "family": "B", "annotation": "Esri Light Gray Canvas: grey and white only", "take": ["pins carry all colour"], "avoid": ["may feel lifeless"], "use_on_site": "Esri terms need a check" },
+    { "n": 11, "source": "https://maps.apple.com/?ll=49.2768,-123.112&z=14&t=k", "author": "agent", "family": "C satellite", "annotation": "Apple satellite: sharp, even imagery", "take": ["photo realism"], "avoid": ["label contrast"], "use_on_site": "as 3" },
+    { "n": 12, "source": "https://www.google.com/maps/@49.2840,-123.1180,900a,35y,40t/data=!3m1!1e3", "author": "agent", "family": "C", "annotation": "Google satellite tilted with 3D buildings", "take": ["3D place view"], "avoid": ["weight", "cost"], "use_on_site": "Google Maps JS API 3D maps" },
+    { "n": 13, "source": "https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9", "author": "agent", "family": "C", "annotation": "Esri World Imagery: satellite with no labels", "take": ["pins as the only text"], "avoid": [], "use_on_site": "Esri terms need a check" },
+    { "n": 14, "source": "https://www.google.com/maps/@25,-150,22000000m/data=!3m1!1e3", "author": "agent", "family": "C", "annotation": "Google satellite world view", "take": ["satellite world start view"], "avoid": [], "use_on_site": "as 12" }
+  ],
+  "dropped": [
+    { "source": "https://guide.michelin.com/ca/en/british-columbia/ca-vancouver/restaurants", "reason": "cookie wall hid the map" },
+    { "source": "https://www.theinfatuation.com/san-francisco/guides/best-restaurants-san-francisco", "reason": "404" },
+    { "source": "https://www.theepisodiceater.com/food-maps/", "reason": "newsletter pop-up hid the maps" },
+    { "source": "https://basemaps.cartocdn.com (Positron, Voyager, Dark Matter)", "reason": "free tiles now return 'API key required'" },
+    { "source": "https://earth.google.com/web/", "reason": "3D mesh only 10% loaded headless" }
+  ]
+}

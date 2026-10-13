@@ -1,0 +1,28 @@
+{
+  "round": 1,
+  "surface": "/food (replaces the desk Food object's link to beliapp.co)",
+  "decision": "Which visual language should the drill-down food map use?",
+  "primary_axis": "visual language (material)",
+  "invariants": [
+    "same 73 places (Beli 'Been' list, ranks 1-73, OCR of Savar's 2026-10-13 screen recording)",
+    "same drill path: World -> country -> province -> cluster -> place card; Esc goes back one level",
+    "same ranked list beside the map, in step with the map",
+    "same card fields: rank, score, price, cuisines, area, Google Maps link",
+    "same clustering and label rules (shared core.js)",
+    "Equal Earth projection, Antarctica removed, world view cropped to 66N-42S",
+    "desktop 1440x900 and phone 390x844"
+  ],
+  "prototype": "mockups/food-map/ (gitignored; open index.html as a file)",
+  "options": [
+    { "id": "A", "artifact": "a-atlas.jpg", "prototype": "mockups/food-map/a-atlas.html", "bet": "Quiet flat map in the site's tokens", "benefit": "Fastest to read; matches inner pages; easy dark mode", "cost": "Least memorable; not a desk object", "risk": "Generic map widget" },
+    { "id": "B", "artifact": "b-paper.jpg", "prototype": "mockups/food-map/b-paper.html", "bet": "Folded paper travel map, push pins, receipt card", "benefit": "Continues the desk's physical objects; food-specific card", "cost": "More drawing work; typewriter text scans slower", "risk": "Costume if the texture is overdone" },
+    { "id": "C", "artifact": "c-dots.jpg", "prototype": "mockups/food-map/c-dots.html", "bet": "Dark halftone dot land, score bubbles", "benefit": "Most striking; scores on every pin; coarse coastlines look intentional", "cost": "Dark block on a white site; canvas redraw per frame", "risk": "Borders hard to read; dashboard mood" },
+    { "id": "D", "artifact": "d-relief.jpg", "prototype": "mockups/food-map/d-relief.html", "bet": "Tilted 3D board, standing flag pins, camera tilts lower per level (CSS 3D, no three.js)", "benefit": "Depth and a flying-in feel without three.js", "cost": "No free pan or wheel zoom; far edge small", "risk": "Harder to read; more motion; weakest on phones" }
+  ],
+  "evidence": "Each artifact is one row: world, British Columbia, Around Vancouver with the card open, phone with the card open. Rendered with headless Chrome from file:// (no server); runtime test tools/smoke.cjs passes for all four.",
+  "known_gaps": [
+    "29 of 73 pins approximate (area centre plus spread); exact locations needed for the build",
+    "Natural Earth coastline is coarse at city zoom; build needs OSM coastline per city area",
+    "light mode only; phone world view small"
+  ]
+}
