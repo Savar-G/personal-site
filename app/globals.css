@@ -1925,12 +1925,16 @@ body {
   }
   .pj-slot .pj-browser,
   .pj-slot-team {
-    transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+    transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out),
+      visibility 0s;
   }
+  /* The hidden view leaves the accessibility tree once it has faded out. */
   .pj-slot[data-view="team"] .pj-browser,
   .pj-slot[data-view="site"] .pj-slot-team {
+    visibility: hidden;
     opacity: 0;
     transform: scale(0.985);
+    transition-delay: 0s, 0s, 0.45s;
   }
 }
 @media (prefers-reduced-motion: reduce) {

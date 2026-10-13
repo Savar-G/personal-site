@@ -22,6 +22,21 @@ function Media({ media, wide }: { media: ProjectMedia; wide: boolean }) {
     case "showcase":
       return (
         <div className="pj-media pj-showcase">
+          {/* Phones only: the team photo starts the scrolling strip. */}
+          {media.team && (
+            <figure className="pj-shot pj-shot--team">
+              <div className="pj-team">
+                <Image
+                  src={media.team.src}
+                  alt={media.team.alt}
+                  width={media.team.width}
+                  height={media.team.height}
+                  sizes="(max-width: 900px) 85vw, 560px"
+                />
+              </div>
+              <figcaption>Team</figcaption>
+            </figure>
+          )}
           <ShowcaseSite site={media.site} team={media.team} />
           {media.screens.map((screen) => (
             <figure key={screen.caption} className="pj-shot pj-shot--phone">
@@ -47,21 +62,6 @@ function Media({ media, wide }: { media: ProjectMedia; wide: boolean }) {
               <figcaption>{screen.caption}</figcaption>
             </figure>
           ))}
-          {/* Phones only: the team photo ends the scrolling strip. */}
-          {media.team && (
-            <figure className="pj-shot pj-shot--team">
-              <div className="pj-team">
-                <Image
-                  src={media.team.src}
-                  alt={media.team.alt}
-                  width={media.team.width}
-                  height={media.team.height}
-                  sizes="85vw"
-                />
-              </div>
-              <figcaption>Team</figcaption>
-            </figure>
-          )}
         </div>
       );
     case "youtube":
