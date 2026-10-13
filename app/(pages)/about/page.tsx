@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <article className="animate-fade-in">
-      <header className="pt-2 pb-8 sm:pb-10 mb-8 sm:mb-10">
+      <header className="pt-2 pb-8 sm:pb-10">
         <h1 className="page-title">About</h1>
       </header>
 
