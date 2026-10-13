@@ -3,8 +3,13 @@
 // this module owns the canvas: the scene, pointer + wheel + key input, and the
 // pull-out animation. mountShelf() returns { select, destroy }.
 //
+// Spines with a `spine` spec are painted by spine-paint.js to match the real
+// book; the rest get a plain spine coloured from the cover.
+//
 // Units are centimetres. A book in local space: x = width (spine at -W/2),
 // y = height (head at +H/2), z = thickness (front cover at +T/2).
+
+import { paintSpine, spineFaces, spineImages } from "./spine-paint";
 
 const BOARD = 0.28; // board thickness
 const OVERHANG = 0.32; // board overhang past the page block
@@ -17,6 +22,16 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lum = ([r, g, b]) => (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
 const rgb = ([r, g, b], a = 1) => `rgba(${r | 0},${g | 0},${b | 0},${a})`;
 const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+const hexRgb = (h) => {
+  const m = /^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(String(h).trim());
+  return m ? [1, 2, 3].map((i) => parseInt(m[i], 16)) : null;
+};
+// spine material per jacket finish
+const FINISH = {
+  gloss: { roughness: 0.42, clearcoat: 0.45, clearcoatRoughness: 0.3 },
+  matte: { roughness: 0.72, clearcoat: 0.08, clearcoatRoughness: 0.7 },
+  cloth: { roughness: 0.92, clearcoat: 0, clearcoatRoughness: 1 },
+};
 
 function mulberry(seed) {
   return () => {
@@ -139,16 +154,26 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
       const Lp = Math.round(b.H * PX_PER_CM), Sp = Math.max(48, Math.round(b.T * PX_PER_CM));
       const c = document.createElement("canvas"); c.width = Sp; c.height = Lp;
       const x = c.getContext("2d");
+      if (b.spine) paintSpine(x, b.spine, { L: Lp, S: Sp, family: familyFor, images: spineArt });
       // Draw in a landscape frame: x runs head -> tail, y runs front cover -> back.
       x.translate(Sp, 0); x.rotate(Math.PI / 2);
-      const g = x.createLinearGradient(0, 0, Lp, 0);
-      b.col.stops.forEach((s, i, all) => g.addColorStop(i / (all.length - 1), rgb(mix(s, b.col.edge, 0.75))));
-      x.fillStyle = g; x.fillRect(0, 0, Lp, Sp);
+      if (!b.spine) plainSpine(x, b, Lp, Sp);
       // the jacket wraps a rounded spine: darker at both folds
       const sh = x.createLinearGradient(0, 0, 0, Sp);
       sh.addColorStop(0, "rgba(0,0,0,.30)"); sh.addColorStop(0.1, "rgba(0,0,0,0)");
       sh.addColorStop(0.45, "rgba(255,255,255,.07)"); sh.addColorStop(0.9, "rgba(0,0,0,0)"); sh.addColorStop(1, "rgba(0,0,0,.32)");
       x.fillStyle = sh; x.fillRect(0, 0, Lp, Sp);
+      x.setTransform(1, 0, 0, 1, 0, 0);
+      noise(x, Sp, Lp, b.spine?.finish === "cloth" ? 18 : 10, rnd);
+      return c;
+    }
+
+    // No spec: the cover's spine-side colours, the title in the book's
+    // spineType, the author at the head, and a tail mark.
+    function plainSpine(x, b, Lp, Sp) {
+      const g = x.createLinearGradient(0, 0, Lp, 0);
+      b.col.stops.forEach((s, i, all) => g.addColorStop(i / (all.length - 1), rgb(mix(s, b.col.edge, 0.75))));
+      x.fillStyle = g; x.fillRect(0, 0, Lp, Sp);
 
       x.fillStyle = lum(b.col.edge) > 0.56 ? "rgba(24,20,16,.88)" : "rgba(250,246,238,.94)";
       x.textBaseline = "middle";
@@ -181,9 +206,6 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
         x.fillText(b.status === "reading" ? "NOW" : yr || "•", Lp * 0.965, Sp * 0.53);
       }
       x.globalAlpha = 1;
-      x.setTransform(1, 0, 0, 1, 0, 0);
-      noise(x, Sp, Lp, 10, rnd);
-      return c;
     }
 
     function pageTex(alongU) {
@@ -235,6 +257,7 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
 
     // fonts the spines use, before painting them
     const faces = new Set(list.map((b) => `${b.type.weight} 40px ${b.type.font}`));
+    for (const b of list) for (const f of spineFaces(b.spine)) faces.add(`${f.italic ? "italic " : ""}${f.weight} 40px ${familyFor(f.family)}`);
     faces.add(`500 20px ${familyFor("Inter")}`);
     await Promise.race([
       Promise.all([...faces].map((f) => document.fonts.load(f).catch(() => null))),
@@ -242,10 +265,16 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
     ]);
     if (disposed) { renderer.dispose(); canvas.remove(); return; }
 
+    // art cropped from photos of the real spines
+    const spineArt = {};
+    await Promise.all([...new Set(list.flatMap((b) => spineImages(b.spine)))].map(async (src) => { spineArt[src] = await loadImg(src); }));
+
     await Promise.all(list.map(async (b) => {
       const img = await loadImg(b.coverSmall);
       b.img = img;
       b.col = img ? sampleCover(img) : { stops: [[110, 100, 90], [110, 100, 90]], edge: [110, 100, 90] };
+      // the jacket's back and the board edges take the real spine's colour
+      if (b.spine?.bg) b.col.edge = hexRgb(b.spine.bg) ?? b.col.edge;
       b.W = clamp(b.H * (img ? img.naturalWidth / img.naturalHeight : 0.66), 12.5, 19);
     }));
     if (disposed) { renderer.dispose(); canvas.remove(); return; }
@@ -260,9 +289,10 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
 
     for (const b of list) {
       const edge = new THREE.Color(rgb(b.col.edge));
+      const fin = FINISH[b.spine?.finish ?? "gloss"] ?? FINISH.gloss;
       b.mats = {
         cover: track(new THREE.MeshPhysicalMaterial({ map: canvasTex(coverCanvas(b.img, b.col)), roughness: 0.48, clearcoat: 0.35, clearcoatRoughness: 0.4 })),
-        spine: track(new THREE.MeshPhysicalMaterial({ map: canvasTex(spineCanvas(b)), roughness: 0.52, clearcoat: 0.3, clearcoatRoughness: 0.45 })),
+        spine: track(new THREE.MeshPhysicalMaterial({ map: canvasTex(spineCanvas(b)), ...fin })),
         back: track(new THREE.MeshPhysicalMaterial({ color: edge.clone().multiplyScalar(0.92), roughness: 0.55, clearcoat: 0.25 })),
         edge: track(new THREE.MeshStandardMaterial({ color: edge.clone().multiplyScalar(0.8), roughness: 0.7 })),
         pageU: track(new THREE.MeshStandardMaterial({ map: pageU, roughness: 0.95 })),

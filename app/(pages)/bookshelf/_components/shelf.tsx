@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { SpineSpec } from "@/lib/books";
 import { spineFontVars } from "./spine-fonts";
 import "./shelf.css";
 
@@ -20,6 +21,7 @@ export type ShelfBook = {
   pages: number;
   heightCm: number;
   spineType: string;
+  spine?: SpineSpec;
   series?: string;
   seriesOrder?: number;
 };

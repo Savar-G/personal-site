@@ -25,6 +25,7 @@ export default function BookshelfPage() {
     pages: b.pages,
     heightCm: b.heightCm,
     spineType: b.spineType,
+    spine: b.spine,
     series: b.series,
     seriesOrder: b.seriesOrder,
   }));

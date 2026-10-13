@@ -25,6 +25,10 @@ export type Book = {
   heightCm: number;
   /** Spine lettering, "<Google font> <weight>[ caps]", e.g. "Cinzel 600 caps". */
   spineType: string;
+  /** The real spine's design, painted on the 3D shelf (spine-paint.js). The
+   *  schema is in content/books/README.md; without it the shelf derives a
+   *  plain spine from the cover. */
+  spine?: SpineSpec;
   /** Series name, e.g. "Mistborn"; books in a series stand together. */
   series?: string;
   /** Position in the series (1, 2, 3...). */
@@ -46,6 +50,51 @@ export type Book = {
 };
 
 export type NoteSection = { heading: string; text: string };
+
+/** Fractions run head (0) to tail (1) along the spine and left (0) to right
+ *  (1) across the upright spine; sizes are fractions of the spine's width. */
+export type SpineSpec = {
+  bg: string;
+  finish?: "gloss" | "matte" | "cloth";
+  bands?: {
+    from: number;
+    to: number;
+    left?: number;
+    right?: number;
+    color?: string;
+    color2?: string;
+    stops?: [number, string][];
+  }[];
+  /** Art cropped from a photo of the real spine, under /public. */
+  images?: {
+    src: string;
+    at?: number;
+    x?: number;
+    w?: number;
+    from?: number;
+    to?: number;
+    left?: number;
+    right?: number;
+    fade?: number;
+    fadeTo?: string;
+    opacity?: number;
+  }[];
+  marks?: { shape: "circle" | "ring" | "rect"; at: number; x?: number; d?: number; w?: number; h?: number; line?: number; color: string }[];
+  text?: {
+    t: string;
+    font: string;
+    color: string;
+    at: number;
+    x?: number;
+    size?: number;
+    dir?: "along" | "across";
+    track?: number;
+    max?: number;
+    lh?: number;
+    align?: "center" | "left" | "right";
+    opacity?: number;
+  }[];
+};
 
 /** Shelf grouping: "Currently reading" first, then "Read". */
 const STATUS_ORDER: Record<ReadingStatus, number> = { reading: 0, read: 1 };
@@ -150,6 +199,7 @@ export function getAllBooks(): Book[] {
         pages: typeof data.pages === "number" ? data.pages : 320,
         heightCm: typeof data.heightCm === "number" ? data.heightCm : 23.5,
         spineType: String(data.spineType ?? "Inter 600"),
+        spine: data.spine && typeof data.spine === "object" ? (data.spine as SpineSpec) : undefined,
         series: data.series ? String(data.series) : undefined,
         seriesOrder: typeof data.seriesOrder === "number" ? data.seriesOrder : undefined,
         category: data.category ? String(data.category) : undefined,
