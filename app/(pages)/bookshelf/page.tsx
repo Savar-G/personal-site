@@ -1,46 +1,46 @@
 import type { Metadata } from "next";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { getAllBooks } from "@/lib/books";
-import { Bookshelf, type BookItem } from "./_components/bookshelf";
+import { Shelf, type ShelfBook } from "./_components/shelf";
 
 export const metadata: Metadata = {
   title: "Bookshelf",
   description:
-    "Books Savar Gupta has read — with notes, takeaways, and the lines worth keeping.",
+    "Books Savar Gupta has read, with a short note on each and his takeaways.",
 };
 
+const NUMBERS = ["No", "One", "Two", "Three", "Four", "Five", "Six"];
+
 export default function BookshelfPage() {
-  // Server-render each book's MDX notes once, then hand the books (plus the
-  // rendered notes) to the client shelf, which owns the animation + modal.
-  const items: BookItem[] = getAllBooks().map((book) => ({
-    slug: book.slug,
-    title: book.title,
-    author: book.author,
-    status: book.status,
-    coverImage: book.coverImage,
-    spineColor: book.spineColor,
-    inkColor: book.inkColor,
-    category: book.category,
-    formattedDate: book.formattedDate,
-    rating: book.rating,
-    summary: book.summary,
-    takeaways: book.takeaways,
-    quotes: book.quotes,
-    noteSections: book.noteSections,
-    notes: book.content ? <MDXRemote source={book.content} /> : null,
+  const books: ShelfBook[] = getAllBooks().map((b) => ({
+    slug: b.slug,
+    title: b.title,
+    author: b.author,
+    status: b.status,
+    dateRead: b.dateRead,
+    dateStarted: b.dateStarted,
+    category: b.category,
+    summary: b.summary,
+    takeaways: b.takeaways.slice(0, 5),
+    coverImage: b.coverImage,
+    // Small covers paint the shelf; the full one loads when a book is opened.
+    coverSmall: b.coverImage?.replace(/^\/books\//, "/books/sm/"),
+    pages: b.pages,
+    heightCm: b.heightCm,
+    spineType: b.spineType,
   }));
+  const reading = books.filter((b) => b.status === "reading").length;
 
   return (
     <div className="animate-fade-in">
-      <header className="pt-2 pb-9 sm:pb-11">
+      <header className="pt-2 pb-8 sm:pb-10">
         <h1 className="page-title">Bookshelf</h1>
         <p className="mt-3 max-w-prose text-stone-500">
-          Books I&apos;ve read, and the ideas that stuck. Tap a cover to open
-          one — or switch to Notes to search everything.
+          {books.length} books. {NUMBERS[reading] ?? reading} on the nightstand.
+          Pull one off the shelf to see what stuck.
         </p>
       </header>
 
-      <Bookshelf items={items} />
+      <Shelf books={books} />
     </div>
   );
 }
