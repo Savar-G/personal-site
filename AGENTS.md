@@ -16,6 +16,11 @@ This laptop has 24 GB of RAM. One Next.js dev server plus one browser pane costs
 - **Before handoff, run `npm run dev:check`.** If it reports a listener, inspect ownership before stopping it. Never kill an unknown or user-owned process.
 - **The hook also matches prose.** A shell heredoc that mentions the banned commands is blocked too. Edit documentation with the file tools, not with Bash.
 
+## Bookshelf
+
+- To add or change a book, follow "Add a book" in `content/books/README.md` step by step. Every book needs its real hardcover jacket, a `spine` block copied from a photo of that edition's real spine, its real page count and height, and takeaways from Savar's vault note. Never invent any of these. If the note does not show the book as read or being read, ask Savar before adding it.
+- The page's design contract is `.design/bookshelf/DESIGN.md`. Spines are matched offline in `scripts/spine-lab/` (run `./setup.sh` there once per checkout); it renders the site's painter to PNGs, so no server is needed.
+
 ## Homepage redesign in progress
 
 - The design contract is `.design/redesign/DESIGN.md`. The reasons for every choice, including rejected options, are in `.design/redesign/decisions.md`. Read both before you change the redesign. The root `DESIGN.md` covers only the Things page.

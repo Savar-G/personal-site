@@ -1,0 +1,10 @@
+{
+  "name": "spine-lab",
+  "private": true,
+  "type": "module",
+  "description": "Offline renderer for the bookshelf's spine specs. See README.md.",
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.11",
+    "js-yaml": "^5.4.3"
+  }
+}

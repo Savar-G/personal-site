@@ -1,13 +1,13 @@
 /* /bookshelf: the 3D wall shelf (shelf-engine.js) and its detail card.
-   The stage runs edge to edge under the page header; the canvas paints the
-   wall, so the stage background is the wall colour while the books load. */
+   The stage runs edge to edge under the page header. It has no background:
+   the wall is the page, and the canvas draws only the shelf, the books, and
+   their shadows on top of it. */
 
 .pages-shell:has(.shelf-stage) {
   overflow-x: clip;
 }
 
 .shelf-wrap {
-  --wall: #ebe4d8;
   --card-bg: #fbf8f2;
   --card-ink: #26221d;
   --card-muted: #7a7266;
@@ -16,7 +16,6 @@
 }
 @media (prefers-color-scheme: dark) {
   .shelf-wrap {
-    --wall: #2a2520;
     --card-bg: #24201b;
     --card-ink: #efe7da;
     --card-muted: #a89c8a;
@@ -29,7 +28,6 @@
   width: 100vw;
   margin-inline: calc(50% - 50vw);
   height: clamp(440px, 66vh, 700px);
-  background: var(--wall);
   overflow: hidden;
   outline: none;
   touch-action: pan-y;

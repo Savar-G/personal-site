@@ -1,0 +1,5 @@
+Edition matched: Harriman House hardcover jacket (2025). Reference: the publisher's own 3D packshot https://www.rulebreakerinvesting.com/wp-content/uploads/2025/08/Rule-Breaker-Investing-Book-3-e1757046923371.png (refs-raw/rule-breaker-investing-3d.png), spine cropped and de-skewed to refs/rule-breaker-investing.jpg. Low resolution (spine about 12 px wide in the source) and in perspective, so letter slant in the ref is perspective, not italic.
+Confidence: medium (render of the real jacket, not a photo of a printed copy).
+Layout: green jacket; title "RULE BREAKER INVESTING" white, all caps, condensed, along head to tail from 0.07 to 0.51; the black jester figure at 0.55-0.66; "David Gardner" black bold at 0.70-0.87; yellow Hh square at the tail 0.90-0.95.
+Typeface: rough-cut condensed grotesque (Knockout-like). Substitute: Bebas Neue; author Inter 800; Hh DM Serif Display.
+Not expressible: the woodcut jester (approximated by a small dark circle and rect); the rough edges of the title letters.
