@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { BrandLink } from "@/app/_components/brand-link";
 
@@ -88,23 +87,6 @@ export default function AboutPage() {
           The way something has always been done isn&apos;t a reason to keep
           doing it. Question whatever assumption you can afford to.
         </p>
-      </div>
-
-      <div className="mt-16 border-t border-stone-200 pt-10">
-        <Link
-          href="/Savar_Gupta_Resume.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="press group inline-flex items-baseline gap-1.5 text-base text-stone-500 hover:text-stone-700"
-        >
-          <span>Resume</span>
-          <span
-            aria-hidden="true"
-            className="icon-shift text-[12px] leading-none text-stone-300 group-hover:translate-x-0.5 group-hover:text-stone-500"
-          >
-            ↗
-          </span>
-        </Link>
       </div>
     </article>
   );
