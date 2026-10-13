@@ -1,14 +1,15 @@
 /* /food: the ranked list beside a real map (F-3). Pills and card follow Airbnb's map:
    white pill, bold number, black when active. */
 
-/* The page is wider than the other inner pages, like /projects. */
-.pages-shell:has(.food-page) {
-  --page-w: 84rem;
-}
-/* A shorter shell header here, so the whole map fits on the first screen. */
+/* Full width, as in the prototype (F-5): the list on the left, the map to the right
+   edge of the window. Like /travel, the shell drops its name header and the main
+   column's width and padding here. */
 .pages-shell:has(.food-page) > header {
-  padding-top: 1rem;
-  padding-bottom: 1.25rem;
+  display: none;
+}
+.pages-shell:has(.food-page) > main {
+  max-width: none;
+  padding: 0;
 }
 
 .food-page {
@@ -18,15 +19,16 @@
   --food-pill-on-ink: #ffffff;
   --food-card: #ffffff;
   display: grid;
-  grid-template-columns: minmax(20rem, 0.72fr) minmax(0, 1fr);
+  grid-template-columns: minmax(23.75rem, 40%) minmax(0, 1fr);
   grid-template-areas:
     "head map"
     "chips map"
     "count map"
     "list map";
   grid-template-rows: auto auto auto 1fr;
-  column-gap: 2rem;
+  column-gap: 1.5rem;
   align-items: start;
+  padding: 0 1.5rem 1.5rem 2rem;
 }
 @media (prefers-color-scheme: dark) {
   .food-page {
@@ -89,8 +91,8 @@
 .food-mapwrap {
   grid-area: map;
   position: sticky;
-  top: 4.5rem;
-  height: calc(100dvh - 7.75rem);
+  top: 3.5rem; /* under the sticky "back to the desk" bar */
+  height: calc(100dvh - 5rem);
   min-height: 26rem;
   border-radius: 1rem;
   overflow: hidden;
@@ -168,9 +170,12 @@
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "head" "chips" "map" "count" "list";
     grid-template-rows: none;
+    padding: 0 1rem 1.5rem;
   }
   .food-chips { border-bottom: 0; }
-  .food-mapwrap { position: relative; top: 0; height: 58vh; min-height: 20rem; border-radius: 0.875rem; }
+  /* Square, not tall: MapLibre will not zoom out past the point where the world is shorter
+     than the map, so a tall phone map could not show Türkiye to Vancouver at once. */
+  .food-mapwrap { position: relative; top: 0; height: min(58vh, calc(100vw - 2rem)); min-height: 18rem; border-radius: 0.875rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -16,7 +16,8 @@ type Scope = { country: CountryCode | null; region: string | null };
 // Crosses the date line on purpose: the Pacific sits in the middle, Türkiye on the left,
 // Hawaii and Vancouver on the right.
 const WORLD: LngLatBoundsLike = [[24, -14], [238, 56]];
-const WORLD_PAD = { top: 40, bottom: 40, left: 70, right: 90 };
+// Room for the pills at the edges; narrow (phone) maps get less, so the world still fits.
+const worldPad = (w: number) => (w < 600 ? { top: 30, bottom: 30, left: 58, right: 66 } : { top: 40, bottom: 40, left: 70, right: 90 });
 const FIT_PAD = { top: 70, bottom: 50, left: 50, right: 50 };
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] as string);
@@ -44,6 +45,8 @@ export function FoodGuide({ places }: { places: Place[] }) {
   const mapRef = useRef<MapLibreMap | null>(null);
   const libRef = useRef<typeof import("maplibre-gl") | null>(null);
   const popupRef = useRef<Popup | null>(null);
+  // True once the visitor pans or zooms; until then a window resize refits the current scope.
+  const userMovedRef = useRef(false);
   const markers = useRef(new Map<string, { marker: Marker; el: HTMLElement; rank?: number }>());
   const selectedRef = useRef<number | null>(null);
   // The marker click handlers are made inside sync, before open exists; they call it through here.
@@ -89,6 +92,7 @@ export function FoodGuide({ places }: { places: Place[] }) {
         });
         el.addEventListener("click", async (e) => {
           e.stopPropagation();
+          userMovedRef.current = true;
           const leaves = await src.getClusterLeaves(props.cluster_id!, 500, 0);
           const b = new lib.LngLatBounds();
           leaves.forEach((l) => b.extend((l.geometry as GeoJSON.Point).coordinates as [number, number]));
@@ -171,7 +175,7 @@ export function FoodGuide({ places }: { places: Place[] }) {
       const lib = libRef.current;
       if (!map || !lib) return;
       const duration = instant || still() ? 0 : 1000;
-      if (!s.country) return map.fitBounds(WORLD, { padding: WORLD_PAD, duration });
+      if (!s.country) return map.fitBounds(WORLD, { padding: worldPad(map.getContainer().clientWidth), duration });
       const b = new lib.LngLatBounds();
       places.filter((p) => inScope(p, s)).forEach((p) => b.extend([p.lng, p.lat]));
       map.fitBounds(b, { padding: FIT_PAD, maxZoom: s.region ? 13 : 9, duration });
@@ -182,6 +186,7 @@ export function FoodGuide({ places }: { places: Place[] }) {
   const choose = useCallback(
     (s: Scope) => {
       popupRef.current?.remove();
+      userMovedRef.current = false;
       scopeRef.current = s;
       setScope(s);
       fitScope(s);
@@ -217,7 +222,8 @@ export function FoodGuide({ places }: { places: Place[] }) {
         container: box.current,
         style: buildStyle(base, dark.matches),
         bounds: WORLD,
-        fitBoundsOptions: { padding: WORLD_PAD },
+        fitBoundsOptions: { padding: worldPad(box.current.clientWidth) },
+        minZoom: -1, // a phone-width map zooms out past 0 to show Türkiye to Vancouver
         attributionControl: { compact: true },
         dragRotate: false,
         pitchWithRotate: false,
@@ -243,6 +249,12 @@ export function FoodGuide({ places }: { places: Place[] }) {
         map.addLayer({ id: "places-hit", type: "circle", source: "places", paint: { "circle-radius": 1, "circle-opacity": 0 } });
       });
       map.on("move", sync);
+      map.on("movestart", (e) => {
+        if ((e as { originalEvent?: Event }).originalEvent) userMovedRef.current = true;
+      });
+      map.on("resize", () => {
+        if (!userMovedRef.current && !selectedRef.current) fitScope(scopeRef.current, true);
+      });
       map.on("sourcedata", (e) => {
         if (e.sourceId === "places" && e.isSourceLoaded) sync();
       });
@@ -253,7 +265,11 @@ export function FoodGuide({ places }: { places: Place[] }) {
         const has = (lng: number, lat: number) => b.contains([lng, lat]) || b.contains([lng + 360, lat]) || b.contains([lng - 360, lat]);
         setInView(new Set(places.filter((p) => has(p.lng, p.lat)).map((p) => p.rank)));
       });
-      map.on("idle", () => box.current?.setAttribute("data-ready", ""));
+      // Tiles from the old zoom can still be drawn during a move; resync once the map settles.
+      map.on("idle", () => {
+        sync();
+        box.current?.setAttribute("data-ready", "");
+      });
       map.once("load", () => {
         box.current?.querySelector(".maplibregl-ctrl-attrib")?.classList.remove("maplibregl-compact-show");
         if (first) {
