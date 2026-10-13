@@ -8,8 +8,6 @@ export const metadata: Metadata = {
     "Books Savar Gupta has read, with a short note on each and his takeaways.",
 };
 
-const NUMBERS = ["No", "One", "Two", "Three", "Four", "Five", "Six"];
-
 export default function BookshelfPage() {
   const books: ShelfBook[] = getAllBooks().map((b) => ({
     slug: b.slug,
@@ -28,16 +26,11 @@ export default function BookshelfPage() {
     heightCm: b.heightCm,
     spineType: b.spineType,
   }));
-  const reading = books.filter((b) => b.status === "reading").length;
 
   return (
     <div className="animate-fade-in">
       <header className="pt-2 pb-8 sm:pb-10">
-        <h1 className="page-title">Bookshelf</h1>
-        <p className="mt-3 max-w-prose text-stone-500">
-          {books.length} books. {NUMBERS[reading] ?? reading} on the nightstand.
-          Pull one off the shelf to see what stuck.
-        </p>
+        <h1 className="page-title">Books I&apos;ve read</h1>
       </header>
 
       <Shelf books={books} />
