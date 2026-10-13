@@ -43,3 +43,17 @@ next-env.d.ts
 
 # Design scratch (kept locally, not shipped)
 mockups/
+
+# spine lab working files (scripts/spine-lab/README.md)
+/scripts/spine-lab/node_modules/
+/scripts/spine-lab/.venv/
+/scripts/spine-lab/out/
+/scripts/spine-lab/refs/
+/scripts/spine-lab/refs-raw/
+/scripts/spine-lab/imgs/
+/scripts/spine-lab/specs/
+/scripts/spine-lab/fonts-src/
+/scripts/spine-lab/fonts-static/
+/scripts/spine-lab/families.d/
+/scripts/spine-lab/.spine-paint-*.mjs
+/scripts/spine-lab/package-lock.json

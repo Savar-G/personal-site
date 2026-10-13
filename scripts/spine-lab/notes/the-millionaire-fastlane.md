@@ -1,0 +1,5 @@
+Edition matched: Viperion paperback (the printing before the black 10th Anniversary jacket). The site cover is the 10th Anniversary black jacket; I found no photo of that jacket's spine, so the layout comes from the Viperion paperback and the ground is set to black as on the new cover. Reference: eBay seller photo, listing https://www.ebay.com/itm/227449357700 photo 1-7 (refs-raw/the-millionaire-fastlane-e1-7.jpg), cropped and rotated to refs/the-millionaire-fastlane.jpg.
+Confidence: medium (clear straight photo of a different printing with the same title lettering; the 10th Anniversary spine itself unseen).
+Layout copied: author "MJ DeMarco" at the head (regular mixed-case sans), then "the" white, "Millionaire" gold, "FASTLANE" white, Viperion Publishing logo at the tail.
+Typeface: heavy squared sans (Bank Gothic / Eurostile Bold style). Substitute: Saira 800 (author Saira 500). Logo: Cinzel 700 text for the V-shield wordmark.
+Not expressible: the Viperion shield logo shape; the real paperback spine has a blue cover-wrap band behind "the Millionaire" that the 10th Anniversary black jacket may not have, so it was left out.

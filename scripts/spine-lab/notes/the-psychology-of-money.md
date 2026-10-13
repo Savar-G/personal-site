@@ -1,0 +1,6 @@
+# the-psychology-of-money
+Edition matched: Harriman House hardcover with white dust jacket (same cover art as the site's paperback with the green border and "10 million" seal). Spine: white; title "The Psychology of Money" (The and of in italic, Money and of in sage green) reading head to tail, grey banknote-brain image, MORGAN HOUSEL bold caps, yellow Hh square at the tail.
+Reference: https://i.ebayimg.com/images/g/Y7cAAeSwBy9pGi-R/s-l1600.jpg (eBay listing 397344867284, picture 3 of 5), straight photo rotated 90 deg clockwise and cropped. Cross-check: paperback in https://i.ebayimg.com/images/g/x4UAAeSwa~hodLlM/s-l1600.jpg shows the same layout plus a tiny "THE INTERNATIONAL BESTSELLER" line at the head (not drawn).
+Confidence: medium (clear straight photo, but it is the hardcover, not the paperback printing shown on the site; the lighting greyed the white, so the spine uses the cover white).
+Typeface: high-contrast didone-style display serif (cover uses a Bodoni/Chronicle-like face) -> Playfair Display 400/500 + italic; author line is DIN-like bold -> Inter 700 (DIN is a little wider and heavier).
+Not expressed: the banknote-brain illustration (a plain dark grey disc), Hh monogram is Playfair 700 text on a yellow square.
