@@ -146,9 +146,9 @@ ${notebookPage(essays)}
   <div class="obj folder" tabindex="0" role="link" aria-label="Projects" data-vis=".08 .09 .92 .91" data-open="/projects" style="left:827px;top:139px;width:230px;height:197px;--r:-4deg;--cy:193px">
     <div class="fold">
       <img decoding="async" fetchpriority="low" src="/desk/folder.webp" alt="">
-      <div class="doc sheet" style="view-transition-name:paper-1;view-transition-class:flight;--l:30px;--t:28px;--dr:-5deg;--dr2:-13deg;--up:-44px;--ux:-30px;--d:0ms"><i></i><i style="--w:62%"></i><i style="--w:74%"></i><i style="--w:50%"></i></div>
-      <div class="doc sheet" style="view-transition-name:paper-2;view-transition-class:flight;--l:60px;--t:24px;--dr:1deg;--dr2:1deg;--up:-60px;--ux:0px;--d:60ms"><i style="--w:70%"></i><i></i><i style="--w:58%"></i><i style="--w:66%"></i></div>
-      <div class="doc sheet" style="view-transition-name:paper-3;view-transition-class:flight;--l:90px;--t:30px;--dr:6deg;--dr2:14deg;--up:-46px;--ux:30px;--d:120ms"><i style="--w:76%"></i><i style="--w:54%"></i><i></i><i style="--w:62%"></i></div>
+      <div class="doc print" style="view-transition-name:paper-2;view-transition-class:flight;--l:26px;--t:18px;--dr:-6deg;--dr2:-14deg;--up:-50px;--ux:-32px;--d:60ms"><img decoding="async" fetchpriority="low" src="/desk/print_embedr.webp" alt=""></div>
+      <div class="doc print" style="view-transition-name:paper-3;view-transition-class:flight;--l:96px;--t:20px;--dr:6deg;--dr2:14deg;--up:-52px;--ux:32px;--d:120ms"><img decoding="async" fetchpriority="low" src="/desk/print_podcast.webp" alt=""></div>
+      <div class="doc print" style="view-transition-name:paper-1;view-transition-class:flight;--l:61px;--t:12px;--dr:1deg;--dr2:-1deg;--up:-66px;--ux:0px;--d:0ms"><img decoding="async" fetchpriority="low" src="/desk/print_unify.webp" alt=""></div>
       <img decoding="async" fetchpriority="low" class="front" src="/desk/folder.webp" alt="">
     </div>
     <span class="cap">Projects</span></div>
