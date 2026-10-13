@@ -22,6 +22,7 @@ export type Book = {
   /** Optional short topic label, e.g. "Investing". */
   category?: string;
   dateRead?: string; // ISO YYYY-MM-DD
+  dateStarted?: string; // ISO YYYY-MM-DD; orders the "reading" shelf
   formattedDate?: string; // "April 29, 2026"
   rating?: number; // 1–5, optional — only rendered when present
   summary: string; // one-line thesis
@@ -122,6 +123,9 @@ export function getAllBooks(): Book[] {
       const { data, content } = matter(raw);
 
       const dateRead = data.dateRead ? String(data.dateRead) : undefined;
+      const dateStarted = data.dateStarted
+        ? String(data.dateStarted)
+        : undefined;
       const ratingNum =
         typeof data.rating === "number" ? data.rating : undefined;
 
@@ -135,6 +139,7 @@ export function getAllBooks(): Book[] {
         inkColor: data.inkColor ? String(data.inkColor) : undefined,
         category: data.category ? String(data.category) : undefined,
         dateRead,
+        dateStarted,
         formattedDate: dateRead ? formatDate(dateRead) : undefined,
         rating: ratingNum,
         summary: String(data.summary ?? ""),
@@ -148,10 +153,13 @@ export function getAllBooks(): Book[] {
       // Group order first (reading before read)…
       const byStatus = STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
       if (byStatus !== 0) return byStatus;
-      // …then most-recently-read first (dated books ahead of undated)…
-      if (a.dateRead && b.dateRead) return b.dateRead.localeCompare(a.dateRead);
-      if (a.dateRead) return -1;
-      if (b.dateRead) return 1;
+      // …then most-recent first (dated books ahead of undated): start date for
+      // the reading shelf, finish date for the read shelf…
+      const aDate = a.status === "reading" ? a.dateStarted : a.dateRead;
+      const bDate = b.status === "reading" ? b.dateStarted : b.dateRead;
+      if (aDate && bDate) return bDate.localeCompare(aDate);
+      if (aDate) return -1;
+      if (bDate) return 1;
       // …then alphabetical as a stable fallback.
       return a.title.localeCompare(b.title);
     });
