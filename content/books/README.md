@@ -16,6 +16,7 @@ status: "read"            # "read" | "reading"  (groups it into a shelf; default
 category: "Investing"      # optional short topic label
 spineColor: "#5a6470"      # accent color for the fallback cover + modal details
 dateRead: "2026-04-29"     # optional ISO date; used to sort newest-first
+dateStarted: "2026-10-12"  # optional ISO date; sorts the "reading" shelf newest-first
 rating: 5                  # optional 1–5; only shown when present
 summary: "One-line thesis shown at the top of the right page."
 takeaways:                 # optional bullet list — the "Key takeaways" section
