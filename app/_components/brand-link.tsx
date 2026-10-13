@@ -28,7 +28,7 @@ export function BrandLink({ href, name, logo }: BrandLinkProps) {
       ) : null}
       <span
         aria-hidden="true"
-        className="icon-shift text-[12px] leading-none text-stone-300 group-hover:translate-x-0.5 group-hover:text-stone-500 dark:text-white dark:group-hover:text-white"
+        className="icon-shift text-[12px] leading-none text-stone-900 group-hover:translate-x-0.5 dark:text-white dark:group-hover:text-white"
       >
         ↗
       </span>
