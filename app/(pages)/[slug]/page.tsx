@@ -31,7 +31,7 @@ export default async function PostPage({ params }: { params: Params }) {
 
   return (
     <article className="animate-fade-in">
-      <header className="pt-2 pb-8 sm:pb-10 mb-8 sm:mb-10">
+      <header className="pt-2 pb-8 sm:pb-10">
         <time dateTime={post.date} className="entry-date mb-3 block">
           {post.formattedDate}
           <span aria-hidden="true"> · </span>
