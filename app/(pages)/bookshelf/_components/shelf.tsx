@@ -20,6 +20,8 @@ export type ShelfBook = {
   pages: number;
   heightCm: number;
   spineType: string;
+  series?: string;
+  seriesOrder?: number;
 };
 
 type Engine = { select: (slug: string | null) => void; destroy: () => void };

@@ -18,6 +18,8 @@ spineColor: "#5a6470"      # fallback colour when there is no cover
 pages: 320                 # page count; sets the book's thickness
 heightCm: 23.5             # trim height in cm; sets the book's height
 spineType: "Inter 700 caps" # spine lettering, see below
+series: "Mistborn"         # optional; books in a series stand together
+seriesOrder: 1             # position in the series; printed at the foot of the spine
 dateRead: "2026-04-29"     # optional ISO date; read books sort newest first
 dateStarted: "2026-10-12"  # optional ISO date; reading books sort newest first
 summary: "One or two sentences on what the book is about."
@@ -38,6 +40,7 @@ takeaways:                 # 3-5 short bullets in my voice; the card hides the s
 ## Field notes
 
 - **Order** - reading books first (newest `dateStarted`), then read books by `dateRead`, newest first. Undated books follow in a fixed shuffle keyed on the slug, so a new undated book lands at a random spot.
+- **Series** - books with the same `series` stand together in `seriesOrder`, at the spot where the series' most recent book would stand. A flat stack never splits a series.
 - **Spine colour** - sampled at runtime from the left edge of the small cover, where a jacket's art wraps onto the spine.
 - **spineType** - `"<family> <weight>[ caps]"`. Pick the family closest to the cover lettering. Families: Inter, Oswald, Bebas Neue, Cinzel, Cormorant Garamond, Playfair Display, Libre Baskerville, DM Serif Display ([`spine-fonts.ts`](../../app/(pages)/bookshelf/_components/spine-fonts.ts)). To add a family, add it there with its weights.
 - **takeaways** - at most 5 are shown. Wrap each in straight double quotes; use curly quotes inside so the YAML never needs escaping.

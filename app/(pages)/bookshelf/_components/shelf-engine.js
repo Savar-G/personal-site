@@ -168,11 +168,18 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
       tw = x.measureText(b.author).width;
       if (tw > Lp * 0.22) { as *= (Lp * 0.22) / tw; x.font = `500 ${as}px ${inter}`; }
       x.textAlign = "left"; x.globalAlpha = 0.8; x.fillText(b.author, Lp * 0.045, Sp * 0.53);
-      // tail mark: the year finished, NOW while reading, or a dot
+      // tail mark: the volume number in a series, else the year finished,
+      // NOW while reading, or a dot
       x.globalAlpha = 0.65; x.textAlign = "right";
-      x.font = `500 ${Math.min(Sp * 0.17, 22)}px ${familyFor("Inter")}`;
-      const yr = (b.dateRead || "").slice(0, 4);
-      x.fillText(b.status === "reading" ? "NOW" : yr || "•", Lp * 0.965, Sp * 0.53);
+      if (b.seriesOrder) {
+        x.globalAlpha = 0.85;
+        x.font = `${weight} ${Math.min(Sp * 0.34, 40)}px ${font}`;
+        x.fillText(String(b.seriesOrder), Lp * 0.965, Sp * 0.53);
+      } else {
+        x.font = `500 ${Math.min(Sp * 0.17, 22)}px ${familyFor("Inter")}`;
+        const yr = (b.dateRead || "").slice(0, 4);
+        x.fillText(b.status === "reading" ? "NOW" : yr || "•", Lp * 0.965, Sp * 0.53);
+      }
       x.globalAlpha = 1;
       x.setTransform(1, 0, 0, 1, 0, 0);
       noise(x, Sp, Lp, 10, rnd);
@@ -291,15 +298,18 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
     const camera = new THREE.PerspectiveCamera(28, 1, 1, 2000);
 
     const n = list.length;
-    let x = 2.2, i = 0;
+    let x = 2.2, i = 0, nextFlat = 9;
     const setHome = (b, pos, quat) => {
       b.home = { pos: pos.clone(), quat: quat.clone() };
       b.pos = pos.clone(); b.quat = quat.clone(); b.hv = 0; b.tw = null;
     };
     while (i < n) {
-      // a few books lie flat in small stacks, like a real shelf
-      if (i % 15 === 9 && i + 3 <= n) {
-        const group = list.slice(i, i + 3);
+      // a few books lie flat in small stacks, like a real shelf (never a
+      // series: those stand together, spine by spine)
+      const next3 = list.slice(i, i + 3);
+      if (i >= nextFlat && next3.length === 3 && next3.every((b) => !b.series)) {
+        nextFlat = i + 15;
+        const group = next3;
         const maxH = Math.max(...group.map((b) => b.H));
         let y = 0;
         for (const b of group) {

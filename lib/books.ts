@@ -25,6 +25,10 @@ export type Book = {
   heightCm: number;
   /** Spine lettering, "<Google font> <weight>[ caps]", e.g. "Cinzel 600 caps". */
   spineType: string;
+  /** Series name, e.g. "Mistborn"; books in a series stand together. */
+  series?: string;
+  /** Position in the series (1, 2, 3...). */
+  seriesOrder?: number;
   /** Optional short topic label, e.g. "Investing". */
   category?: string;
   dateRead?: string; // ISO YYYY-MM-DD
@@ -122,7 +126,7 @@ export function getAllBooks(): Book[] {
     return [];
   }
 
-  return files
+  const sorted = files
     .map((filename): Book => {
       const slug = filename.replace(/\.mdx$/, "");
       const raw = readFileSync(join(BOOKS_DIR, filename), "utf8");
@@ -146,6 +150,8 @@ export function getAllBooks(): Book[] {
         pages: typeof data.pages === "number" ? data.pages : 320,
         heightCm: typeof data.heightCm === "number" ? data.heightCm : 23.5,
         spineType: String(data.spineType ?? "Inter 600"),
+        series: data.series ? String(data.series) : undefined,
+        seriesOrder: typeof data.seriesOrder === "number" ? data.seriesOrder : undefined,
         category: data.category ? String(data.category) : undefined,
         dateRead,
         dateStarted,
@@ -173,6 +179,25 @@ export function getAllBooks(): Book[] {
       // a new book lands at a random spot instead of by title.
       return shuffleKey(a.slug) - shuffleKey(b.slug);
     });
+
+  // A series stands together, in series order, where its first-sorted book
+  // (the one read or started most recently) would stand.
+  const out: Book[] = [];
+  const placed = new Set<string>();
+  for (const book of sorted) {
+    if (!book.series) {
+      out.push(book);
+      continue;
+    }
+    if (placed.has(book.series)) continue;
+    placed.add(book.series);
+    out.push(
+      ...sorted
+        .filter((b) => b.series === book.series)
+        .sort((a, b) => (a.seriesOrder ?? 0) - (b.seriesOrder ?? 0)),
+    );
+  }
+  return out;
 }
 
 /** FNV-1a hash of the slug: a stable pseudo-random sort key. */
