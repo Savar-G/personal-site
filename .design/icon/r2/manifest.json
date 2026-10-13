@@ -1,0 +1,31 @@
+{
+  "round": 2,
+  "decision": "Final form of A2 (Plop)",
+  "primary_axis": "small-size weight + backing tile",
+  "options": [
+    {
+      "id": "P1",
+      "name": "As picked",
+      "note": "A2 unchanged: cut-out, no tile.",
+      "artifact": "P1.svg"
+    },
+    {
+      "id": "P2",
+      "name": "Bold",
+      "note": "Thicker lines, bigger cube, no motion lines. Built to survive 16 px.",
+      "artifact": "P2.svg"
+    },
+    {
+      "id": "P3",
+      "name": "Highlight tile",
+      "note": "Bold scene on the 'Savar.' highlight blue. Blue splash drops.",
+      "artifact": "P3.svg"
+    },
+    {
+      "id": "P4",
+      "name": "Blue tile",
+      "note": "Bold scene on brand blue. The strongest colour in a row of tabs.",
+      "artifact": "P4.svg"
+    }
+  ]
+}
