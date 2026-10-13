@@ -10,6 +10,7 @@ import {
 import type { Project, ProjectLink, ProjectMedia } from "@/lib/projects";
 import { CountUp } from "./count-up";
 import { LoopVideo } from "./loop-video";
+import { ShowcaseSite } from "./showcase-site";
 
 function Media({ media, wide }: { media: ProjectMedia; wide: boolean }) {
   // A full-width card shows its media up to 46rem wide.
@@ -21,25 +22,7 @@ function Media({ media, wide }: { media: ProjectMedia; wide: boolean }) {
     case "showcase":
       return (
         <div className="pj-media pj-showcase">
-          <figure className="pj-shot pj-shot--site">
-            <div className="pj-browser">
-              <div className="pj-browser-bar" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <em>{media.site.url}</em>
-              </div>
-              <Image
-                src={media.site.src}
-                alt={`${media.site.url} landing page`}
-                preload
-                width={media.site.width}
-                height={media.site.height}
-                sizes="(max-width: 900px) 85vw, 560px"
-              />
-            </div>
-            <figcaption>Landing page</figcaption>
-          </figure>
+          <ShowcaseSite site={media.site} team={media.team} />
           {media.screens.map((screen) => (
             <figure key={screen.caption} className="pj-shot pj-shot--phone">
               <div className="pj-phone">
@@ -64,6 +47,21 @@ function Media({ media, wide }: { media: ProjectMedia; wide: boolean }) {
               <figcaption>{screen.caption}</figcaption>
             </figure>
           ))}
+          {/* Phones only: the team photo ends the scrolling strip. */}
+          {media.team && (
+            <figure className="pj-shot pj-shot--team">
+              <div className="pj-team">
+                <Image
+                  src={media.team.src}
+                  alt={media.team.alt}
+                  width={media.team.width}
+                  height={media.team.height}
+                  sizes="85vw"
+                />
+              </div>
+              <figcaption>Team</figcaption>
+            </figure>
+          )}
         </div>
       );
     case "youtube":

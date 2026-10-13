@@ -14,9 +14,11 @@ export type ProjectLink = {
 
 export type ProjectMedia =
   // A site in a browser frame with phone screens beside it (the flagship).
+  // An optional team photo shares the site's slot behind a caption toggle.
   | {
       kind: "showcase";
       site: { src: string; url: string; width: number; height: number };
+      team?: { src: string; alt: string; width: number; height: number };
       screens: {
         src: string;
         caption: string;
@@ -140,6 +142,12 @@ export const projects: Project[] = [
         url: "unifysocial.ca",
         width: 1600,
         height: 900,
+      },
+      team: {
+        src: "/projects/unify-team.webp",
+        alt: "The Unify team for 2025-26: 24 people in black suits on concrete stairs.",
+        width: 1280,
+        height: 790,
       },
       // Screen recordings from the app, cropped to the screen; they loop while visible.
       screens: [

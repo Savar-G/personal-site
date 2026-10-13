@@ -1855,6 +1855,91 @@ body {
   border-radius: 1.1rem;
 }
 
+/* Team photo. On a wide screen it sits behind the landing page in the same
+   slot and the caption toggles between them; on phones it ends the strip. */
+.pj-team {
+  overflow: hidden;
+  border-radius: 0.625rem;
+  background: var(--color-stone-200);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--shadow) 8%, transparent),
+    0 12px 32px -12px color-mix(in oklab, var(--shadow) 22%, transparent);
+}
+.pj-shot--team img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.pj-slot-stage {
+  position: relative;
+}
+.pj-slot-team {
+  display: none;
+  position: absolute;
+  inset: 0;
+}
+.pj-slot-team img {
+  object-fit: cover;
+}
+.pj-slot figcaption {
+  overflow: visible;
+}
+.pj-slot-tabs {
+  display: none;
+  gap: 0.875rem;
+}
+.pj-slot-tabs button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--color-stone-400);
+  text-decoration: underline dotted;
+  text-decoration-color: color-mix(in oklab, currentColor 55%, transparent);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color 0.16s var(--ease-out);
+}
+.pj-slot-tabs button:hover {
+  color: var(--color-stone-700);
+}
+.pj-slot-tabs button[aria-pressed="true"] {
+  color: var(--color-stone-800);
+  text-decoration: none;
+  cursor: default;
+}
+.pj-slot-tabs button:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--color-stone-900) 55%, transparent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+@media (min-width: 900px) {
+  .pj-shot--team,
+  .pj-slot-static {
+    display: none;
+  }
+  .pj-slot-tabs {
+    display: inline-flex;
+  }
+  .pj-slot-team {
+    display: block;
+  }
+  .pj-slot .pj-browser,
+  .pj-slot-team {
+    transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+  }
+  .pj-slot[data-view="team"] .pj-browser,
+  .pj-slot[data-view="site"] .pj-slot-team {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pj-slot .pj-browser,
+  .pj-slot-team {
+    transition: none;
+  }
+}
+
 .pj-body {
   display: grid;
   gap: 1.25rem;
@@ -2114,7 +2199,8 @@ body {
     flex: none;
     scroll-snap-align: start;
   }
-  .pj-shot--site {
+  .pj-shot--site,
+  .pj-shot--team {
     width: 82%;
   }
   .pj-shot--phone {
