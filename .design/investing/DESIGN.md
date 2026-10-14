@@ -20,7 +20,7 @@
 ## Desk (I-9, I-10, I-11)
 
 - **Object:** a clear glass piggy bank full of loonies (`public/desk/piggy.webp`, cut-out; the glass keeps a white inside, so the page does not show through it in dark mode). Caption "Investing". Opens `/investing` with the normal lift and fade (no flight).
-- **Place (desk, L1):** 170x183 at (1170, 515), -4deg, on the right under Socials. Around it: Resume and Coffee chat at 85% (`--ms:.85`), Resume at (72, 388) and Coffee at (181, 610) in layout px; the sugar cubes at (430, 718), (461, 741), (434, 763) and the hint at (424, 813); Food at (560, 568); Bookshelf at (900, 630).
+- **Place (desk, L1):** 170x183 at (1170, 640), -4deg, on the right under Socials, in line with the bottom row (I-17). Around it: Resume and Coffee chat at 85% (`--ms:.85`), Resume at (72, 388) and Coffee at (181, 610) in layout px; the sugar cubes at (430, 718), (461, 741), (434, 763) and the hint at (424, 813); Food at (560, 568); Bookshelf at (900, 630).
 - **Place (pocket desk):** third row with Coffee chat and Food, in `desk/pocket.js`: Coffee (80, 652.5) at .56, Food (232, 647.5) at .5, Investing (328, 652) at .54; cubes at (160, 638), (170, 657), (158, 675).
 - **Hover:** the default lift, and a loonie's edge peeks out of the slot (`public/desk/loonie.webp`). Slot centre in the object: (92, 15).
 - **Click (pop and flip):** the loonie rises out of the slot about 100 px with three turns, hangs, drops back in; the piggy dips on the catch (160 ms); then the page opens. About 0.9 s before the fade. Reduced motion: no flip, the page opens at once.
