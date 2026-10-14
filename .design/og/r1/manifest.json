@@ -1,0 +1,12 @@
+{
+  "round": 1,
+  "decision": "What concept should the savargupta.com share card (Open Graph image) use?",
+  "primary_axis": "concept",
+  "invariants": ["1200x630", "real desk assets only, no AI image of Savar", "greeting copy from DESIGN.md", "brand blue #2F66F0", "savargupta.com visible"],
+  "options": [
+    { "id": "A", "artifact": "cards.html#A", "bet": "Show a crop of the real desk", "benefit": "True preview of the homepage", "cost": "Busy; objects are small at chat size", "risk": "Reads as a cluttered white card in white feeds" },
+    { "id": "B", "artifact": "cards.html#B", "bet": "One brand colour and the sugar-cube icon, huge", "benefit": "Best legibility at thumbnail size; ties to the favicon", "cost": "Says less about what is on the site", "risk": "Flat graphic can feel like a startup ad" },
+    { "id": "C", "artifact": "cards.html#C", "bet": "The RAZR rings: a hook that asks to be tapped", "benefit": "Stands out on dark and light feeds; ties to the ringing phone on the desk", "cost": "Name is in a sentence, not a headline", "risk": "Some will read it as a prank or spam call" },
+    { "id": "D", "artifact": "cards.html#D", "bet": "Scrapbook of real photos around a name label", "benefit": "Most human; shows range", "cost": "Busiest card", "risk": "Detail turns to noise at 300 px" }
+  ]
+}
