@@ -4,7 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "./food.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { GeoJSONSource, LngLatBoundsLike, Map as MapLibreMap, Marker, Popup } from "maplibre-gl";
-import { COUNTRY_NAMES, googleMapsUrl, priceLabel, type CountryCode, type Place } from "@/lib/food";
+import { COUNTRY_NAMES, googleMapsUrl, photoSrc, photoThumb, priceLabel, type CountryCode, type Place } from "@/lib/food";
 import { BASE_STYLE_URL, buildStyle } from "./map-style";
 
 // /food (decisions F-1, F-3): a real street map in Airbnb's quiet colours with a white
@@ -23,6 +23,18 @@ const FIT_PAD = { top: 70, bottom: 50, left: 50, right: 50 };
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] as string);
 const score = (p: Place) => p.score.toFixed(1);
 
+// Up to 4 photos; with more, the 4th says "+N" and opens the viewer there.
+function stripHTML(p: Place) {
+  const ph = p.photos ?? [];
+  if (!ph.length) return "";
+  const cells = ph.slice(0, 4).map((x, i) => {
+    const more = i === 3 && ph.length > 4 ? ph.length - 3 : 0;
+    const label = more ? `${more} more photos` : `Photo ${i + 1} of ${ph.length}`;
+    return `<button type="button" class="food-strip-cell" data-photo="${i}" aria-label="${label}"><img src="${photoThumb(x)}" alt="" loading="lazy" decoding="async">${more ? `<b>+${more}</b>` : ""}</button>`;
+  });
+  return `<div class="food-strip">${cells.join("")}</div>`;
+}
+
 function cardHTML(p: Place, total: number) {
   const price = priceLabel(p);
   return `<div class="food-card">
@@ -30,6 +42,7 @@ function cardHTML(p: Place, total: number) {
     <h2>${esc(p.name)}</h2>
     <div class="food-card-line"><span class="food-pill food-pill-on">${score(p)}</span>${price ? `<span>${price}</span>` : ""}</div>
     <p class="food-card-area">${esc(p.area)}</p>
+    ${stripHTML(p)}
     <a href="${googleMapsUrl(p)}" target="_blank" rel="noopener">Open in Google Maps</a>
     <button class="food-card-x" type="button" aria-label="Close">×</button>
   </div>`;
@@ -40,6 +53,12 @@ export function FoodGuide({ places }: { places: Place[] }) {
   const [scope, setScope] = useState<Scope>({ country: null, region: null });
   const [inView, setInView] = useState<Set<number> | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
+  // The photo viewer: which place and which photo.
+  const [viewer, setViewer] = useState<{ rank: number; i: number } | null>(null);
+  const viewerRef = useRef(viewer);
+  useEffect(() => {
+    viewerRef.current = viewer;
+  }, [viewer]);
 
   const box = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -150,6 +169,9 @@ export function FoodGuide({ places }: { places: Place[] }) {
         .setHTML(cardHTML(p, places.length))
         .addTo(map);
       popup.getElement().querySelector(".food-card-x")?.addEventListener("click", () => popup.remove());
+      popup.getElement().querySelectorAll<HTMLElement>("[data-photo]").forEach((el) =>
+        el.addEventListener("click", () => setViewer({ rank, i: Number(el.dataset.photo) })),
+      );
       popup.on("close", () => {
         if (selectedRef.current !== rank) return;
         selectedRef.current = null;
@@ -294,7 +316,7 @@ export function FoodGuide({ places }: { places: Place[] }) {
   // Esc closes the card, then steps back: province, country, everywhere.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
+      if (e.key !== "Escape" || viewerRef.current) return;
       if (popupRef.current?.isOpen()) return popupRef.current.remove();
       const s = scopeRef.current;
       if (s.region) choose({ country: s.country, region: null });
@@ -381,6 +403,12 @@ export function FoodGuide({ places }: { places: Place[] }) {
               onClick={() => open(p.rank, true)}
             >
               <span className="food-row-rank">{p.rank}</span>
+              {p.photos?.length ? (
+                // eslint-disable-next-line @next/next/no-img-element -- pre-sized webp thumbnail
+                <img className="food-row-photo" src={photoThumb(p.photos[0])} alt="" loading="lazy" decoding="async" />
+              ) : (
+                <span className="food-row-photo is-empty" />
+              )}
               <span className="food-row-main">
                 <span className="food-row-name">{p.name}</span>
                 <span className="food-row-sub">{[p.cuisines.slice(0, 2).join(", "), priceLabel(p)].filter(Boolean).join(" · ")}</span>
@@ -391,6 +419,56 @@ export function FoodGuide({ places }: { places: Place[] }) {
           </li>
         ))}
       </ol>
+
+      {viewer && byRank.get(viewer.rank)?.photos && (
+        <PhotoViewer place={byRank.get(viewer.rank)!} index={viewer.i} onIndex={(i) => setViewer({ rank: viewer.rank, i })} onClose={() => setViewer(null)} />
+      )}
+    </div>
+  );
+}
+
+// Full-size photos of one place. Arrows step, Esc or a click outside the photo closes.
+function PhotoViewer({ place, index, onIndex, onClose }: { place: Place; index: number; onIndex: (i: number) => void; onClose: () => void }) {
+  const photos = place.photos!;
+  const n = photos.length;
+  const ph = photos[index];
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const back = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus();
+    return () => back?.focus();
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowRight" && n > 1) onIndex((index + 1) % n);
+      else if (e.key === "ArrowLeft" && n > 1) onIndex((index + n - 1) % n);
+      else return;
+      e.preventDefault();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [index, n, onIndex, onClose]);
+
+  return (
+    <div className="food-viewer" role="dialog" aria-modal="true" aria-label={`Photos of ${place.name}`} onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <figure>
+        {/* eslint-disable-next-line @next/next/no-img-element -- pre-sized webp */}
+        <img key={ph.id} src={photoSrc(ph)} width={ph.w} height={ph.h} alt={`Photo ${index + 1} of ${n} at ${place.name}`} />
+        <figcaption>
+          <span>{place.name}</span>
+          {n > 1 && <span className="food-viewer-n">{`${index + 1} / ${n}`}</span>}
+        </figcaption>
+      </figure>
+      {n > 1 && (
+        <>
+          <button type="button" className="food-viewer-step is-prev" aria-label="Previous photo" onClick={() => onIndex((index + n - 1) % n)}>‹</button>
+          <button type="button" className="food-viewer-step is-next" aria-label="Next photo" onClick={() => onIndex((index + 1) % n)}>›</button>
+        </>
+      )}
+      <button ref={closeRef} type="button" className="food-viewer-x" aria-label="Close" onClick={onClose}>×</button>
     </div>
   );
 }
