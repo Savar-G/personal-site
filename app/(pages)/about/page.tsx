@@ -36,7 +36,7 @@ export default function AboutPage() {
           Canadians with the same credentials. So we built an iOS, Android,
           and web app to help them settle in faster, better informed, and
           with a community around them. With a team of 25+, we&apos;ve grown
-          to 500+ users, 18 partnerships, $4,000+ in grants, and a few
+          to 650+ users, 18 partnerships, $4,000+ in grants, and a few
           million social impressions.
         </p>
 

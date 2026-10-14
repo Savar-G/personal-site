@@ -112,7 +112,7 @@ export const projects: Project[] = [
       },
     ],
     stats: [
-      { value: "450+", label: "users" },
+      { value: "650+", label: "users" },
       { value: "16", label: "partnerships" },
       { value: "35+", label: "events" },
     ],
