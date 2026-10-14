@@ -108,9 +108,7 @@ function Account({ account: a, period }: { account: AccountView; period: Period 
               <>
                 <span className="inv-tick">{shown.ticker}</span>
                 <b className={tone(shown.returns[period])}>{pct(shown.returns[period])}</b>
-                <small>
-                  {note(shown, period) ?? SPAN[period]} · {(shown.weight * 100).toFixed(1)}% of {a.name}
-                </small>
+                <small>{note(shown, period) ?? SPAN[period]}</small>
               </>
             ) : (
               <>
@@ -120,6 +118,16 @@ function Account({ account: a, period }: { account: AccountView; period: Period 
             )}
           </div>
         </div>
+        {/* The hovered holding's name and weight sit under the donut; the hole is too small for them. */}
+        <p className="inv-under" aria-live="polite">
+          {shown && (
+            <>
+              <b>{shown.name}</b>
+              <br />
+              {(shown.weight * 100).toFixed(1)}% of {a.name}
+            </>
+          )}
+        </p>
       </div>
 
       <div className="inv-card inv-tablecard">

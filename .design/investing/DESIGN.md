@@ -31,7 +31,7 @@
 1. Header name, "Investing", and Savar's story (approved 2026-10-14) in the 44rem reading column.
 2. "What I hold": one period toggle (1M, YTD, 1Y, All time; default All time) for both accounts.
 3. For each account, a donut card beside a table card (stacked under 820 px). The donut shows weights; its centre shows the account's return for the period. The table lists Holding (colour bar, ticker, name), Return (arrow and sign), and Allocation. Accounts with three holdings or fewer get a 180 px donut and a one-line description for each fund.
-4. Hover or focus a slice or a row: both highlight, other slices fade to 28%, and the centre shows that holding (ticker, return, "since bought"/"since listing" or the period, and its weight).
+4. Hover or focus a slice or a row: both highlight, other slices fade to 28%, and the centre shows that holding (ticker, return, and "since bought"/"since listing" or the period). Its name and weight ("13.2% of TFSA") show under the donut, in two lines kept free so the card does not jump (I-15).
 5. The note: holdings date, prices date, no dollar amounts, and how each return is calculated.
 - The page uses `page-wide` (70rem), like /projects. It revalidates once a day.
 
