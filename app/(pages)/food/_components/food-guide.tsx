@@ -305,6 +305,10 @@ export function FoodGuide({ places }: { places: Place[] }) {
 
     return () => {
       cancelled = true;
+      // map.remove() closes an open card; its close handler must not sync the removed map
+      // or write the food hash into the next page's URL.
+      selectedRef.current = null;
+      popupRef.current = null;
       dark.removeEventListener("change", onScheme);
       live.forEach((m) => m.marker.remove());
       live.clear();
