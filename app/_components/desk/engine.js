@@ -93,8 +93,31 @@ export function mountDesk(root, router) {
     stage.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 240, delay: 60, easing: 'ease-in', fill: 'forwards' })
       .finished.then(() => navigate(href));
   }
+  // Investing (I-11): a loonie flips up out of the slot and drops back in, the piggy dips
+  // on the catch, then the page opens. The coin starts behind the glass and comes in front
+  // once it clears the slot.
+  function piggyOpen(el) {
+    if (still) return leave(el, el.dataset.open);
+    if (el.classList.contains('busy')) return;
+    const coin = el.querySelector('.loonie.fly');
+    el.classList.add('busy');
+    coin.animate([{ opacity: 0 }, { opacity: 1, offset: .08 }, { opacity: 1, offset: .92 }, { opacity: 0 }], { duration: 760, fill: 'forwards' });
+    const flip = coin.animate([
+      { transform: 'translateY(18px) rotateX(70deg) rotateY(0deg)' },
+      { transform: 'translateY(-96px) rotateX(10deg) rotateY(540deg)', offset: .45, easing: 'cubic-bezier(.3,0,.6,1)' },
+      { transform: 'translateY(-104px) rotateX(0deg) rotateY(720deg)', offset: .55, easing: 'cubic-bezier(.4,0,1,1)' },
+      { transform: 'translateY(16px) rotateX(70deg) rotateY(1080deg)' }], { duration: 760, easing: 'ease-out', fill: 'forwards' });
+    later(() => coin.classList.add('front'), 90);
+    later(() => coin.classList.remove('front'), 620);
+    flip.finished.then(() => el.querySelector('.pig').animate(
+      [{ transform: 'none' }, { transform: 'translateY(3px) scale(1.04, .95)' }, { transform: 'none' }],
+      { duration: 160, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' }).finished)
+      .then(() => leave(el, el.dataset.open))
+      .catch(() => {});                       // cancelled: the desk unmounted mid-flip
+  }
   function go(el) {
     if (el.id === 'resume') warpIn();
+    else if (el.classList.contains('piggy')) piggyOpen(el);
     else if (el.dataset.open) leave(el, el.dataset.open);
     else if (el.dataset.href) window.open(el.dataset.href, el.dataset.href.startsWith('mailto:') ? '_self' : '_blank');
   }

@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "route": "full",
+  "job_kind": "new",
+  "surface": "marketing",
+  "constraint_mode": "existing-system",
+  "phase": "review",
+  "gates": {"contract": "approved", "direction": "approved", "ship": "pending"},
+  "artifacts": {
+    "design_contract": ".design/investing/DESIGN.md",
+    "references": ".design/investing/references.json",
+    "decisions": ".design/investing/decisions.md",
+    "selected_experiment": ".design/investing/r3/page.template.html",
+    "latest_evidence": [],
+    "latest_review": null
+  },
+  "open_decisions": [],
+  "blockers": [
+    {"id": "B3", "reason": "Not yet checked on a Vercel preview", "needs": "Savar approves pushing the branch, then checks the preview"}
+  ]
+}

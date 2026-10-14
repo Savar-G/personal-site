@@ -1,0 +1,5 @@
+[
+  {"source": ".design/redesign/DESIGN.md", "author": "existing-product", "annotation": "Desk object, caption, hover, pocket desk, and inner-page rules", "take": ["photographic cut-outs", "lift-and-fade or flight into the page", "back to the desk link"], "avoid": ["text on objects"], "applies_to": ["layout", "motion", "interaction", "type", "color"], "priority": "primary"},
+  {"source": "public/desk/coffee.webp, public/desk/ramen.webp", "author": "existing-product", "annotation": "Top-down studio light, soft contact shadow, white background", "take": ["camera angle", "light", "shadow"], "avoid": [], "applies_to": ["color"], "priority": "primary"},
+  {"source": "~/Downloads/Snowball Holdings (1).csv (2026-06-07, not committed)", "author": "user", "annotation": "Real TFSA data shape: 12 holdings, Total profit %, no period returns", "take": ["columns"], "avoid": ["committing shares or cost"], "applies_to": ["content"], "priority": "primary"}
+]

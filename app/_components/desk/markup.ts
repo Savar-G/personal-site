@@ -173,26 +173,32 @@ ${notebookPage(essays)}
     </div>
     <span class="cap">Socials</span></div>
 
-  <div class="obj paper" id="resume" tabindex="0" role="link" aria-label="Resume" data-vis="0 0 1 1" style="left:70px;top:560px;width:176px;height:228px;--r:-6deg;--cy:238px">
+  <div class="obj paper" id="resume" tabindex="0" role="link" aria-label="Resume" data-vis="0 0 1 1" style="left:72px;top:388px;width:176px;height:228px;--r:-6deg;--cy:238px;--ms:.85">
     <div class="sheet"><img decoding="async" fetchpriority="low" src="/desk/resume_desk.webp" alt=""></div><span class="cap">Resume</span></div>
 
-  <div class="obj books" tabindex="0" role="link" aria-label="Bookshelf" data-vis=".04 .1 .96 .92" data-open="/bookshelf" style="left:1180px;top:668px;width:190px;height:204px;--cy:206px">
+  <div class="obj piggy" tabindex="0" role="link" aria-label="Investing" data-vis=".03 .01 .97 .9" data-open="/investing" style="left:1170px;top:515px;width:170px;height:183px;--r:-4deg;--cy:190px">
+    <span class="loonie peek"><img decoding="async" fetchpriority="low" src="/desk/loonie.webp" alt=""></span>
+    <img class="pig" decoding="async" fetchpriority="low" src="/desk/piggy.webp" alt="">
+    <span class="loonie fly"><img decoding="async" fetchpriority="low" src="/desk/loonie.webp" alt=""></span>
+    <span class="cap">Investing</span></div>
+
+  <div class="obj books" tabindex="0" role="link" aria-label="Bookshelf" data-vis=".04 .1 .96 .92" data-open="/bookshelf" style="left:900px;top:630px;width:190px;height:204px;--cy:206px">
     <span class="bk" style="view-transition-name:book-the-everything-store;view-transition-class:flight;left:0;top:18px;--br:-12deg;--hx:-34px;--hy:-4px;--hr:-21deg;box-shadow:0 6px 14px rgba(0,0,0,.18)"><img decoding="async" fetchpriority="low" src="/desk/the-everything-store.webp" alt=""><i class="gl"></i></span>
     <span class="bk" style="view-transition-name:book-build;view-transition-class:flight;left:78px;top:24px;--br:9deg;--hx:30px;--hy:-2px;--hr:18deg;box-shadow:0 6px 14px rgba(0,0,0,.18)"><img decoding="async" fetchpriority="low" src="/desk/build.webp" alt=""><i class="gl"></i></span>
     <span class="bk" style="view-transition-name:book-chip-war;view-transition-class:flight;left:40px;top:40px;--br:-2deg;--hx:-2px;--hy:-18px;--hr:-1deg;box-shadow:0 8px 18px rgba(0,0,0,.22)"><img decoding="async" fetchpriority="low" src="/desk/chip-war.webp" alt=""><i class="gl"></i></span>
     <span class="cap">Bookshelf</span></div>
 
-  <div class="obj" id="coffee" tabindex="0" role="link" aria-label="Book a coffee chat" data-vis=".07 .07 .85 .83" data-href="https://cal.com/savar-gupta/coffee-chat" style="left:405px;top:585px;width:260px;height:267px;--r:-10deg;--cy:246px">
+  <div class="obj" id="coffee" tabindex="0" role="link" aria-label="Book a coffee chat" data-vis=".07 .07 .85 .83" data-href="https://cal.com/savar-gupta/coffee-chat" style="left:181px;top:610px;width:260px;height:267px;--r:-10deg;--cy:246px;--ms:.85">
     <img decoding="async" fetchpriority="low" src="/desk/coffee.webp" alt=""><div class="liquid" id="liquid"></div>
     <div class="steam cup"><span style="position:absolute;left:0;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" stroke-linecap="round"/></svg></span><span style="position:absolute;left:24px;bottom:6px"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" stroke-linecap="round"/></svg></span><span style="position:absolute;left:46px;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" stroke-linecap="round"/></svg></span></div>
     <span class="cap" id="coffeecap">Coffee chat</span><span class="coldnote">gone cold · grab a fresh one with me →</span></div>
 
-  <div class="cube" style="--ld:780ms;left:676px;top:688px;--cr:-8deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
-  <div class="cube" style="--ld:870ms;left:712px;top:716px;--cr:14deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
-  <div class="cube" style="--ld:960ms;left:680px;top:742px;--cr:3deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
+  <div class="cube" style="--ld:780ms;left:430px;top:718px;--cr:-8deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
+  <div class="cube" style="--ld:870ms;left:461px;top:741px;--cr:14deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
+  <div class="cube" style="--ld:960ms;left:434px;top:763px;--cr:3deg"><img decoding="async" fetchpriority="low" src="/desk/sugar.webp" alt=""></div>
   <div class="cubehint" id="cubehint">psst, drop one in</div>
 
-  <div class="obj food" tabindex="0" role="link" aria-label="Food" data-vis=".25 .24 .77 .75" data-open="/food" style="left:790px;top:560px;width:300px;height:309px;--r:6deg;--cy:266px">
+  <div class="obj food" tabindex="0" role="link" aria-label="Food" data-vis=".25 .24 .77 .75" data-open="/food" style="left:560px;top:568px;width:300px;height:309px;--r:6deg;--cy:266px">
     <img decoding="async" fetchpriority="low" src="/desk/ramen.webp" alt="">
     <div class="steam"><span style="position:absolute;left:0;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span><span style="position:absolute;left:30px;bottom:6px"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span><span style="position:absolute;left:58px;bottom:0"><svg viewBox="0 0 26 80"><path d="M13 78 C 2 62, 24 52, 13 38 S 3 14, 14 2" class="wisp" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span></div>
     <span class="cap">Food</span></div>
@@ -273,6 +279,7 @@ ${notebookPage(essays)}
       <li><span><a href="/things">Things</a></span></li>
       <li><span><a href="/travel">Travel</a> · Japan, Bali, Maui, Turkey, California, Banff, Joffre Lakes</span></li>
       <li><span><a href="/food">Food</a> · every place I've ranked on Beli, on a map</span></li>
+      <li><span><a href="/investing">Investing</a> · how I started, and what I hold</span></li>
       <li><span><a href="mailto:savar.gupta1922@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/savar-gupta" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://x.com/savar_gupta" target="_blank" rel="noopener">X</a> · <a href="https://github.com/Savar-G" target="_blank" rel="noopener">GitHub</a> · <a href="https://beliapp.co/app/savargupta" target="_blank" rel="noopener">Beli</a> · <a href="https://cal.com/savar-gupta/coffee-chat" target="_blank" rel="noopener">Book a call</a></span></li>
     </ul>
   </div>

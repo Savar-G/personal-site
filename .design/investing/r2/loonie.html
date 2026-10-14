@@ -1,0 +1,142 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>D3 loonie options</title>
+<style>
+  :root { --ink:#18181B; --body:#52525B; --cap:#52525B; }
+  body { margin:0; font:13px/1.45 Inter, var(--font-sans, system-ui), sans-serif; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .cell { position:relative; background:#fff; color:var(--ink); border-radius:var(--radius, 12px); height:360px; overflow:hidden; }
+  .cell h3 { position:absolute; left:14px; top:10px; margin:0; font-size:13px; }
+  .cell .sub { position:absolute; left:14px; top:28px; right:14px; color:var(--body); font-size:12px; }
+  .pig { position:absolute; left:50%; top:170px; width:150px; height:161px; margin-left:-75px; cursor:pointer;
+         transform:rotate(-4deg); transition:transform 180ms cubic-bezier(.2,.8,.2,1); z-index:3; outline:none; }
+  .pig img.body { display:block; width:100%; height:100%; position:relative; z-index:2; pointer-events:none; transform-origin:40% 90%; }
+  .pig .cap { position:absolute; left:50%; top:167px; transform:translateX(-50%) rotate(4deg); font-size:12px; font-weight:500; color:var(--cap); white-space:nowrap; }
+  .pig:hover, .pig:focus-visible { transform:translateY(-6px) rotate(-2deg) scale(1.03); }
+  .pig:hover .cap, .pig:focus-visible .cap { color:var(--ink); }
+  /* Hover affordance (all options): a loonie's edge peeks out of the slot. */
+  .peek { position:absolute; left:66px; top:-2px; width:30px; height:30px; z-index:1; transform:translateY(16px) rotate(-17deg) rotateX(62deg);
+          transition:transform 220ms cubic-bezier(.2,.8,.2,1); pointer-events:none; }
+  .peek img, .coin img { width:100%; height:100%; display:block; }
+  .pig:hover .peek, .pig:focus-visible .peek { transform:translateY(-8px) rotate(-17deg) rotateX(62deg); }
+  .pig.busy .peek { opacity:0; }
+  .coin { position:absolute; width:34px; height:34px; left:0; top:0; z-index:1; pointer-events:none; opacity:0; transform-style:preserve-3d; will-change:transform; }
+  .coin.front { z-index:5; }
+  .page { position:absolute; inset:0; background:#fff; z-index:10; opacity:0; pointer-events:none; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:var(--body); }
+  .page .donut { width:120px; height:120px; border-radius:50%; background:conic-gradient(#2F66F0 0 30%, #7FA2F5 0 52%, #B9CCF9 0 70%, #DCE5FC 0 100%); display:grid; place-items:center; }
+  .page .hole { width:66px; height:66px; border-radius:50%; background:#fff; display:grid; place-items:center; font-weight:600; color:var(--ink); }
+  .again { position:absolute; left:0; right:0; bottom:10px; text-align:center; color:#A1A1AA; font-size:11px; }
+  .shadow { position:absolute; width:26px; height:6px; border-radius:50%; background:rgba(0,0,0,.18); filter:blur(2px); opacity:0; z-index:0; }
+  @media (max-width:600px) { .grid { grid-template-columns:1fr; } }
+</style></head>
+<body>
+<div class="grid">
+  <div class="cell" data-opt="A"><h3>A · Pop and flip</h3><div class="sub">The loonie flips up out of the slot and drops back in. "Ka-ching." Then the page opens. 0.9 s.</div></div>
+  <div class="cell" data-opt="B"><h3>B · The loonie leads</h3><div class="sub">The loonie spins out and flies to you, then becomes the centre of the TFSA chart. 1.1 s.</div></div>
+  <div class="cell" data-opt="C"><h3>C · Shake it out</h3><div class="sub">The piggy tips and shakes, a loonie drops onto the desk, rolls, and settles. 1.5 s.</div></div>
+</div>
+<script>
+const PIG = "/Users/savargupta/Github/personal-site/.claude/worktrees/investing/public/desk/piggy.webp";
+const COIN = "/Users/savargupta/Github/personal-site/.claude/worktrees/investing/public/desk/loonie.webp";
+const EASE = "cubic-bezier(.2,.8,.2,1)";
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+for (const cell of document.querySelectorAll(".cell")) {
+  cell.insertAdjacentHTML("beforeend", `
+    <div class="pig" tabindex="0" role="link" aria-label="Investing">
+      <div class="peek"><img src="${COIN}" alt=""></div>
+      <img class="body" src="${PIG}" alt=""><span class="cap">Investing</span></div>
+    <div class="coin"><img src="${COIN}" alt=""></div>
+    <div class="shadow"></div>
+    <div class="page"><div class="donut"><div class="hole">+32.0%</div></div><div>/investing opens</div></div>
+    <div class="again">click the piggy bank</div>`);
+  const pig = cell.querySelector(".pig");
+  const go = () => play(cell);
+  pig.addEventListener("click", go);
+  pig.addEventListener("keydown", (e) => e.key === "Enter" && go());
+}
+
+// Slot centre, in cell coordinates.
+function slot(cell) {
+  const p = cell.querySelector(".pig").getBoundingClientRect(), c = cell.getBoundingClientRect();
+  return { x: p.left - c.left + 81, y: p.top - c.top + 13 };
+}
+
+async function play(cell) {
+  const pig = cell.querySelector(".pig"), coin = cell.querySelector(".coin"), page = cell.querySelector(".page"), shadow = cell.querySelector(".shadow");
+  if (pig.classList.contains("busy")) return;
+  pig.classList.add("busy");
+  pig.blur();
+  const s = slot(cell), half = 17;
+  coin.style.left = s.x - half + "px";
+  coin.style.top = s.y - half + "px";
+  const opt = cell.dataset.opt;
+  if (reduce) {
+    await page.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, fill: "forwards" }).finished;
+  } else if (opt === "A") await playA(pig, coin);
+  else if (opt === "B") await playB(cell, pig, coin);
+  else await playC(cell, pig, coin, shadow);
+  if (!reduce && opt !== "B") await page.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, fill: "forwards" }).finished;
+  await new Promise((r) => setTimeout(r, 1100));
+  for (const el of [coin, page, shadow, pig, pig.querySelector("img.body")]) el.getAnimations().forEach((a) => a.cancel());
+  coin.classList.remove("front");
+  pig.classList.remove("busy");
+}
+
+// A: up out of the slot with two flips, a hang, and back in; the piggy dips on the catch.
+async function playA(pig, coin) {
+  coin.animate([{ opacity: 0 }, { opacity: 1, offset: .08 }, { opacity: 1, offset: .92 }, { opacity: 0 }], { duration: 760, fill: "forwards" });
+  const up = coin.animate([
+    { transform: "translateY(18px) rotateX(70deg) rotateY(0deg)" },
+    { transform: "translateY(-96px) rotateX(10deg) rotateY(540deg)", offset: .45, easing: "cubic-bezier(.3,0,.6,1)" },
+    { transform: "translateY(-104px) rotateX(0deg) rotateY(720deg)", offset: .55, easing: "cubic-bezier(.4,0,1,1)" },
+    { transform: "translateY(16px) rotateX(70deg) rotateY(1080deg)" }], { duration: 760, easing: "ease-out", fill: "forwards" });
+  setTimeout(() => coin.classList.add("front"), 90);
+  setTimeout(() => coin.classList.remove("front"), 620);
+  await up.finished;
+  await pig.animate([{ transform: "rotate(-4deg)" }, { transform: "translateY(3px) rotate(-4deg) scale(1.04,.95)" }, { transform: "rotate(-4deg)" }], { duration: 160, easing: EASE }).finished;
+}
+
+// B: out of the slot, spinning, toward the viewer; it lands as the donut's hole.
+async function playB(cell, pig, coin) {
+  const c = cell.getBoundingClientRect(), cx = c.width / 2, cy = c.height / 2 - 14;
+  const s = slot(cell), dx = cx - s.x, dy = cy - s.y;
+  coin.animate([{ opacity: 0 }, { opacity: 1, offset: .1 }, { opacity: 1 }], { duration: 760, fill: "forwards" });
+  setTimeout(() => coin.classList.add("front"), 90);
+  pig.animate([{ opacity: 1 }, { opacity: 1, offset: .4 }, { opacity: 0 }], { duration: 760, fill: "forwards" });
+  await coin.animate([
+    { transform: "translate(0,18px) rotateX(70deg) rotateY(0deg) scale(1)" },
+    { transform: "translate(0,-70px) rotateX(10deg) rotateY(360deg) scale(1.2)", offset: .4, easing: "cubic-bezier(.4,0,.2,1)" },
+    { transform: `translate(${dx}px,${dy}px) rotateX(0deg) rotateY(1080deg) scale(1.94)` }], { duration: 760, fill: "forwards" }).finished;
+  const page = cell.querySelector(".page");
+  page.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, fill: "forwards" });
+  await coin.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, delay: 120, fill: "forwards" }).finished;
+}
+
+// C: tip forward and shake; the coin falls from the slot, bounces, rolls, and wobbles flat.
+async function playC(cell, pig, coin, shadow) {
+  // Tip the body only, so the caption stays level.
+  const body = pig.querySelector("img.body");
+  await body.animate([
+    { transform: "rotate(0deg)" }, { transform: "rotate(-22deg) translateY(-8px)", offset: .3 },
+    { transform: "rotate(-16deg) translateY(-12px)", offset: .45 }, { transform: "rotate(-26deg) translateY(-8px)", offset: .6 },
+    { transform: "rotate(-18deg) translateY(-12px)", offset: .75 }, { transform: "rotate(-22deg) translateY(-8px)" }], { duration: 480, easing: "ease-in-out", fill: "forwards" }).finished;
+  coin.classList.add("front");
+  const ground = 170 + 161 - 22 - 10; // pig top + height - slot - a little
+  const fall = ground - slot(cell).y - 14;
+  body.animate([{ transform: "rotate(-22deg) translateY(-8px)" }, { transform: "rotate(0deg)" }], { duration: 420, delay: 120, easing: EASE, fill: "forwards" });
+  coin.animate([{ opacity: 0 }, { opacity: 1, offset: .05 }, { opacity: 1 }], { duration: 900, fill: "forwards" });
+  const sx = slot(cell).x;
+  shadow.style.left = sx - 70 - 13 + "px"; shadow.style.top = ground + 18 + "px";
+  shadow.animate([{ opacity: 0, transform: "translateX(0)" }, { opacity: 1, offset: .35 }, { opacity: 1, transform: "translateX(-46px)" }], { duration: 900, fill: "forwards" });
+  await coin.animate([
+    { transform: "translate(-6px,0) rotateX(80deg) rotate(0deg)", easing: "cubic-bezier(.5,0,1,1)" },
+    { transform: `translate(-70px,${fall}px) rotateX(80deg) rotate(-20deg)`, offset: .3, easing: "cubic-bezier(0,0,.4,1)" },
+    { transform: `translate(-84px,${fall - 22}px) rotateX(80deg) rotate(-80deg)`, offset: .42, easing: "cubic-bezier(.5,0,1,1)" },
+    { transform: `translate(-98px,${fall}px) rotateX(80deg) rotate(-140deg)`, offset: .52 },
+    { transform: `translate(-118px,${fall}px) rotateX(74deg) rotate(-240deg)`, offset: .68 },
+    { transform: `translate(-124px,${fall + 6}px) rotateX(62deg) rotate(-300deg)`, offset: .8 },
+    { transform: `translate(-126px,${fall + 8}px) rotateX(68deg) rotate(-330deg)`, offset: .9 },
+    { transform: `translate(-126px,${fall + 8}px) rotateX(62deg) rotate(-340deg)` }], { duration: 900, fill: "forwards" }).finished;
+}
+</script>
+</body></html>

@@ -1,0 +1,95 @@
+/* /investing (I-12, I-13). Site tokens: the stone scale is zinc, inverted in dark mode. */
+
+.inv {
+  /* One colour per holding, in slot order: teal to magenta, alternating light and dark
+     so neighbouring slices differ; validated for colour-blind separation of neighbours
+     on #fff and #121214 (dataviz validate_palette.js, 2026-10-14). */
+  --inv-c0: #5f97f4; --inv-c1: #00b481; --inv-c2: #4e57b7; --inv-c3: #00b59d; --inv-c4: #674eb0;
+  --inv-c5: #00b3b7; --inv-c6: #7a46a4; --inv-c7: #00afce; --inv-c8: #8a3f93; --inv-c9: #00a8e1;
+  --inv-c10: #97397f; --inv-c11: #30a0ed; --inv-c12: #a13567;
+  --inv-up: #15803d;
+  --inv-down: #b91c1c;
+  margin-top: 3.5rem;
+}
+@media (prefers-color-scheme: dark) {
+  .inv {
+    --inv-c0: #558ce8; --inv-c1: #00a976; --inv-c2: #535dbd; --inv-c3: #00aa93; --inv-c4: #6c54b7;
+    --inv-c5: #00a8ac; --inv-c6: #804cab; --inv-c7: #00a3c3; --inv-c8: #91459a; --inv-c9: #009dd5;
+    --inv-c10: #9e3f85; --inv-c11: #1f95e1; --inv-c12: #a73b6d;
+    --inv-up: #4ade80;
+    --inv-down: #f87171;
+  }
+}
+
+.inv-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.inv-bar h2 { margin: 0; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; }
+
+.inv-seg { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--color-stone-100); }
+.inv-seg button { padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--color-stone-600); cursor: pointer; }
+.inv-seg button[aria-pressed="true"] { background: var(--color-stone-50); color: var(--color-stone-900); box-shadow: 0 1px 2px rgb(0 0 0 / .08), 0 0 0 1px var(--color-stone-200); }
+.inv-seg button:focus-visible { outline: 2px solid #2f66f0; outline-offset: 1px; }
+
+.inv-acct { display: grid; grid-template-columns: minmax(260px, 1fr) 2fr; gap: 1rem; margin-bottom: 1rem; }
+.inv-card { border: 1px solid var(--color-stone-200); border-radius: 16px; padding: 22px 24px; background: var(--color-stone-50); }
+.inv-chart { display: flex; flex-direction: column; }
+.inv-chart h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.inv-chart h3 span { display: block; font-size: 13px; font-weight: 500; color: var(--color-stone-400); }
+
+.inv-donut { position: relative; width: 240px; max-width: 100%; aspect-ratio: 1; margin: auto; padding-top: 1rem; }
+.inv-donut svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.inv-donut path { transform-origin: 120px 120px; transition: opacity 140ms ease, transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1); cursor: pointer; }
+.inv-donut.is-hovering path:not(.is-on) { opacity: .28; }
+.inv-donut path.is-on { filter: drop-shadow(0 4px 6px rgb(0 0 0 / .18)); }
+.inv-centre { position: absolute; inset: 1rem 0 0; display: grid; place-content: center; text-align: center; pointer-events: none; }
+.inv-centre > div { display: flex; flex-direction: column; align-items: center; }
+.inv-centre > div[hidden] { display: none; }
+.inv-centre b { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.inv-centre small { font-size: 12px; color: var(--color-stone-600); max-width: 9.5rem; line-height: 1.35; }
+.inv-tick { font-size: 12px; font-weight: 600; }
+/* Two lines reserved, so the card does not jump when a holding is hovered. */
+.inv-under { min-height: 2.9em; margin: 10px 0 0; text-align: center; font-size: 13px; line-height: 1.45; color: var(--color-stone-600); }
+.inv-under b { font-weight: 600; color: var(--color-stone-900); }
+
+.inv-table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.inv-table th { padding: 0 10px 10px; border-bottom: 1px solid var(--color-stone-200); text-align: left; font-size: 13px; font-weight: 500; color: var(--color-stone-600); }
+.inv-table td { padding: 9px 10px; border-bottom: 1px solid var(--color-stone-200); }
+.inv-table tbody tr:last-child td { border-bottom: 0; }
+.inv-table tbody tr { transition: background 120ms ease; outline: none; }
+.inv-table tbody tr.is-on { background: var(--color-stone-100); }
+.inv-table tbody tr:focus-visible { box-shadow: inset 0 0 0 2px #2f66f0; }
+.inv-table .inv-n { text-align: right; white-space: nowrap; }
+.inv-h { padding-left: 0 !important; }
+.inv-h > div { display: flex; align-items: center; gap: 12px; }
+.inv-sw { flex: none; width: 4px; height: 20px; border-radius: 2px; }
+.inv-tk { font-weight: 600; }
+.inv-nm { margin-left: -4px; font-size: 13px; color: var(--color-stone-600); }
+.inv-why { display: block; font-size: 11px; color: var(--color-stone-400); }
+.inv-about { margin: 4px 0 0 16px; font-size: 13px; line-height: 1.45; color: var(--color-stone-500); }
+.inv-acct.is-small .inv-donut { width: 180px; padding-top: .75rem; }
+.inv-acct.is-small .inv-centre { inset: .75rem 0 0; }
+.inv-acct.is-small .inv-table td { padding-top: 14px; padding-bottom: 14px; }
+.inv-up { color: var(--inv-up); }
+.inv-down { color: var(--inv-down); }
+
+@media (max-width: 820px) {
+  .inv-acct { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .inv-card { padding: 18px 16px; }
+  .inv-nm { display: none; }
+}
+/* Entrance (I-16). holdings.tsx sets data-armed before the first paint and
+   data-enter when the account is a third in view. The ring is revealed by a mask
+   circle (circumference 408.4) drawing clockwise; rows fade up one after another. */
+.inv-acct[data-armed] .inv-sweep { stroke-dashoffset: 408.4; }
+.inv-acct[data-armed] .inv-donut path { pointer-events: none; } /* a mask does not stop hover */
+.inv-acct[data-enter] .inv-sweep { animation: inv-sweep 900ms cubic-bezier(.45, 0, .2, 1) both; }
+@keyframes inv-sweep { from { stroke-dashoffset: 408.4; } to { stroke-dashoffset: 0; } }
+.inv-acct[data-armed] .inv-table tbody tr { opacity: 0; }
+.inv-acct[data-enter] .inv-table tbody tr { animation: inv-row 300ms ease-out both; animation-delay: calc(60ms + var(--i, 0) * 35ms); }
+@keyframes inv-row { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .inv-donut path, .inv-table tbody tr { transition: none; }
+  .inv-donut path.is-on { transform: none !important; }
+}
