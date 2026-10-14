@@ -66,8 +66,10 @@ export default async function InvestingPage() {
             spent years admiring in those businesses.
           </p>
           <p>
-            Today I have two accounts. My TFSA holds about a dozen businesses I picked myself. My
-            RRSP holds two ETFs: the S&amp;P 500, and a global small cap value fund.
+            Today I&apos;m a long-term growth investor. I look for companies with strong moats,
+            great products, great management, and fast growth. My TFSA holds about a dozen of
+            them, all picked myself. My RRSP holds two ETFs: the S&amp;P 500, and a global small
+            cap value fund.
           </p>
         </div>
       </div>
