@@ -1,5 +1,10 @@
 /* /investing (I-12, I-13). Site tokens: the stone scale is zinc, inverted in dark mode. */
 
+/* Links in the story (the books open on the bookshelf), styled like .prose-site links. */
+.inv-story a { color: var(--color-stone-900); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
+  transition: text-decoration-thickness .16s var(--ease-out), color .16s var(--ease-out); }
+.inv-story a:hover { color: var(--color-stone-600); text-decoration-thickness: 2px; }
+
 .inv {
   /* One colour per holding, in slot order: teal to magenta, alternating light and dark
      so neighbouring slices differ; validated for colour-blind separation of neighbours

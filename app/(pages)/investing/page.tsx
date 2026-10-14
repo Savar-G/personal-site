@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getInvesting } from "@/lib/investing";
 import { Holdings } from "./_components/holdings";
 
@@ -26,7 +27,7 @@ export default async function InvestingPage() {
         </header>
 
         {/* Savar's story, approved 2026-10-14 (.design/investing/story-draft.md). */}
-        <div className="space-y-4 leading-relaxed text-stone-600">
+        <div className="inv-story space-y-4 leading-relaxed text-stone-600">
           <p>
             I bought my first stocks in early 2020. I wasn&apos;t old enough to open an investment
             account, so I used my parents&apos;. The money was everything I&apos;d saved from a
@@ -34,8 +35,16 @@ export default async function InvestingPage() {
           </p>
           <p>Then COVID hit. In a matter of months, I watched about 90% of it disappear.</p>
           <p>
-            That loss sent me to learn from the greats. I read <cite>The Intelligent Investor</cite>{" "}
-            by Benjamin Graham and <cite>The Snowball</cite>, and I went through everything Warren
+            {/* The links open each book on the bookshelf (its #slug selects it). */}
+            That loss sent me to learn from the greats. I read{" "}
+            <Link href="/bookshelf#the-intelligent-investor">
+              <cite>The Intelligent Investor</cite>
+            </Link>{" "}
+            by Benjamin Graham and{" "}
+            <Link href="/bookshelf#the-snowball">
+              <cite>The Snowball</cite>
+            </Link>
+            , and I went through everything Warren
             Buffett and Charlie Munger taught, including every Berkshire Hathaway letter to
             shareholders. I read every Amazon letter too, and that is where my obsession with
             consumer products and building great ones started.
@@ -57,8 +66,10 @@ export default async function InvestingPage() {
             spent years admiring in those businesses.
           </p>
           <p>
-            Today I have two accounts. My TFSA holds about a dozen businesses I picked myself. My
-            RRSP holds two ETFs: the S&amp;P 500, and a global small cap value fund.
+            Today I&apos;m a long-term growth investor. I look for companies with strong moats,
+            great products, great management, and fast growth. My TFSA holds about a dozen of
+            them, all picked myself. My RRSP holds two ETFs: the S&amp;P 500, and a global small
+            cap value fund.
           </p>
         </div>
       </div>

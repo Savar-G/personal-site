@@ -16,7 +16,7 @@ For a while I planned to go into equity analysis. It came naturally to me. I dec
 
 I'd rather be building with AI than competing against it. Product is where I get to do that: start with the customer, work backwards, and build the kind of products I spent years admiring in those businesses.
 
-Today I have two accounts. My TFSA holds about a dozen businesses I picked myself. My RRSP holds two ETFs: the S&P 500, and a global small cap value fund.
+Today I'm a long-term growth investor. I look for companies with strong moats, great products, great management, and fast growth. My TFSA holds about a dozen of them, all picked myself. My RRSP holds two ETFs: the S&P 500, and a global small cap value fund.
 
 ---
 
