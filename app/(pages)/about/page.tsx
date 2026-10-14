@@ -97,10 +97,10 @@ export default function AboutPage() {
         </p>
 
         <p>
-          I&apos;m also a long-time investor. I started in 2020, before I was
-          old enough to open my own account, and reading Buffett, Munger, and
-          every Berkshire letter turned into an obsession with great businesses
-          and their moats. You can see{" "}
+          Investing is one of my biggest interests. I started in 2020, before I
+          was old enough to open my own account, and reading Buffett, Munger,
+          and every Berkshire letter turned into an obsession with great
+          businesses and their moats. You can see{" "}
           <Link href="/investing">what I hold and how I got started</Link>.
         </p>
       </div>
