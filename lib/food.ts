@@ -5,6 +5,10 @@
 // distance Beli showed for it. `approx: true` means the place was not found, so the pin sits
 // near its neighbourhood.
 
+import { foodPhotos, type FoodPhoto } from "./food-photos";
+
+export type { FoodPhoto };
+
 export type CountryCode = "CAN" | "USA" | "JPN" | "IDN" | "TUR" | "HKG";
 
 export type Place = {
@@ -27,6 +31,8 @@ export type Place = {
   lat: number;
   lng: number;
   approx: boolean;
+  /** Photos from Savar's library, best first (lib/food-photos.ts) */
+  photos?: FoodPhoto[];
 };
 
 export const COUNTRY_NAMES: Record<CountryCode, string> = {
@@ -278,6 +284,15 @@ export const places: Place[] = [
   {"rank":237,"name":"Duffin's Donuts","score":1.4,"price":1,"cuisines":["Donuts"],"area":"Knight, Vancouver","city":"Vancouver","location":"Knight, Vancouver, BC, Canada","country":"CAN","region":"CA-BC","regionName":"British Columbia","lat":49.23286,"lng":-123.07762,"approx":false},
   {"rank":238,"name":"Dotombori Kamukura - Yawata","score":0.8,"price":2,"cuisines":[],"area":"Yawata","city":"Yawata","location":"Yawata, Japan","country":"JPN","region":"JP-26","regionName":"Kyoto","lat":34.85908,"lng":135.71331,"approx":false},
 ];
+
+for (const e of foodPhotos) {
+  const p = places[e.rank - 1];
+  if (p?.rank !== e.rank || p.name !== e.name) throw new Error(`food-photos: #${e.rank} is ${p?.name}, not ${e.name}`);
+  p.photos = e.photos;
+}
+
+export const photoSrc = (ph: FoodPhoto) => `/food/${ph.id}.webp`;
+export const photoThumb = (ph: FoodPhoto) => `/food/${ph.id}-t.webp`;
 
 /** "$$" style price, in yen for Japan */
 export function priceLabel(p: Place): string {
