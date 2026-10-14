@@ -36,7 +36,10 @@ def inline_css(m):
 html = re.sub(r'<link rel="stylesheet" href="([^"]+)"[^>]*/>', inline_css, html)
 # KEEP_INLINE=1 keeps inline scripts (the pre-paint script lays out the phone desk).
 import os
-if os.environ.get("KEEP_INLINE") == "1":
+if os.environ.get("KEEP_ALL") == "1":
+    # Hydrate from the build: point the /_next/ scripts at .next on disk.
+    html = re.sub(r'src="(/_next/[^"]+)"', lambda m: f'src="file://{root}/.next/{m.group(1)[len("/_next/"):]}"', html)
+elif os.environ.get("KEEP_INLINE") == "1":
     html = re.sub(r"<script\b[^>]*\bsrc=[^>]*>.*?</script>", "", html, flags=re.S)
 else:
     html = re.sub(r"<script\b[^>]*>.*?</script>", "", html, flags=re.S)

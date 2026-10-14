@@ -39,8 +39,10 @@
 .inv-donut svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .inv-donut path { transform-origin: 120px 120px; transition: opacity 140ms ease, transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1); cursor: pointer; }
 .inv-donut.is-hovering path:not(.is-on) { opacity: .28; }
-.inv-donut path.is-on { transform: scale(1.035); }
+.inv-donut path.is-on { filter: drop-shadow(0 4px 6px rgb(0 0 0 / .18)); }
 .inv-centre { position: absolute; inset: 1rem 0 0; display: grid; place-content: center; text-align: center; pointer-events: none; }
+.inv-centre > div { display: flex; flex-direction: column; align-items: center; }
+.inv-centre > div[hidden] { display: none; }
 .inv-centre b { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .inv-centre small { font-size: 12px; color: var(--color-stone-600); max-width: 9.5rem; line-height: 1.35; }
 .inv-tick { font-size: 12px; font-weight: 600; }
@@ -76,7 +78,17 @@
   .inv-card { padding: 18px 16px; }
   .inv-nm { display: none; }
 }
+/* Entrance (I-16). holdings.tsx sets data-armed before the first paint and
+   data-enter when the account is a third in view. The ring is revealed by a mask
+   circle (circumference 408.4) drawing clockwise; rows fade up one after another. */
+.inv-acct[data-armed] .inv-sweep { stroke-dashoffset: 408.4; }
+.inv-acct[data-enter] .inv-sweep { animation: inv-sweep 900ms cubic-bezier(.45, 0, .2, 1) both; }
+@keyframes inv-sweep { from { stroke-dashoffset: 408.4; } to { stroke-dashoffset: 0; } }
+.inv-acct[data-armed] .inv-table tbody tr { opacity: 0; }
+.inv-acct[data-enter] .inv-table tbody tr { animation: inv-row 300ms ease-out both; animation-delay: calc(60ms + var(--i, 0) * 35ms); }
+@keyframes inv-row { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
 @media (prefers-reduced-motion: reduce) {
   .inv-donut path, .inv-table tbody tr { transition: none; }
-  .inv-donut path.is-on { transform: none; }
+  .inv-donut path.is-on { transform: none !important; }
 }

@@ -6,8 +6,8 @@ set -euo pipefail
 in="$1"; out="$2"; w="${3:-1440}"; h="${4:-900}"
 dark=(); [ "${DARK:-}" = 1 ] && dark=(--force-dark-mode)
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
-  --headless=new --disable-gpu --hide-scrollbars "${dark[@]}" \
+  --headless=new --disable-gpu --hide-scrollbars ${dark[@]+"${dark[@]}"} \
   --user-data-dir=/tmp/inv-shot-profile \
-  --window-size="$w,$h" --virtual-time-budget=2000 \
+  --window-size="$w,$h" --virtual-time-budget="${BUDGET:-2000}" \
   --screenshot="$out" "file://$in" 2>/dev/null
 ls -la "$out"
