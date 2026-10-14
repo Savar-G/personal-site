@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 
-// A stat such as "450+" counts up from 0 the first time it scrolls into view
+// A stat such as "650+" counts up from 0 the first time it scrolls into view
 // (R-79). The server renders the real value, so it reads right without
 // JavaScript, with reduced motion, and in the flight from the desk; the count
 // only starts once the number is on screen.
