@@ -38,7 +38,7 @@ app/
   layout.tsx      Sticky header, fonts, sitewide chrome
   page.tsx        Homepage (bio + post list grouped by year)
   globals.css     Tailwind + custom prose, animations, nav overlay
-  opengraph-image.tsx  Auto-generated OG image at /opengraph-image
+  opengraph-image.jpg  Share card; source .design/og/card.html, render with .design/og/tools/render.sh
   robots.ts       /robots.txt
   sitemap.ts      /sitemap.xml
 content/posts/    MDX source for posts
