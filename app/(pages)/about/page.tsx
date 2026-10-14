@@ -95,6 +95,14 @@ export default function AboutPage() {
           tournaments. Outside of that, I love to{" "}
           <Link href="/travel">travel</Link> and try new food.
         </p>
+
+        <p>
+          I&apos;m also a long-time investor. I started in 2020, before I was
+          old enough to open my own account, and reading Buffett, Munger, and
+          every Berkshire letter turned into an obsession with great businesses
+          and their moats. You can see{" "}
+          <Link href="/investing">what I hold and how I got started</Link>.
+        </p>
       </div>
     </article>
   );
