@@ -1,0 +1,177 @@
+{
+  "tfsa": {
+    "id": "tfsa",
+    "name": "TFSA",
+    "fullName": "Tax-Free Savings Account",
+    "asOf": "2026-10-14",
+    "placeholder": false,
+    "allTime": 31.97,
+    "holdings": [
+      {
+        "ticker": "AMZN",
+        "symbol": "AMZN",
+        "name": "Amazon",
+        "currency": "USD",
+        "weight": 14.051,
+        "investedShare": 13.145,
+        "valueRatio": 1.29872,
+        "allTime": 29.87
+      },
+      {
+        "ticker": "GOOGL",
+        "symbol": "GOOGL",
+        "name": "Alphabet",
+        "currency": "USD",
+        "weight": 13.245,
+        "investedShare": 8.915,
+        "valueRatio": 1.80507,
+        "allTime": 85.36
+      },
+      {
+        "ticker": "META",
+        "symbol": "META",
+        "name": "Meta",
+        "currency": "USD",
+        "weight": 13.173,
+        "investedShare": 12.922,
+        "valueRatio": 1.23856,
+        "allTime": 23.97
+      },
+      {
+        "ticker": "MELI",
+        "symbol": "MELI",
+        "name": "MercadoLibre",
+        "currency": "USD",
+        "weight": 10.173,
+        "investedShare": 13.292,
+        "valueRatio": 0.92982,
+        "allTime": -7.01
+      },
+      {
+        "ticker": "BN",
+        "symbol": "BN.TO",
+        "name": "Brookfield",
+        "currency": "CAD",
+        "weight": 8.752,
+        "investedShare": 8.609,
+        "valueRatio": 1.23504,
+        "allTime": 25.19
+      },
+      {
+        "ticker": "MSFT",
+        "symbol": "MSFT",
+        "name": "Microsoft",
+        "currency": "USD",
+        "weight": 8.275,
+        "investedShare": 7.43,
+        "valueRatio": 1.35311,
+        "allTime": 36.17
+      },
+      {
+        "ticker": "ASML",
+        "symbol": "ASML",
+        "name": "ASML",
+        "currency": "USD",
+        "weight": 5.945,
+        "investedShare": 5.651,
+        "valueRatio": 1.27826,
+        "allTime": 97.97
+      },
+      {
+        "ticker": "MU",
+        "symbol": "MU",
+        "name": "Micron",
+        "currency": "USD",
+        "weight": 5.568,
+        "investedShare": 4.807,
+        "valueRatio": 1.40723,
+        "allTime": 140.73
+      },
+      {
+        "ticker": "TVK",
+        "symbol": "TVK.TO",
+        "name": "Terravest",
+        "currency": "CAD",
+        "weight": 5.504,
+        "investedShare": 8.038,
+        "valueRatio": 0.83195,
+        "allTime": -9.49
+      },
+      {
+        "ticker": "SPGI",
+        "symbol": "SPGI",
+        "name": "S&P Global",
+        "currency": "USD",
+        "weight": 4.939,
+        "investedShare": 7.3,
+        "valueRatio": 0.82198,
+        "allTime": -12.77
+      },
+      {
+        "ticker": "MA",
+        "symbol": "MA",
+        "name": "Mastercard",
+        "currency": "USD",
+        "weight": 4.653,
+        "investedShare": 4.512,
+        "valueRatio": 1.25294,
+        "allTime": 26.05
+      },
+      {
+        "ticker": "V",
+        "symbol": "V",
+        "name": "Visa",
+        "currency": "USD",
+        "weight": 4.632,
+        "investedShare": 4.195,
+        "valueRatio": 1.34156,
+        "allTime": 35.5
+      },
+      {
+        "ticker": "ISRG",
+        "symbol": "ISRG",
+        "name": "Intuitive Surgical",
+        "currency": "USD",
+        "firstBuy": "2026-06-08",
+        "weight": 1.09,
+        "investedShare": 1.184,
+        "valueRatio": 1.11878,
+        "allTime": 11.85
+      }
+    ]
+  },
+  "rrsp": {
+    "id": "rrsp",
+    "name": "RRSP",
+    "fullName": "Registered Retirement Savings Plan",
+    "placeholder": false,
+    "asOf": "2026-10-14",
+    "allTime": 1.75,
+    "holdings": [
+      {
+        "ticker": "VFV",
+        "symbol": "VFV.TO",
+        "name": "Vanguard S&P 500 Index ETF",
+        "currency": "CAD",
+        "firstBuy": "2026-09-01",
+        "about": "Tracks the S&P 500: about 500 large US companies.",
+        "weight": 50,
+        "investedShare": 48.691,
+        "valueRatio": 1.04488,
+        "allTime": 4.49
+      },
+      {
+        "ticker": "CASV",
+        "symbol": "CASV.TO",
+        "name": "Avantis CIBC Global Small Cap Value ETF",
+        "currency": "CAD",
+        "firstBuy": "2026-09-01",
+        "about": "Small companies in developed markets, picked for profitability and value.",
+        "weight": 50,
+        "investedShare": 51.309,
+        "valueRatio": 0.99158,
+        "allTime": -0.84
+      }
+    ]
+  }
+}

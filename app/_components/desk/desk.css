@@ -48,12 +48,12 @@
          transform: rotate(var(--r, 0deg)) scale(var(--ms, 1)); transition: transform 180ms var(--ease); outline: none; }
   .desk-page .obj.blend { mix-blend-mode: multiply; }
   .desk-page .obj img { display: block; width: 100%; height: 100%; pointer-events: none; }
-  .desk-page .obj:hover, .desk-page .obj:focus-visible { transform: translateY(-6px) rotate(calc(var(--r, 0deg) + 2deg)) scale(1.03); z-index: 20; }
+  .desk-page .obj:hover, .desk-page .obj:focus-visible { transform: translateY(-6px) rotate(calc(var(--r, 0deg) + 2deg)) scale(calc(var(--ms, 1) * 1.03)); z-index: 20; }
   .desk-page .obj.dragging { transition: none; cursor: grabbing; z-index: 40 !important; }
 
   /* Every object has a caption under it, like a file name on a desktop. It stays level. */
   .desk-page .cap { position: absolute; left: 50%; top: var(--cy, 100%); transform: translateX(-50%) rotate(calc(var(--r, 0deg) * -1));
-         font-size: calc(12px * var(--ts, 1)); font-weight: 500; color: var(--cap); white-space: nowrap; pointer-events: none; transition: color 140ms ease; }
+         font-size: calc(12px * var(--ts, 1) / var(--ms, 1)); font-weight: 500; color: var(--cap); white-space: nowrap; pointer-events: none; transition: color 140ms ease; }
   .desk-page .obj:hover .cap, .desk-page .obj:focus-visible .cap, .desk-page .obj.active .cap, .desk-page .obj.open .cap { color: var(--ink); }
 
   /* ---------- notebook (opens on hover) ---------- */
@@ -166,6 +166,17 @@
   .desk-page .food:hover .steam svg, .desk-page .food:focus-visible .steam svg { animation: desk-steam 2.2s ease-out infinite; }
   .desk-page .food:hover .steam span:nth-child(2) svg, .desk-page .food:focus-visible .steam span:nth-child(2) svg { animation-delay: .6s; }
   .desk-page .food:hover .steam span:nth-child(3) svg, .desk-page .food:focus-visible .steam span:nth-child(3) svg { animation-delay: 1.2s; }
+
+  /* Investing: a glass piggy bank. On hover a loonie's edge peeks out of the slot; a click
+     flips one up and back in (engine.js), then the page opens (I-11). Slot centre: (92, 15). */
+  .desk-page .piggy .pig { position: relative; z-index: 1; }
+  .desk-page .piggy .loonie { position: absolute; left: 75px; top: -2px; width: 34px; height: 34px; pointer-events: none; }
+  .desk-page .piggy .loonie img { width: 100%; height: 100%; }
+  .desk-page .piggy .peek { z-index: 0; transform: translateY(18px) rotate(-17deg) rotateX(62deg); transition: transform 220ms var(--ease); }
+  .desk-page .piggy:hover .peek, .desk-page .piggy:focus-visible .peek { transform: translateY(-9px) rotate(-17deg) rotateX(62deg); }
+  .desk-page .piggy.busy .peek { opacity: 0; }
+  .desk-page .piggy .fly { z-index: 0; opacity: 0; }
+  .desk-page .piggy .fly.front { z-index: 2; }
   @keyframes desk-steam { 0% { opacity: 0; transform: translateY(24px) scaleX(.8); } 30% { opacity: .75; }
                      100% { opacity: 0; transform: translateY(-46px) scaleX(1.25); } }
 
@@ -209,7 +220,7 @@
   .desk-page .splat { position: absolute; pointer-events: none; z-index: 60; overflow: visible; }
   .desk-page .plop { position: absolute; pointer-events: none; z-index: 62; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 17px;
           color: var(--ink); white-space: nowrap; }
-  .desk-page .cubehint { position: absolute; left: 668px; top: 800px; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 13px; color: var(--body);
+  .desk-page .cubehint { position: absolute; left: 424px; top: 813px; font-family: var(--font-courier-prime), monospace; font-weight: 700; font-size: 13px; color: var(--body);
               opacity: 0; transition: opacity 160ms ease; pointer-events: none; }
   .desk-page .cubehint.show { opacity: 1; }
 
@@ -269,7 +280,7 @@
   .desk-page #coffee.cold:hover .coldnote, .desk-page #coffee.cold:focus-visible .coldnote { opacity: 1; }
 
   /* ---------- picking things up ---------- */
-  .desk-page .obj.dragging { transform: rotate(var(--r, 0deg)) translateY(-10px) scale(1.06); filter: drop-shadow(0 22px 22px rgba(0,0,0,.22)); }
+  .desk-page .obj.dragging { transform: rotate(var(--r, 0deg)) translateY(-10px) scale(calc(var(--ms, 1) * 1.06)); filter: drop-shadow(0 22px 22px rgba(0,0,0,.22)); }
   .desk-page .obj { transition: transform 180ms var(--ease), filter 180ms var(--ease); }
   /* A thrown Travel stack slides on the desk; its angle changes every frame, so no transform transition. */
   .desk-page .obj.sliding { transition: filter 180ms var(--ease); }
@@ -316,7 +327,7 @@
   .desk-page .missed { font-size: calc(5.5px * var(--ts, 1)) !important; color: #fca5a5 !important; }
 
   /* Dark desk: give the darkest objects a faint rim so they do not sink into the background. */
-  @media (prefers-color-scheme: dark) { .desk-page .food > img { filter: drop-shadow(0 0 1.5px rgba(255,255,255,.2)); } }
+  @media (prefers-color-scheme: dark) { .desk-page .food > img, .desk-page .piggy .pig { filter: drop-shadow(0 0 1.5px rgba(255,255,255,.2)); } }
 
   @media (prefers-reduced-motion: reduce) {
     .desk-page .greet h1 .hl:hover, .desk-page .greet h1 .hl:focus-visible { transform: none; }
@@ -428,6 +439,7 @@
 .desk-page .stage.landing .notebook { animation-delay: 195ms; }
 .desk-page .stage.landing .folder { animation-delay: 270ms; }
 .desk-page .stage.landing #phone { animation-delay: 345ms; }
+.desk-page .stage.landing .piggy { animation-delay: 382ms; }
 .desk-page .stage.landing .books { animation-delay: 420ms; }
 .desk-page .stage.landing .food { animation-delay: 495ms; }
 .desk-page .stage.landing #coffee { animation-delay: 570ms; }

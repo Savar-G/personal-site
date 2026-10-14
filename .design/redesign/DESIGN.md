@@ -37,6 +37,7 @@ White page. Photographic objects around the greeting. Every object has a level c
 | Three book covers | Bookshelf | `/bookshelf` | books fan out; the covers catch the light (R-78) |
 | Black coffee on a saucer with spoon, three sugar cubes beside it | Coffee chat | cal.com/savar-gupta/coffee-chat | lift; drag a cube into the cup: cartoon splash (outlined drops, splat, "plop!", ripples, cup squash-and-stretch); caption counts sugars; cubes respawn; first cube toasts "I take mine black, but you do you." |
 | Ramen | Food | `/food` | steam rises |
+| Glass piggy bank full of loonies, right of the greeting under Socials | Investing | `/investing` | a loonie peeks out of the slot; click: the loonie flips up and drops back in, then the page opens (I-11). Desk layout L1 (I-10) also moved Resume and Coffee chat (85%), Food, and Bookshelf; contract: `.design/investing/DESIGN.md` |
 
 **Default hover:** translateY -6px, rotate +2°, scale 1.03, 180 ms `cubic-bezier(0.2, 0.8, 0.2, 1)`.
 

@@ -21,6 +21,13 @@ This laptop has 24 GB of RAM. One Next.js dev server plus one browser pane costs
 - To add or change a book, follow "Add a book" in `content/books/README.md` step by step. Every book needs its real hardcover jacket, a `spine` block copied from a photo of that edition's real spine, its real page count and height, and takeaways from Savar's vault note. Never invent any of these. If the note does not show the book as read or being read, ask Savar before adding it.
 - The page's design contract is `.design/bookshelf/DESIGN.md`. Spines are matched offline in `scripts/spine-lab/` (run `./setup.sh` there once per checkout); it renders the site's painter to PNGs, so no server is needed.
 
+## Investing
+
+- The repo is public. Never commit Savar's Snowball CSV, his RRSP input file, share counts, costs, or dollar values. `lib/investing-data.json` holds only ratios and percentages.
+- To update holdings, run `node scripts/investing-import.mjs --tfsa <Snowball CSV> --tfsa-date <export date> --rrsp <private rrsp.json> [--first-buy TICKER=YYYY-MM-DD]`. The header of that script describes `rrsp.json`. Keep the input files outside the repo.
+- After an update, run the math tests (`node --experimental-strip-types --test scripts/investing-math.test.mjs`) and scan the changed files for any number from the CSV before you commit.
+- The design contract is `.design/investing/DESIGN.md`. Each holding keeps its colour slot until the next export.
+
 ## Homepage redesign in progress
 
 - The design contract is `.design/redesign/DESIGN.md`. The reasons for every choice, including rejected options, are in `.design/redesign/decisions.md`. Read both before you change the redesign. The root `DESIGN.md` covers only the Things page.
