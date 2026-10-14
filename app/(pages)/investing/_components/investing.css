@@ -82,6 +82,7 @@
    data-enter when the account is a third in view. The ring is revealed by a mask
    circle (circumference 408.4) drawing clockwise; rows fade up one after another. */
 .inv-acct[data-armed] .inv-sweep { stroke-dashoffset: 408.4; }
+.inv-acct[data-armed] .inv-donut path { pointer-events: none; } /* a mask does not stop hover */
 .inv-acct[data-enter] .inv-sweep { animation: inv-sweep 900ms cubic-bezier(.45, 0, .2, 1) both; }
 @keyframes inv-sweep { from { stroke-dashoffset: 408.4; } to { stroke-dashoffset: 0; } }
 .inv-acct[data-armed] .inv-table tbody tr { opacity: 0; }

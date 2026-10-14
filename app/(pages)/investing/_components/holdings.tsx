@@ -32,6 +32,16 @@ const colour = (slot: number) => `var(--inv-c${slot % 13})`;
 const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ENTER = "inv-enter"; // event on .inv-acct when its entrance starts
 
+// Whether an account plays its entrance. Its donut card must be off screen at mount:
+// hiding what a full page load just painted would flash. Account and Rolling both
+// ask, in the same frame, so they always agree.
+function arms(acct: Element | null | undefined) {
+  const card = acct?.querySelector(".inv-chart");
+  if (!card || still() || !("IntersectionObserver" in window)) return false;
+  const r = card.getBoundingClientRect();
+  return !(r.top < innerHeight && r.bottom > 0);
+}
+
 // One donut slice between two angles (radians, clockwise from 12 o'clock).
 function arc(r0: number, r1: number, a0: number, a1: number) {
   const p = (r: number, a: number) => `${120 + r * Math.sin(a)} ${120 - r * Math.cos(a)}`;
@@ -94,8 +104,8 @@ function Rolling({
     const el = ref.current;
     if (!el) return;
     cancelAnimationFrame(raf.current);
-    shown.current = to;
     if (from === null || to === null || from === to || still()) {
+      shown.current = to;
       el.textContent = fmt.current(to);
       return;
     }
@@ -103,7 +113,9 @@ function Rolling({
     const step = (t: number) => {
       // A frame can be stamped a little before t0; clamp so it never starts below `from`.
       const k = Math.min(1, Math.max(0, (t - t0) / ms));
-      el.textContent = fmt.current(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+      // Track what is on screen, so an interrupted roll continues from there.
+      shown.current = k < 1 ? from + (to - from) * (1 - Math.pow(1 - k, 3)) : to;
+      el.textContent = fmt.current(shown.current);
       if (k < 1) raf.current = requestAnimationFrame(step);
     };
     raf.current = requestAnimationFrame(step);
@@ -112,7 +124,7 @@ function Rolling({
   useLayoutEffect(() => {
     const el = ref.current;
     const acct = el?.closest(".inv-acct");
-    if (!entrance || !el || !acct || still() || latest.current === null) return;
+    if (!entrance || !el || !acct || !arms(acct) || latest.current === null) return;
     shown.current = 0;
     waiting.current = true;
     el.textContent = fmt.current(0);
@@ -131,7 +143,15 @@ function Rolling({
 
   useEffect(() => () => cancelAnimationFrame(raf.current), []);
 
-  return <span ref={ref}>{format(first)}</span>;
+  // Screen readers get only the final value, not every frame of the roll.
+  return (
+    <>
+      <span ref={ref} aria-hidden="true">
+        {format(first)}
+      </span>
+      <span className="sr-only">{format(value)}</span>
+    </>
+  );
 }
 
 export function Holdings({ accounts }: { accounts: AccountView[] }) {
@@ -165,26 +185,25 @@ function Account({ account: a, period }: { account: AccountView; period: Period 
   const slices = donut(a.holdings);
 
   // Entrance: hide the ring and rows before the first paint (CSS, data-armed), then
-  // play once when the account is a third in view. Without JS everything shows.
+  // play once when half of the donut card is in view. The card, not the account:
+  // a stacked 13-row account can be taller than any ratio a short screen reaches.
+  // A card already on screen at mount stays as it is (see arms). Without JS everything shows.
   useLayoutEffect(() => {
     const el = root.current;
-    if (!el || still()) return;
+    const card = el?.querySelector(".inv-chart");
+    if (!el || !card || !arms(el)) return;
     el.dataset.armed = "";
-    const enter = () => {
-      delete el.dataset.armed;
-      el.dataset.enter = "";
-      el.dispatchEvent(new Event(ENTER));
-    };
-    if (!("IntersectionObserver" in window)) return enter();
     const io = new IntersectionObserver(
       ([e]) => {
-        if (!e.isIntersecting) return;
+        if (e.intersectionRatio < 0.5) return;
         io.disconnect();
-        enter();
+        delete el.dataset.armed;
+        el.dataset.enter = "";
+        el.dispatchEvent(new Event(ENTER));
       },
-      { threshold: 0.35 },
+      { threshold: 0.5 },
     );
-    io.observe(el);
+    io.observe(card);
     return () => io.disconnect();
   }, []);
 
