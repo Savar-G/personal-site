@@ -107,7 +107,9 @@
   .desk-page.inking .stage > :not(.notebook), .desk-page.inking .corner { pointer-events: none; }
   /* ---------- RAZR (live contacts) ---------- */
   .desk-page .phone { width: 202px; height: 420px; transform-origin: 50% 22%; transition: transform 260ms var(--ease); }
-  .desk-page .phone:hover, .desk-page .phone:focus-visible, .desk-page .phone.active { transform: translateY(30px) rotate(0deg) scale(1.5); z-index: 30; }
+  .desk-page .phone:hover, .desk-page .phone:focus-visible, .desk-page .phone.active { transform: translateY(30px) rotate(0deg) scale(1.4); z-index: 30; }
+  /* The zoomed phone stands upright, so its caption stops counter-rotating. */
+  .desk-page .phone:hover .cap, .desk-page .phone:focus-visible .cap, .desk-page .phone.active .cap { transform: translateX(-50%); }
   .desk-page .screen { position: absolute; left: 75px; top: 84px; width: 67px; height: 89px; background: #0a1b3d; overflow: hidden;
             font-family: var(--font-pixelify-sans), monospace; line-height: 1.15; color: #e5e7eb; }
   .desk-page .screen .lock, .desk-page .screen .menu { position: absolute; inset: 0; transition: opacity 180ms ease; }
@@ -317,6 +319,8 @@
   .desk-page .screen .call { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
                   background: radial-gradient(circle at 50% 35%, #1e7a4a, #0a1b3d 75%); }
   .desk-page .phone.ringing .screen .call { display: flex; }
+  /* A ringing phone shows only the call: the menu would draw over it and take its clicks. */
+  .desk-page .phone.ringing .screen .menu { opacity: 0; pointer-events: none; }
   .desk-page .screen .call small { font-size: 4.5px; letter-spacing: .5px; color: #b7f5cf; animation: desk-blinkt 1s steps(2) infinite; }
   .desk-page .screen .call b { font-size: 10px; font-weight: 400; color: #fff; }
   .desk-page .screen .call .keys { display: flex; gap: 4px; margin-top: 4px; }
@@ -363,6 +367,7 @@
   .desk-page .phone:hover, .desk-page .phone:focus-visible, .desk-page .phone.active { transform: rotate(var(--r, 0deg)) scale(var(--ms, 1)); z-index: 3; }
   .desk-page .obj:active { transform: rotate(var(--r, 0deg)) scale(calc(var(--ms, 1) * .95)); transition-duration: 90ms; }
   .desk-page .phone { transform-origin: 50% 50%; }
+  .desk-page .phone:hover .cap, .desk-page .phone:focus-visible .cap, .desk-page .phone.active .cap { transform: translateX(-50%) rotate(calc(var(--r, 0deg) * -1)); }
   .desk-page .cap { font-size: calc(11px / var(--ms, 1)); }
   .desk-page .travel:hover .pola, .desk-page .travel:focus-visible .pola { translate: 0 0; rotate: var(--pr); }
   .desk-page .books:hover .bk, .desk-page .books:focus-visible .bk { translate: 0 0; rotate: var(--br); }

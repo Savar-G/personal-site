@@ -176,7 +176,7 @@ ${notebookPage(essays)}
   <div class="obj paper" id="resume" tabindex="0" role="link" aria-label="Resume" data-vis="0 0 1 1" style="left:72px;top:388px;width:176px;height:228px;--r:-6deg;--cy:238px;--ms:.85">
     <div class="sheet"><img decoding="async" fetchpriority="low" src="/desk/resume_desk.webp" alt=""></div><span class="cap">Resume</span></div>
 
-  <div class="obj piggy" tabindex="0" role="link" aria-label="Investing" data-vis=".03 .01 .97 .9" data-open="/investing" style="left:1170px;top:515px;width:170px;height:183px;--r:-4deg;--cy:190px">
+  <div class="obj piggy" tabindex="0" role="link" aria-label="Investing" data-vis=".03 .01 .97 .9" data-open="/investing" style="left:1170px;top:640px;width:170px;height:183px;--r:-4deg;--cy:190px">
     <span class="loonie peek"><img decoding="async" fetchpriority="low" src="/desk/loonie.webp" alt=""></span>
     <img class="pig" decoding="async" fetchpriority="low" src="/desk/piggy.webp" alt="">
     <span class="loonie fly"><img decoding="async" fetchpriority="low" src="/desk/loonie.webp" alt=""></span>
