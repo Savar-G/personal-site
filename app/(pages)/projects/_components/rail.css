@@ -27,17 +27,20 @@ html.pj-rail-snapping {
   top: 3.5rem;
   height: calc(100svh - 3.5rem);
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  align-content: start;
   overflow: clip;
   padding: 1.5rem 0 1.25rem;
 }
 
+/* The card sits at the top of the stage, right under the page title, so a
+   tall window leaves its spare space under the counter, not above the card.
+   Its height leaves room for the stage padding and the counter row. */
 .pj-rail-track {
   --cw: min(1060px, 80vw);
   --gap: 28px;
   position: relative;
-  align-self: center;
-  height: min(100%, 35rem);
+  height: min(35rem, calc(100svh - 10rem));
   perspective: 1600px;
 }
 
@@ -382,7 +385,7 @@ html.pj-rail-snapping {
   .pj-rail-track {
     --cw: 86vw;
     --gap: 14px;
-    height: min(100%, 42rem);
+    height: min(42rem, calc(100svh - 10rem));
   }
   .pj-rail-card {
     grid-template-columns: minmax(0, 1fr);
