@@ -233,9 +233,10 @@ function RailCard({ project, index }: { project: Project; index: number }) {
   );
 }
 
-// One project at a time (R-90): the stage pins, and scrolling down pans a row
-// of cards sideways. The engine (rail-engine.ts) moves the cards; this renders
-// them and the counter. With reduced motion the cards sit in a plain list.
+// One project at a time (R-90, R-91): the page is one screen tall and does not
+// scroll; the wheel, swipes, and keys move the row of cards sideways. The
+// engine (rail-engine.ts) moves the cards; this renders them and the counter.
+// With reduced motion the cards sit in a plain list and the page scrolls.
 export function ProjectRail({ projects }: { projects: Project[] }) {
   const ref = useRef<HTMLElement>(null);
 
@@ -281,9 +282,6 @@ export function ProjectRail({ projects }: { projects: Project[] }) {
           </button>
         </div>
       </div>
-      {projects.map((project) => (
-        <span key={project.slug} className="pj-rail-snap" aria-hidden="true" />
-      ))}
     </section>
   );
 }
