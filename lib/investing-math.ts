@@ -32,10 +32,10 @@ export type AccountInput = {
   placeholder: boolean;
   allTime: number | null;
   /**
-   * The account's own YTD and All time (%), as the broker reports them on `asOf`.
-   * When set, they replace the account totals built from the holdings.
+   * The account's own returns (%), as the broker reports them on `asOf`. Each one
+   * given replaces the account total built from the holdings for that period.
    */
-  reported?: { asOf: string; ytd: number | null; allTime: number | null } | null;
+  reported?: { asOf: string; returns: Partial<Record<Period, number>> } | null;
   holdings: HoldingInput[];
 };
 
@@ -198,16 +198,24 @@ export function viewAccount(
   } else returns.ALL = null;
 
   // The broker's own figures divide the dollar gain by the cash put in, so they count
-  // when money went in. Each is rolled forward by the account's move since. YTD only
-  // counts in the same calendar year.
+  // when money went in. Each is rolled forward: the account's move since is added,
+  // and the move over the days that left the window (none for YTD and All time) is
+  // taken out. Once the window starts after the report, it covers none of it.
   const rep = account.reported;
   if (rep) {
     // Never past "now": the FX series can tick later than the stocks on the same day.
     const repAt = Math.min(endOfDay(rep.asOf), now);
-    const g = valueGrowth(repAt, now);
-    if (rep.allTime !== null) returns.ALL = (1 + rep.allTime / 100) * g - 1;
-    const sameYear = new Date(repAt * 1000).getUTCFullYear() === new Date(now * 1000).getUTCFullYear();
-    if (rep.ytd !== null && sameYear) returns.YTD = (1 + rep.ytd / 100) * g - 1;
+    const startsRep = periodStarts(repAt);
+    for (const p of PERIODS) {
+      const r = rep.returns[p];
+      if (r === undefined) continue;
+      if (p === "ALL") {
+        returns.ALL = (1 + r / 100) * valueGrowth(repAt, now) - 1;
+        continue;
+      }
+      if (starts[p] >= repAt) continue;
+      returns[p] = ((1 + r / 100) * valueGrowth(repAt, now)) / valueGrowth(startsRep[p], starts[p]) - 1;
+    }
   }
 
   return {

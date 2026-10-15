@@ -8,8 +8,12 @@
     "allTime": 31.97,
     "reported": {
       "asOf": "2026-10-15",
-      "ytd": 15.29,
-      "allTime": 39.95
+      "returns": {
+        "1M": 4.26,
+        "YTD": 15.29,
+        "1Y": 18.3,
+        "ALL": 39.95
+      }
     },
     "holdings": [
       {

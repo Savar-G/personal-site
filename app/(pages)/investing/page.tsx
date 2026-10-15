@@ -81,9 +81,9 @@ export default async function InvestingPage() {
         {pricesAsOf
           ? `Prices as of ${date(pricesAsOf)}, updated daily.`
           : "Daily prices are unavailable right now, so only all-time returns are shown."}{" "}
-        No dollar amounts. The TFSA&apos;s YTD and All time totals come from my broker: the
-        dollar gain over the cash I put in, moved daily with prices. Other returns are the
-        return of today&apos;s holdings over that period, or since I bought, if that is later.
+        No dollar amounts. The TFSA&apos;s totals come from my broker: the dollar gain over
+        the cash I put in, moved daily with prices. Other returns are the return of
+        today&apos;s holdings over that period, or since I bought, if that is later.
         All time includes dividends and gains from shares I sold. Each holding&apos;s return is
         in its own currency; account totals are in Canadian dollars.
       </p>
