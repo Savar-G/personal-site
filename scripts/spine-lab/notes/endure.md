@@ -1,0 +1,8 @@
+# endure
+Edition: St. Martin's Press first US hardcover, May 2022, ISBN 978-1-250-27929-3 (black jacket, orange ENDURE, Hanes portrait; same jacket as the site's cover).
+Reference: https://cameronhanes.com/cdn/shop/files/ENDUREBook_03.png?v=1732247114&width=3840 (studio product photo from the author's shop, book standing at a three-quarter angle with the spine facing left; cropped to the spine face, no rotation needed). Confirmed by https://m.media-amazon.com/images/I/71z3MfQvnzL.jpg (two-book set mockup with the same spine layout).
+Confidence: high (clear, near-straight photo of this edition; the spine face is about 88 px wide in the source, so fine detail is soft).
+Layout: black spine; ENDURE in large orange stencil caps reading head to tail from the head to 0.59; crossed-arrows-over-orange-circle mark at 0.6-0.69; CAMERON and HANES as two parallel orange lines of widely tracked condensed caps; St. Martin's Press mark with "ST. MARTIN'S PRESS" at the tail.
+Typeface: ENDURE is a squared military stencil -> Black Ops One 400 (new family). Author is a tracked condensed grotesque (DIN Condensed-like) -> Oswald 500. Publisher line -> Inter 700.
+Images: endure-arrows.png (crossed arrows and circle) and endure-smp.png (St. Martin's Press wave mark) are cropped from the reference photo, background keyed to transparency. The publisher wording is set as text because the photo's lettering is too soft to crop.
+Not expressed: the real stencil's exact cuts differ slightly from Black Ops One (for example the N's diagonal); the circle in the cropped mark is slightly oval from the photo's perspective.

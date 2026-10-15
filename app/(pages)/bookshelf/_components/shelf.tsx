@@ -107,6 +107,22 @@ export function Shelf({ books }: { books: ShelfBook[] }) {
           Shelving books…
         </p>
 
+        {/* shelf-engine.js shows each arrow while there is more shelf that way */}
+        {[-1, 1].map((d) => (
+          <button
+            key={d}
+            type="button"
+            className="shelf-pan"
+            data-pan={d}
+            disabled
+            aria-label={d < 0 ? "Scroll the shelf left" : "Scroll the shelf right"}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d={d < 0 ? "M14.5 6 8.5 12l6 6" : "M9.5 6l6 6-6 6"} />
+            </svg>
+          </button>
+        ))}
+
         <aside
           className={`shelf-card${book ? " is-open" : ""}`}
           aria-live="polite"

@@ -11,6 +11,7 @@ const alfaSlab = localFont({ src: "../_fonts/alfa-slab-one.woff2", weight: "400"
 const almendra = localFont({ src: "../_fonts/almendra.woff2", weight: "400", display: "swap", preload: false, variable: "--font-spine-almendra" });
 const amatic = localFont({ src: "../_fonts/amatic-sc-700.woff2", weight: "700", display: "swap", preload: false, variable: "--font-spine-amatic-sc" });
 const barlow = localFont({ src: "../_fonts/barlow-700.woff2", weight: "700", display: "swap", preload: false, variable: "--font-spine-barlow" });
+const blackOps = localFont({ src: "../_fonts/black-ops-one.woff2", weight: "400", display: "swap", preload: false, variable: "--font-spine-black-ops-one" });
 const bebas = localFont({ src: "../_fonts/bebas-neue.woff2", weight: "400", display: "swap", preload: false, variable: "--font-spine-bebas-neue" });
 const bitter = localFont({
   src: [
@@ -31,6 +32,7 @@ const cormorant = localFont({
   preload: false,
   variable: "--font-spine-cormorant-garamond",
 });
+const courgette = localFont({ src: "../_fonts/courgette.woff2", weight: "400", display: "swap", preload: false, variable: "--font-spine-courgette" });
 const dmSerif = localFont({ src: "../_fonts/dm-serif-display.woff2", weight: "400", display: "swap", preload: false, variable: "--font-spine-dm-serif-display" });
 const baskerville = localFont({
   src: [
@@ -41,6 +43,8 @@ const baskerville = localFont({
   preload: false,
   variable: "--font-spine-libre-baskerville",
 });
+const imbue = localFont({ src: "../_fonts/imbue.woff2", weight: "100 900", display: "swap", preload: false, variable: "--font-spine-imbue" });
+const jost = localFont({ src: "../_fonts/jost.woff2", weight: "100 900", display: "swap", preload: false, variable: "--font-spine-jost" });
 const michroma = localFont({ src: "../_fonts/michroma.woff2", weight: "400", display: "swap", preload: false, variable: "--font-spine-michroma" });
 const montserrat = localFont({ src: "../_fonts/montserrat.woff2", weight: "100 900", display: "swap", preload: false, variable: "--font-spine-montserrat" });
 const oswald = localFont({ src: "../_fonts/oswald.woff2", weight: "400 700", display: "swap", preload: false, variable: "--font-spine-oswald" });
@@ -59,8 +63,8 @@ const sourceSerif = localFont({ src: "../_fonts/source-serif-4.woff2", weight: "
 const newsreader = localFont({ src: "../_fonts/newsreader.woff2", weight: "500", display: "swap", preload: false, variable: "--font-newsreader" });
 
 export const spineFontVars = [
-  alfaSlab, almendra, amatic, barlow, bebas, bitter, cinzel, cormorant, dmSerif,
-  baskerville, michroma, montserrat, oswald, playfair, saira, sourceSerif, newsreader,
+  alfaSlab, almendra, amatic, barlow, bebas, blackOps, bitter, cinzel, cormorant, courgette,
+  dmSerif, imbue, jost, baskerville, michroma, montserrat, oswald, playfair, saira, sourceSerif, newsreader,
 ]
   .map((f) => f.variable)
   .join(" ");
