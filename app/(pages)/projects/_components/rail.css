@@ -1,0 +1,442 @@
+/* ---------- Projects rail: one project at a time (R-90) ----------
+   project-rail.tsx renders it; rail-engine.ts moves it. The rail is as wide as
+   the window, so the neighbouring cards peek in from the edges. */
+
+.pages-shell:has(.pj-rail) {
+  overflow-x: clip;
+}
+
+/* The engine turns on proximity snapping to each card while the page is open,
+   and stops a sideways swipe from going back a page. */
+html.pj-rail-snapping {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 3.5rem;
+  overscroll-behavior-x: none;
+}
+
+.pj-rail {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  /* The engine sets the exact height; this is close, so nothing below jumps. */
+  height: calc(100svh + (var(--n) - 1) * 75svh);
+}
+
+.pj-rail-stage {
+  position: sticky;
+  top: 3.5rem;
+  height: calc(100svh - 3.5rem);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  overflow: clip;
+  padding: 1.5rem 0 1.25rem;
+}
+
+.pj-rail-track {
+  --cw: min(1060px, 80vw);
+  --gap: 28px;
+  position: relative;
+  align-self: center;
+  height: min(100%, 35rem);
+  perspective: 1600px;
+}
+
+.pj-rail-snap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  scroll-snap-align: start;
+}
+
+/* ---- the card ---- */
+.pj-rail-card {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--cw);
+  margin-left: calc(var(--cw) / -2);
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.75rem);
+  padding: clamp(0.625rem, 1.2vw, 1rem);
+  border-radius: 1.25rem;
+  background: var(--color-stone-50);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--shadow) 7%, transparent),
+    0 1px 2px color-mix(in oklab, var(--shadow) 6%, transparent),
+    0 24px 48px -20px color-mix(in oklab, var(--shadow) 24%, transparent);
+  transition: box-shadow 0.3s var(--ease-out);
+  will-change: transform, opacity;
+}
+@media (prefers-color-scheme: dark) {
+  .pj-rail-card {
+    background: var(--color-stone-100);
+  }
+}
+.pj-rail-card:hover {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--shadow) 10%, transparent),
+    0 1px 2px color-mix(in oklab, var(--shadow) 6%, transparent),
+    0 30px 60px -20px color-mix(in oklab, var(--shadow) 32%, transparent);
+}
+
+/* Before the engine runs: the first card in the middle, the second peeking. */
+@media (prefers-reduced-motion: no-preference) {
+  .pj-rail-card {
+    visibility: hidden;
+  }
+  .pj-rail-card:nth-child(1) {
+    visibility: visible;
+  }
+  .pj-rail-card:nth-child(2) {
+    visibility: visible;
+    opacity: 0.5;
+    transform: translate3d(calc(var(--cw) * 0.96 + var(--gap)), 0, 0)
+      rotateY(-6deg) scale(0.92);
+  }
+}
+
+.pj-rail-text {
+  min-width: 0;
+  padding: clamp(0.875rem, 2.4vw, 2.25rem);
+}
+.pj-rail-eyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-stone-500);
+}
+.pj-rail-name {
+  margin-top: 0.875rem;
+  font-size: clamp(1.75rem, 3.2vw, 2.625rem);
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--color-stone-900);
+}
+.pj-rail-blurb {
+  margin-top: 0.875rem;
+  max-width: 32em;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-stone-700);
+  text-wrap: pretty;
+}
+.pj-rail-role {
+  margin-top: 0.875rem;
+  font-size: 0.8125rem;
+  color: var(--color-stone-500);
+}
+.pj-rail-stats {
+  display: flex;
+  gap: 1.375rem;
+  margin-top: 1.125rem;
+}
+.pj-rail-stats div {
+  display: flex;
+  flex-direction: column;
+}
+.pj-rail-stats dd {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-stone-900);
+  font-variant-numeric: tabular-nums;
+}
+.pj-rail-stats dt {
+  font-size: 0.75rem;
+  color: var(--color-stone-500);
+}
+
+.pj-rail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.125rem;
+  margin-top: 1.5rem;
+}
+.pj-rail-case {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: 999px;
+  background: var(--color-stone-900);
+  color: var(--color-stone-50);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.pj-rail-case > span[aria-hidden] {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-out);
+}
+.pj-rail-card:hover .pj-rail-case > span[aria-hidden],
+.pj-rail-case:focus-visible > span[aria-hidden] {
+  transform: translateX(4px);
+}
+/* The whole card opens the case study. */
+.pj-rail-case::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 1.25rem;
+}
+.pj-rail-case:focus-visible {
+  outline: none;
+}
+.pj-rail-case:focus-visible::after {
+  outline: 2px solid var(--color-stone-900);
+  outline-offset: 3px;
+}
+/* Links and players inside the card sit above that hit area. */
+.pj-rail-ext,
+.pj-rail-player {
+  position: relative;
+  z-index: 1;
+}
+.pj-rail-ext {
+  font-size: 0.875rem;
+  color: var(--color-stone-500);
+  text-decoration: underline;
+  text-decoration-color: var(--color-stone-300);
+  text-underline-offset: 4px;
+  transition: color 0.16s var(--ease-out), text-decoration-color 0.16s var(--ease-out);
+}
+.pj-rail-ext:hover {
+  color: var(--color-stone-900);
+  text-decoration-color: currentColor;
+}
+
+/* ---- media: each keeps its own shape, centred in the card ---- */
+.pj-rail-media {
+  position: relative;
+  width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: var(--color-stone-100);
+}
+@media (prefers-color-scheme: dark) {
+  .pj-rail-media {
+    background: var(--color-stone-200);
+  }
+}
+.pj-rail-phones {
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4%;
+}
+.pj-rail-phones figure {
+  width: 23%;
+  text-align: center;
+}
+.pj-rail-phones video,
+.pj-rail-phones img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 380 / 832;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 12px 30px -10px color-mix(in oklab, var(--shadow) 40%, transparent);
+}
+.pj-rail-phones figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.6875rem;
+  color: var(--color-stone-500);
+}
+.pj-rail-player {
+  aspect-ratio: 16 / 9;
+  background: #000000;
+}
+.pj-rail-player .video-embed {
+  margin: 0;
+  height: 100%;
+  border-radius: 0;
+}
+.pj-rail-video,
+.pj-rail-video video {
+  width: 100%;
+  height: 100%;
+}
+.pj-rail-video video {
+  display: block;
+  object-fit: cover;
+}
+.pj-rail-ctls {
+  position: absolute;
+  right: 0.625rem;
+  bottom: 0.625rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.pj-rail-ctls button {
+  display: grid;
+  place-items: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, #fafafa 88%, transparent);
+  color: #18181b;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+  opacity: 0.75;
+  transition: opacity 0.2s var(--ease-out);
+}
+.pj-rail-ctls svg {
+  width: 15px;
+  height: 15px;
+}
+.pj-rail-player:hover .pj-rail-ctls button,
+.pj-rail-ctls button:focus-visible {
+  opacity: 1;
+}
+.pj-rail-photo img {
+  object-fit: contain;
+  padding: 6%;
+}
+@media (prefers-color-scheme: dark) {
+  .pj-rail-photo img {
+    filter: invert(1) hue-rotate(180deg);
+    mix-blend-mode: screen;
+  }
+}
+.pj-rail-tools {
+  align-self: stretch;
+  max-height: none;
+  display: grid;
+  align-content: center;
+  padding: 8% 9%;
+}
+.pj-rail-tools p {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-stone-500);
+}
+.pj-rail-tools ul {
+  margin-top: 0.875rem;
+  font-size: clamp(1.125rem, 2vw, 1.625rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.45;
+  color: var(--color-stone-700);
+}
+
+/* ---- counter and arrows under the card ---- */
+.pj-rail-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.125rem;
+  margin-top: 1.125rem;
+}
+.pj-rail-count {
+  min-width: 4rem;
+  text-align: center;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--color-stone-500);
+  font-variant-numeric: tabular-nums;
+}
+.pj-rail-progress {
+  width: 10rem;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--color-stone-200);
+}
+.pj-rail-progress i {
+  display: block;
+  height: 100%;
+  background: var(--color-stone-900);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.pj-rail-arrow {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-stone-200);
+  color: var(--color-stone-900);
+  transition: background-color 0.16s var(--ease-out), opacity 0.16s var(--ease-out);
+}
+.pj-rail-arrow:hover {
+  background: var(--color-stone-100);
+}
+.pj-rail-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ---- phones: media on top, text below ---- */
+@media (max-width: 820px) {
+  .pj-rail-track {
+    --cw: 86vw;
+    --gap: 14px;
+    height: min(100%, 42rem);
+  }
+  .pj-rail-card {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 0.25rem;
+    overflow: hidden;
+  }
+  .pj-rail-media {
+    order: -1;
+  }
+  .pj-rail-tools {
+    aspect-ratio: 16 / 10;
+    align-self: auto;
+  }
+  .pj-rail-text {
+    padding: 0.875rem 0.625rem 0.625rem;
+  }
+  .pj-rail-blurb {
+    font-size: 0.9375rem;
+  }
+}
+
+/* ---- reduced motion: a plain list ---- */
+@media (prefers-reduced-motion: reduce) {
+  .pj-rail {
+    width: auto;
+    height: auto;
+    margin-left: 0;
+  }
+  .pj-rail-stage {
+    position: static;
+    height: auto;
+    overflow: visible;
+    padding: 0;
+  }
+  .pj-rail-track {
+    display: grid;
+    gap: 1.75rem;
+    height: auto;
+  }
+  .pj-rail-card {
+    position: relative;
+    left: auto;
+    width: auto;
+    margin-left: 0;
+    min-height: 26rem;
+  }
+  .pj-rail-foot,
+  .pj-rail-snap {
+    display: none;
+  }
+  .pj-rail-case > span[aria-hidden],
+  .pj-rail-card,
+  .pj-rail-ctls button {
+    transition: none;
+  }
+}

@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { ViewTransition } from "react";
 import { GitHubContributions } from "@/app/_components/github-contributions";
 import { projects } from "@/lib/projects";
-import { ProjectCard } from "./_components/project-card";
+import { ProjectRail } from "./_components/project-rail";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -10,32 +9,21 @@ export const metadata: Metadata = {
     "Projects by Savar Gupta: Unify, Embedr, Podcast Sync, SFU Rocketry, a health and activity wearable, Taskline, and HealthOS.",
 };
 
-// Media-led case cards (decision R-70): the flagship spans the full width,
-// the rest sit in a two-column grid. Wider than the other inner pages.
+// One project at a time on a rail (decision R-90); each card opens its case
+// study at /projects/<slug>. The full detail (ProjectCard) moves to those pages.
 export default function ProjectsPage() {
   return (
     <div className="page-wide animate-fade-in">
-      <header className="pt-2 pb-9 sm:pb-11">
+      <header className="pt-2 pb-2">
         <h1 className="page-title">Projects</h1>
         <p className="mt-3 max-w-prose text-stone-500">
           Things I&apos;ve built.
         </p>
       </header>
 
-      <div className="pj-grid">
-        {projects.map((project, i) => (
-          // The folder's three papers on the desk fly into the first three cards.
-          <ViewTransition
-            key={project.name}
-            name={i < 3 ? `paper-${i + 1}` : undefined}
-            share="flight"
-          >
-            <ProjectCard project={project} index={i} />
-          </ViewTransition>
-        ))}
-      </div>
+      <ProjectRail projects={projects} />
 
-      <div className="mt-14 sm:mt-16">
+      <div className="mt-10 sm:mt-12">
         <GitHubContributions />
       </div>
     </div>

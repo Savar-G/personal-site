@@ -45,6 +45,10 @@ export type ProjectMedia =
 
 export type Project = {
   name: string;
+  // The case study lives at /projects/<slug>.
+  slug: string;
+  // One or two lines for the /projects rail card. Draft copy; Savar rewrites it.
+  blurb: string;
   category: string;
   tone: Tone;
   role: string;
@@ -67,6 +71,9 @@ export type Project = {
 export const projects: Project[] = [
   {
     name: "Unify",
+    slug: "unify",
+    blurb:
+      "The all-in-one newcomer settlement platform. Unify makes settling in Canada simpler, clearer, and more connected.",
     category: "Startup · Software & AI",
     tone: "startup",
     role: "Co-founder",
@@ -178,6 +185,9 @@ export const projects: Project[] = [
   },
   {
     name: "Embedr",
+    slug: "embedr",
+    blurb:
+      "An AI engineering environment for hardware: datasheets, KiCad schematics, and firmware bring-up.",
     category: "Startup · Software & AI",
     tone: "startup",
     role: "Product & GTM",
@@ -233,6 +243,9 @@ export const projects: Project[] = [
   },
   {
     name: "Podcast Sync",
+    slug: "podcast-sync",
+    blurb:
+      "YouTube on my desktop, Apple Podcasts on the go. The two apps never knew where I was in the other one, so I made them stay in sync, both ways.",
     category: "Software · Open source",
     tone: "software",
     role: "Solo builder",
@@ -282,6 +295,9 @@ export const projects: Project[] = [
   },
   {
     name: "SFU Rocketry",
+    slug: "sfu-rocketry",
+    blurb:
+      "A student team building liquid-fuelled rockets. I designed, validated, and hot-fired a LOX/Ethanol engine.",
     category: "Hardware · Mechanical",
     tone: "mechanical",
     role: "Propulsion & Mechanical Engineer",
@@ -317,6 +333,9 @@ export const projects: Project[] = [
   },
   {
     name: "Health & Activity Wearable",
+    slug: "wearable",
+    blurb:
+      "An ESP32-S3 wearable with IMU and heart-rate sensing and an on-device activity classifier that streams to a phone over BLE, with no cloud.",
     category: "Hardware · Firmware",
     tone: "hardware",
     role: "Hardware & Firmware Engineer",
@@ -330,6 +349,9 @@ export const projects: Project[] = [
   },
   {
     name: "Taskline",
+    slug: "taskline",
+    blurb:
+      "An Obsidian plugin that turns agent-extracted action items from meetings and notes into one execution queue.",
     category: "Software · AI tools",
     tone: "software",
     role: "Solo builder",
@@ -348,6 +370,9 @@ export const projects: Project[] = [
   },
   {
     name: "HealthOS",
+    slug: "healthos",
+    blurb:
+      "A personal health dashboard that tracks strength training, running, sleep, recovery, and body composition.",
     category: "Software",
     tone: "plain",
     role: "Solo builder",
