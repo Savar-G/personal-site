@@ -117,3 +117,26 @@ test("all time adds the move since the snapshot on money invested", () => {
   near(v.holdings[0].returns.ALL, 0.5 + 1.5 * 0.1);
   near(v.returns.ALL, 0.5 + 1.5 * 0.1);
 });
+
+test("the broker's own YTD and All time replace the account totals, rolled forward", () => {
+  const rep = "2026-10-01";
+  const r = endOfDay(rep);
+  const up = series(start, (ts) => (ts <= r ? 100 : 110));
+  const a = account([h("A", "CAD", 50, 50, 1.2, 20), h("B", "CAD", 50, 50, 1, 0)]);
+  a.reported = { asOf: rep, ytd: 15, allTime: 40 };
+  const v = viewAccount(a, { A: up, B: flat }, fxFlat, now);
+  // Half the account rose 10% after the broker's figures.
+  near(v.returns.ALL, 1.4 * 1.05 - 1);
+  near(v.returns.YTD, 1.15 * 1.05 - 1);
+  // 1M and 1Y and the holdings keep the price method.
+  near(v.holdings[0].returns.ALL, 0.2 + 1.2 * 0.1);
+  near(v.returns["1Y"], 0.05);
+});
+
+test("a reported YTD from last year is not used", () => {
+  const a = account([h("A", "CAD", 100, 100, 1, 0)]);
+  a.reported = { asOf: "2025-12-15", ytd: 30, allTime: 40 };
+  const v = viewAccount(a, { A: flat }, fxFlat, now);
+  near(v.returns.YTD, 0);
+  near(v.returns.ALL, 0.4);
+});

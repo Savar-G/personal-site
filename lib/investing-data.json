@@ -6,6 +6,11 @@
     "asOf": "2026-10-14",
     "placeholder": false,
     "allTime": 31.97,
+    "reported": {
+      "asOf": "2026-10-15",
+      "ytd": 15.29,
+      "allTime": 39.95
+    },
     "holdings": [
       {
         "ticker": "AMZN",

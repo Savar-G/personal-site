@@ -31,6 +31,11 @@ export type AccountInput = {
   asOf: string;
   placeholder: boolean;
   allTime: number | null;
+  /**
+   * The account's own YTD and All time (%), as the broker reports them on `asOf`.
+   * When set, they replace the account totals built from the holdings.
+   */
+  reported?: { asOf: string; ytd: number | null; allTime: number | null } | null;
   holdings: HoldingInput[];
 };
 
@@ -157,6 +162,13 @@ export function viewAccount(
     return { ticker: h.ticker, name: h.name, about: h.about, weight: weights[i], returns, sinceListing, sinceBought };
   });
 
+  // Account value growth between two times: the snapshot holdings, each moved in CAD.
+  const valueGrowth = (from: number, to: number) => {
+    const at = (ts: number) =>
+      account.holdings.reduce((s, h) => s + h.weight * cad(h, snap, ts, "adj").cad, 0);
+    return at(to) / at(from);
+  };
+
   const returns = {} as Record<Period, number | null>;
   for (const p of ["1M", "YTD", "1Y"] as const) {
     // Value at the period start of today's holdings, with today's value = 1.
@@ -184,6 +196,19 @@ export function viewAccount(
     );
     returns.ALL = (1 + account.allTime / 100) * growth - 1;
   } else returns.ALL = null;
+
+  // The broker's own figures divide the dollar gain by the cash put in, so they count
+  // when money went in. Each is rolled forward by the account's move since. YTD only
+  // counts in the same calendar year.
+  const rep = account.reported;
+  if (rep) {
+    // Never past "now": the FX series can tick later than the stocks on the same day.
+    const repAt = Math.min(endOfDay(rep.asOf), now);
+    const g = valueGrowth(repAt, now);
+    if (rep.allTime !== null) returns.ALL = (1 + rep.allTime / 100) * g - 1;
+    const sameYear = new Date(repAt * 1000).getUTCFullYear() === new Date(now * 1000).getUTCFullYear();
+    if (rep.ytd !== null && sameYear) returns.YTD = (1 + rep.ytd / 100) * g - 1;
+  }
 
   return {
     id: account.id,

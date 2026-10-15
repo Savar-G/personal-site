@@ -2,7 +2,12 @@
 // Turns Savar's private account exports into lib/investing-data.json for /investing.
 //
 //   node scripts/investing-import.mjs --tfsa "<Snowball Holdings.csv>" --tfsa-date 2026-06-07 \
-//     [--rrsp <rrsp.json>] [--placeholder]
+//     [--rrsp <rrsp.json>] [--placeholder] \
+//     [--tfsa-reported 2026-10-15 --tfsa-ytd 15.29 --tfsa-all-time 39.95]
+//
+// --tfsa-ytd and --tfsa-all-time are the percents the Wealthsimple app shows for the
+// account on --tfsa-reported (I-18). They set the account's YTD and All time; the
+// holdings keep the Snowball numbers. Without them the last reported figures stay.
 //
 // The repo is public (I-5). The output holds only fractions and percentages: each
 // holding's share of the account's value, its share of the money invested, the ratio
@@ -58,6 +63,9 @@ const { values: args } = parseArgs({
     // that did not hold it (a safe lower bound).
     "first-buy": { type: "string", multiple: true, default: [] },
     placeholder: { type: "boolean", default: false },
+    "tfsa-reported": { type: "string" },
+    "tfsa-ytd": { type: "string" },
+    "tfsa-all-time": { type: "string" },
   },
 });
 const FIRST_BUY = Object.fromEntries(args["first-buy"].map((s) => s.split("=")));
@@ -226,6 +234,21 @@ async function readRrsp(path) {
 }
 
 const tfsa = readTfsa(args.tfsa);
+
+// The broker's own account figures (I-18): from the flags, else the last committed ones.
+function reportedTfsa() {
+  const pct = (s) => (s === undefined ? null : Number(s));
+  if (args["tfsa-reported"]) {
+    return { asOf: args["tfsa-reported"], ytd: pct(args["tfsa-ytd"]), allTime: pct(args["tfsa-all-time"]) };
+  }
+  if (args["tfsa-ytd"] || args["tfsa-all-time"]) throw new Error("--tfsa-ytd and --tfsa-all-time need --tfsa-reported");
+  let last = null;
+  try {
+    last = JSON.parse(readFileSync(OUT, "utf8")).tfsa?.reported ?? null;
+  } catch {}
+  if (last) console.warn(`keeping the Wealthsimple figures from ${last.asOf}; pass --tfsa-reported to update them`);
+  return last;
+}
 const rrsp = args.rrsp ? await readRrsp(args.rrsp) : null;
 
 const data = {
@@ -235,6 +258,7 @@ const data = {
     fullName: "Tax-Free Savings Account",
     asOf: args["tfsa-date"],
     placeholder: args.placeholder,
+    reported: reportedTfsa(),
     ...tfsa,
   },
   rrsp: rrsp
