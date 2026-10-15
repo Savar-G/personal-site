@@ -102,6 +102,8 @@ function RailMedia({ project }: { project: Project }) {
         <div className="pj-rail-media pj-rail-phones">
           {media.screens.map((screen) => (
             <figure key={screen.caption}>
+              {/* The phone: bezel, metal edge, and side buttons (rail.css). */}
+              <div className="pj-rail-phone">
               {screen.video ? (
                 <video
                   src={screen.video}
@@ -124,6 +126,7 @@ function RailMedia({ project }: { project: Project }) {
                   sizes="150px"
                 />
               )}
+              </div>
               <figcaption>{screen.caption}</figcaption>
             </figure>
           ))}
