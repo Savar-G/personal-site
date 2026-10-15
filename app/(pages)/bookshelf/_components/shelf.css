@@ -68,6 +68,72 @@
   display: none;
 }
 
+/* ----- edge arrows: pan the shelf (shelf-engine.js turns each on) ----- */
+
+.shelf-pan {
+  position: absolute;
+  z-index: 1;
+  top: var(--pan-y, 50%);
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--card-line);
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--card-bg) 86%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--card-ink);
+  box-shadow: 0 8px 22px -8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+  transition:
+    opacity 0.35s var(--ease-out),
+    transform 0.35s var(--ease-out),
+    background-color 0.2s;
+}
+.shelf-pan[data-pan="-1"] {
+  left: max(20px, env(safe-area-inset-left));
+}
+.shelf-pan[data-pan="1"] {
+  right: max(20px, env(safe-area-inset-right));
+}
+.shelf-pan.is-on {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.shelf-pan.is-on:hover {
+  background: var(--card-bg);
+}
+.shelf-pan.is-on:active {
+  transform: scale(0.92);
+}
+.shelf-pan:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--card-ink) 55%, transparent);
+  outline-offset: 2px;
+}
+.shelf-pan svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.25s var(--ease-out);
+}
+.shelf-pan[data-pan="-1"]:hover svg {
+  transform: translateX(-2px);
+}
+.shelf-pan[data-pan="1"]:hover svg {
+  transform: translateX(2px);
+}
+
 /* ----- detail card ----- */
 
 .shelf-card {
@@ -248,7 +314,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .shelf-card,
-  .shelf-canvas {
+  .shelf-canvas,
+  .shelf-pan,
+  .shelf-pan svg {
     transition: none;
   }
   .shelf-card-body {

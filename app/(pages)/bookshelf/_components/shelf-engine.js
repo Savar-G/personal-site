@@ -438,6 +438,10 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
       sTarget = clamp(sTarget, sMin(), sMax());
       s = clamp(s, sMin(), sMax());
       placeCamera();
+      // the edge arrows sit at the books' mid-height
+      camera.updateMatrixWorld();
+      _p.set(s, 11, 6).project(camera);
+      stage.style.setProperty("--pan-y", `${((1 - _p.y) / 2) * H}px`);
       if (selected) { const d = displayPose(selected); tweenTo(selected, d.pos, d.quat, 1); }
       dirty = 3;
     }
@@ -575,6 +579,26 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
       }
     });
     on(window, "keydown", (e) => { if (e.key === "Escape" && selected) select(null); });
+    // Edge arrows (shelf.tsx): each shows while there is more shelf that way.
+    const arrows = [...stage.querySelectorAll("[data-pan]")];
+    for (const a of arrows) {
+      on(a, "click", () => {
+        if (selected) return;
+        sTarget = clamp(sTarget + Number(a.dataset.pan) * half() * 1.3, sMin(), sMax()); dirty = 3;
+      });
+    }
+    let edges = null;
+    function updateArrows() {
+      const open = selected || fits() ? [false, false] : [sTarget > sMin() + 0.5, sTarget < sMax() - 0.5];
+      const key = open.join();
+      if (key === edges) return;
+      edges = key;
+      arrows.forEach((a) => {
+        const show = open[a.dataset.pan === "-1" ? 0 : 1];
+        a.classList.toggle("is-on", show);
+        a.disabled = !show;
+      });
+    }
     on(dark, "change", applyTheme);
     const ro = new ResizeObserver(resize);
     ro.observe(stage);
@@ -595,6 +619,7 @@ export function mountShelf(stage, books, { onSelect, onReady, onFail }) {
       let busy = selected !== null || drag.active;
       if (Math.abs(sTarget - s) > 0.002) { s += (sTarget - s) * k; busy = true; } else s = sTarget;
       placeCamera();
+      updateArrows();
 
       if (lastMove && !down) {
         const h = pick(lastMove.clientX, lastMove.clientY);

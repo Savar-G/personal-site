@@ -23,7 +23,7 @@ The design contract for the bookshelf page. How to add a book: [`content/books/R
 
 - One wood plank (light oak in light mode, dark walnut in dark mode) with a dark metal bookend at each end.
 - Books stand spine out, at small random depths and gaps. From the tenth book on, about every fifteenth place holds three books lying flat in a small stack; a series never goes into a stack and always stands together in order.
-- Drag, sideways wheel, or arrow keys pan the shelf when it is wider than the screen. Hovering a standing book tips it out from the top.
+- Drag, sideways wheel, arrow keys, or the round arrow buttons at the stage edges pan the shelf when it is wider than the screen. Each button shows only while there is more shelf in its direction, sits at the books' mid-height, and hides while a book is open. Hovering a standing book tips it out from the top.
 - Click a book and it comes off the shelf toward the camera, cover forward, beside the detail card (phones: above the bottom sheet). The other books recede. Drag the open book to turn it. Esc, a click on empty space, or "Esc ✕" puts it back. The URL hash holds the open book's slug.
 
 ## Books
@@ -71,3 +71,4 @@ The design contract for the bookshelf page. How to add a book: [`content/books/R
 | 2026-10-13 | Spines copy the real spine of the edition on the site, from photos | Savar: solid-colour spines were not aesthetic; he wanted the real fonts, designs, and title and author placement. He chose recreated spines over photographing his own copies. |
 | 2026-10-13 | Stand-in shapes for logos removed; real art is cropped from photos | Flat dots and rings where a logo belongs read as fake. Savar's taste: real media or none. |
 | 2026-10-13 | Four spines are designed from their covers | No photo of the spine exists online: How to Win Friends & Influence People, The Fish That Ate the Whale, The Nvidia Way, The Fundamentals of Investing (Kindle only). A phone photo of a real copy would let them be redone. |
+| 2026-10-14 | Round arrow buttons at the stage edges | Savar: people need a visible sign that the shelf moves left and right. Drag and wheel gave no hint. |
