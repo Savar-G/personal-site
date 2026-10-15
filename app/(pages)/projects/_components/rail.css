@@ -32,6 +32,7 @@
   }
   /* No pull-to-refresh bounce or swipe-back while the rail takes the input. */
   html.pj-rail-locked {
+    overflow: hidden;
     overscroll-behavior: none;
   }
 }
@@ -49,19 +50,20 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   overflow: clip;
   padding: 1.25rem 0 1.5rem;
 }
 
-/* The card takes the height that is left, up to 36rem; the counter row sits
-   right under it. */
+/* The card and the counter row sit in the middle of the space under the
+   title, so the gaps above and below are even. The card is 36rem tall and
+   shrinks when the window is shorter; the counter row sits right under it. */
 .pj-rail-track {
   --cw: min(1060px, 80vw);
   --gap: 28px;
   position: relative;
-  flex: 1 1 auto;
+  flex: 0 1 36rem;
   min-height: 0;
-  max-height: 36rem;
   perspective: 1600px;
 }
 
@@ -259,13 +261,11 @@
    phone keeps its shape at every width. */
 .pj-rail-phone {
   position: relative;
-  padding: 4.5%;
-  border-radius: 17% / 7.8%;
+  padding: 2%;
+  border-radius: 15% / 6.9%;
   background: #0b0b0c;
   box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.07),
-    0 0 0 1.5px #8d8d92,
-    0 0 0 2.5px #3a3a3d,
+    0 0 0 1px #8d8d92,
     0 14px 30px -10px color-mix(in oklab, var(--shadow) 45%, transparent);
 }
 /* Volume buttons on the left, the side button on the right. */
@@ -273,12 +273,12 @@
 .pj-rail-phone::after {
   content: "";
   position: absolute;
-  width: 2.5px;
-  border-radius: 2px;
+  width: 1.5px;
+  border-radius: 1px;
   background: linear-gradient(90deg, #5b5b60, #a1a1a6);
 }
 .pj-rail-phone::before {
-  left: -4.5px;
+  left: -2.5px;
   top: 19%;
   height: 19%;
   background: linear-gradient(
@@ -289,7 +289,7 @@
   );
 }
 .pj-rail-phone::after {
-  right: -4.5px;
+  right: -2.5px;
   top: 25%;
   height: 12%;
   background: linear-gradient(90deg, #a1a1a6, #5b5b60);
@@ -437,7 +437,7 @@
   .pj-rail-track {
     --cw: 86vw;
     --gap: 14px;
-    max-height: 42rem;
+    flex-basis: 42rem;
   }
   .pj-rail-card {
     grid-template-columns: minmax(0, 1fr);
@@ -511,7 +511,7 @@
     height: calc(100% - 1.5rem);
     aspect-ratio: 380 / 832;
     padding: 0;
-    border: 0.25rem solid #0b0b0c;
+    border: 2px solid #0b0b0c;
   }
   .pj-rail-phones video,
   .pj-rail-phones img {
@@ -543,7 +543,7 @@
   .pj-rail-track {
     display: grid;
     gap: 1.75rem;
-    max-height: none;
+    flex: none;
   }
   .pj-rail-card {
     position: relative;
