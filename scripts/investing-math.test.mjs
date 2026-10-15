@@ -117,3 +117,40 @@ test("all time adds the move since the snapshot on money invested", () => {
   near(v.holdings[0].returns.ALL, 0.5 + 1.5 * 0.1);
   near(v.returns.ALL, 0.5 + 1.5 * 0.1);
 });
+
+test("the broker's own YTD and All time replace the account totals, rolled forward", () => {
+  const rep = "2026-10-01";
+  const r = endOfDay(rep);
+  const up = series(start, (ts) => (ts <= r ? 100 : 110));
+  const a = account([h("A", "CAD", 50, 50, 1.2, 20), h("B", "CAD", 50, 50, 1, 0)]);
+  a.reported = { asOf: rep, returns: { YTD: 15, ALL: 40 } };
+  const v = viewAccount(a, { A: up, B: flat }, fxFlat, now);
+  // Half the account rose 10% after the broker's figures.
+  near(v.returns.ALL, 1.4 * 1.05 - 1);
+  near(v.returns.YTD, 1.15 * 1.05 - 1);
+  // 1M and 1Y and the holdings keep the price method.
+  near(v.holdings[0].returns.ALL, 0.2 + 1.2 * 0.1);
+  near(v.returns["1Y"], 0.05);
+});
+
+test("a reported YTD from last year is not used", () => {
+  const a = account([h("A", "CAD", 100, 100, 1, 0)]);
+  a.reported = { asOf: "2025-12-15", returns: { "1M": 9, YTD: 30, ALL: 40 } };
+  const v = viewAccount(a, { A: flat }, fxFlat, now);
+  near(v.returns.YTD, 0);
+  near(v.returns["1M"], 0);
+  near(v.returns.ALL, 0.4);
+});
+
+test("a reported 1M rolls forward: new days added, days that left the window taken out", () => {
+  const rep = "2026-10-08";
+  const left = endOfDay("2026-09-10"); // after the reported window's start, before today's
+  const r = endOfDay(rep);
+  const p = series(start, (ts) => (ts <= left ? 100 : ts <= r ? 120 : 132));
+  const a = account([h("A", "CAD", 100, 100, 1, 0)]);
+  a.reported = { asOf: rep, returns: { "1M": 4.26, "1Y": 18.3 } };
+  const v = viewAccount(a, { A: p }, fxFlat, now);
+  near(v.returns["1M"], (1.0426 * 1.1) / 1.2 - 1);
+  // The 1Y window lost only flat days.
+  near(v.returns["1Y"], 1.183 * 1.1 - 1);
+});

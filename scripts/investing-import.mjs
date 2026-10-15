@@ -2,7 +2,13 @@
 // Turns Savar's private account exports into lib/investing-data.json for /investing.
 //
 //   node scripts/investing-import.mjs --tfsa "<Snowball Holdings.csv>" --tfsa-date 2026-06-07 \
-//     [--rrsp <rrsp.json>] [--placeholder]
+//     [--rrsp <rrsp.json>] [--placeholder] \
+//     [--tfsa-reported 2026-10-15 --tfsa-return 1M=4.26 --tfsa-return YTD=15.29 \
+//      --tfsa-return 1Y=18.30 --tfsa-return ALL=39.95]
+//
+// Each --tfsa-return is a percent the Wealthsimple app shows for the account on
+// --tfsa-reported (I-18), for 1M, YTD, 1Y, or ALL. They set the account's totals; the
+// holdings keep the Snowball numbers. Without them the last reported figures stay.
 //
 // The repo is public (I-5). The output holds only fractions and percentages: each
 // holding's share of the account's value, its share of the money invested, the ratio
@@ -58,6 +64,8 @@ const { values: args } = parseArgs({
     // that did not hold it (a safe lower bound).
     "first-buy": { type: "string", multiple: true, default: [] },
     placeholder: { type: "boolean", default: false },
+    "tfsa-reported": { type: "string" },
+    "tfsa-return": { type: "string", multiple: true, default: [] },
   },
 });
 const FIRST_BUY = Object.fromEntries(args["first-buy"].map((s) => s.split("=")));
@@ -226,6 +234,24 @@ async function readRrsp(path) {
 }
 
 const tfsa = readTfsa(args.tfsa);
+
+// The broker's own account figures (I-18): from the flags, else the last committed ones.
+function reportedTfsa() {
+  const given = args["tfsa-return"].map((s) => s.split("="));
+  for (const [p, r] of given) {
+    if (!["1M", "YTD", "1Y", "ALL"].includes(p) || !Number.isFinite(Number(r))) throw new Error(`bad --tfsa-return ${p}=${r}`);
+  }
+  if (args["tfsa-reported"]) {
+    return { asOf: args["tfsa-reported"], returns: Object.fromEntries(given.map(([p, r]) => [p, Number(r)])) };
+  }
+  if (given.length) throw new Error("--tfsa-return needs --tfsa-reported");
+  let last = null;
+  try {
+    last = JSON.parse(readFileSync(OUT, "utf8")).tfsa?.reported ?? null;
+  } catch {}
+  if (last) console.warn(`keeping the Wealthsimple figures from ${last.asOf}; pass --tfsa-reported to update them`);
+  return last;
+}
 const rrsp = args.rrsp ? await readRrsp(args.rrsp) : null;
 
 const data = {
@@ -235,6 +261,7 @@ const data = {
     fullName: "Tax-Free Savings Account",
     asOf: args["tfsa-date"],
     placeholder: args.placeholder,
+    reported: reportedTfsa(),
     ...tfsa,
   },
   rrsp: rrsp
