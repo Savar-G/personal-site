@@ -402,8 +402,8 @@ export const projects: Project[] = [
     },
     layout: "tall",
   },
-  // School projects (R-93). Facts come from the course reports, poster, and
-  // pitch deck; no grade or placement is claimed. `problem` and `reflection`
+  // School projects (R-93). Facts come from the course reports and poster; no
+  // grade or placement is claimed. `problem` and `reflection`
   // are left for Savar to write.
   {
     name: "Ball-Launching Arm",
@@ -472,63 +472,6 @@ export const projects: Project[] = [
       alt: "The black 3D-printed truss arm beside the taped servo hopper, with a green marble ready to drop.",
       width: 945,
       height: 709,
-    },
-  },
-  {
-    name: "MSCI Equity Research",
-    slug: "msci-equity-research",
-    blurb:
-      "A stock pitch on MSCI with my own DCF: a BUY at a US$662.98 target, 16% above the price at the time.",
-    category: "Finance · Equity research",
-    tone: "plain",
-    role: "Solo analyst",
-    dates: "May 2025",
-    summary:
-      "A stock pitch on MSCI, the index and analytics company: business model, segments, industry, growth catalysts, and a DCF valuation.",
-    did: [
-      {
-        lead: "Mapped the business:",
-        text: "four segments (Indexes, Analytics, ESG & Climate, Private Assets), about 97% recurring revenue, and 95%+ client retention.",
-      },
-      {
-        lead: "Built the DCF:",
-        text: "perpetuity growth method at a 7.5% WACC and 4% terminal growth, with a sensitivity table across both.",
-      },
-      {
-        lead: "Made the case on three points:",
-        text: "a high-margin, capital-light business, tailwinds from passive investing and ESG, and less than 15% of a ~US$28B market captured so far.",
-      },
-    ],
-    results: [
-      { value: "16%", label: "upside to target" },
-      { value: "US$662.98", label: "price target" },
-      { value: "7.5%", label: "WACC" },
-      { value: "4%", label: "terminal growth" },
-    ],
-    resultsNote: "Recommendation: BUY. Price on May 18, 2025: US$572.22.",
-    approach: [
-      {
-        title: "Business first, model second",
-        text: "The revenue model, segments, and industry come before the valuation, so every input in the DCF has a reason behind it.",
-      },
-      {
-        title: "Tie growth to catalysts",
-        text: "The 4% terminal growth rests on ESG demand and the shift to passive investing, which pays MSCI a fee on assets tracking its indexes.",
-      },
-      {
-        title: "Show the range, not one number",
-        text: "Across 7.0-8.0% WACC and 3.5-4.5% growth, the value runs from US$515 to US$930, so the downside is limited and the upside is wide.",
-      },
-    ],
-    tools: ["Excel", "DCF modelling", "PowerPoint"],
-    links: [],
-    media: {
-      kind: "image",
-      src: "/projects/msci-dcf.webp",
-      alt: "The pitch's DCF slide: the perpetuity growth build, the implied share price, and a sensitivity table.",
-      width: 1600,
-      height: 900,
-      drawing: true,
     },
   },
   {
