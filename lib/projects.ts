@@ -1,5 +1,6 @@
-// Projects for /projects. Facts come from the Sep 2026 resume and Savar's own
-// messages; no invented metrics. Order matters: the desk's folder papers fly
+// Projects for /projects. Facts come from the Sep 2026 resume, Savar's own
+// messages, and (for the school projects) the course reports; no invented
+// metrics. Order matters: the desk's folder papers fly
 // into the first three cards, and the tall Rocketry card sits left of the
 // three small cards after it.
 
@@ -38,6 +39,9 @@ export type ProjectMedia =
       width: number;
       height: number;
       credit?: string;
+      // Line art on white: inverted in dark mode and padded on the rail.
+      // Photos and slides keep their colours and fill the frame.
+      drawing?: boolean;
     }
   | { kind: "placeholder"; label: string }
   // No media: a small icon tile on a compact card.
@@ -394,8 +398,81 @@ export const projects: Project[] = [
       width: 1068,
       height: 786,
       credit: "SFU Rocketry, sfurocketry.com (GEN3 engine wireframe)",
+      drawing: true,
     },
     layout: "tall",
+  },
+  // School projects (R-93). Facts come from the course reports; no grade or
+  // placement is claimed. `problem` and `reflection` are left for Savar to
+  // write.
+  {
+    name: "Ball-Launching Arm",
+    slug: "ball-launching-arm",
+    blurb:
+      "An autonomous arm that senses which of three balls is loaded, feeds one at a time, and launches or drops it. I led the control system.",
+    category: "Hardware · Mechatronics",
+    tone: "hardware",
+    role: "Controls lead",
+    dates: "May – Aug 2025",
+    team: "5 students, MSE 312 (Mechatronics Design II)",
+    summary:
+      "An autonomous arm for SFU's MSE 312 design competition: a 3D-printed truss arm on a 12 V encoder gearmotor, a servo-fed hopper, and Simulink control on an Arduino Mega.",
+    did: [
+      {
+        lead: "Led the Simulink control system:",
+        text: "an LDR sensor classifies each ball, a servo state machine feeds one ball at a time, and a launch sequence cocks the arm to 55° and swings it to 160° at 400°/s. The marble drops instead.",
+      },
+      {
+        lead: "Wrote a custom trajectory generator",
+        text: "with an acceleration ramp, a cruise limit, and an exact stop, which feeds the PID position loop that drives the motor through PWM.",
+      },
+      {
+        lead: "Tuned the PID from measurements:",
+        text: "the motor's open-loop step response gave its gain and time constant, then one gain changed at a time against settling time and overshoot.",
+      },
+      {
+        lead: "Helped debug the integration:",
+        text: "loose joints and damaged ICs in the drive circuit, and a failed motor whose encoder had to be realigned.",
+      },
+    ],
+    results: [
+      { value: "1.3 mm", label: "tip deflection at 5 N (limit 10 mm)" },
+      { value: "3", label: "ball types: two launched, the marble dropped" },
+      { value: "400°/s", label: "launch swing" },
+      { value: "±1°", label: "arm position tolerance" },
+    ],
+    resultsNote: "Every subsystem met its design constraints in testing.",
+    approach: [
+      {
+        title: "Move the sensor, not the threshold",
+        text: "On the black arm the light sensor needed steady light and missed the marble. We moved it to the hopper with a white LED opposite, so room light no longer changed the readings.",
+      },
+      {
+        title: "Let the hopper sort the marble",
+        text: "The sensor could not see the translucent marble at all. The hopper's brass rods are spaced so the marble falls through and is dropped, and the sensor only tells wood from fluffy.",
+      },
+      {
+        title: "Replace the block that failed",
+        text: "Simulink's trapezoidal trajectory block reached a forward target and never came back. My own generator moved the arm in both directions without overshoot.",
+      },
+      {
+        title: "One ball, then wait",
+        text: "The hopper servo idles at 90°, pushes to 120° for 0.5 s, then ignores the sensor for 15 s, so a second ball cannot follow before the launch ends.",
+      },
+      {
+        title: "Pick the arm by the numbers",
+        text: "Three truss designs went through FEA. A matrix of six weighted criteria (deflection, inertia, mass, and more) chose the third: 2.75 points against 2.0 and 1.4.",
+      },
+    ],
+    tools: ["Simulink", "MATLAB", "Arduino Mega", "SolidWorks", "FEA", "3D printing"],
+    links: [],
+    media: {
+      kind: "image",
+      src: "/projects/mse312-launcher.webp",
+      alt: "The black 3D-printed truss arm beside the taped servo hopper, with a green marble ready to drop.",
+      width: 945,
+      height: 709,
+    },
   },
   {
     name: "Health & Activity Wearable",
@@ -412,6 +489,39 @@ export const projects: Project[] = [
     tools: ["KiCad", "ESP32-S3", "C/C++", "FreeRTOS", "Edge Impulse", "BLE"],
     links: [],
     media: { kind: "icon", icon: "chip" },
+  },
+  {
+    name: "Serene",
+    slug: "serene",
+    blurb:
+      "A voice-first AI companion wearable for seniors who live alone. We interviewed nurses, caregivers, and seniors before designing anything.",
+    category: "Product · Discovery",
+    tone: "product",
+    role: "Team member",
+    dates: "Fall 2025",
+    team: "6 students, MSE 490 (Tech Entrepreneurship)",
+    summary:
+      "A voice-first AI companion wearable for seniors who live alone, with fall detection, shaped by interviews with nurses, caregivers, and seniors.",
+    did: [],
+    results: [{ value: "6+", label: "stakeholder interviews" }],
+    resultsNote: "Nurses, caregivers, family members, and seniors.",
+    approach: [
+      {
+        title: "Find the buyer",
+        text: "Seniors wear the device, but families and caregivers decide to buy it. The product has to calm the family as much as it comforts the senior.",
+      },
+      {
+        title: "Safety without stigma",
+        text: "Seniors refuse devices that look medical. One caregiver said they \"make my clients feel sick and old.\" It has to feel like part of who they are.",
+      },
+      {
+        title: "Nothing to remember",
+        text: "A nurse told us a device that needs a button press will not work for someone with dementia, so it listens and acts on its own.",
+      },
+    ],
+    tools: ["Customer interviews", "Stakeholder mapping", "Market sizing"],
+    links: [],
+    media: { kind: "icon", icon: "heart" },
   },
   {
     name: "Taskline",

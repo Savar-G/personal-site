@@ -353,12 +353,17 @@
 .pj-rail-ctls button:focus-visible {
   opacity: 1;
 }
+/* A photo or slide fills its frame; line art sits padded on the tray and
+   turns light-on-dark in dark mode. */
 .pj-rail-photo img {
+  object-fit: cover;
+}
+.pj-rail-photo--drawing img {
   object-fit: contain;
   padding: 6%;
 }
 @media (prefers-color-scheme: dark) {
-  .pj-rail-photo img {
+  .pj-rail-photo--drawing img {
     filter: invert(1) hue-rotate(180deg);
     mix-blend-mode: screen;
   }

@@ -5,7 +5,7 @@ import { ProjectRail } from "./_components/project-rail";
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Projects by Savar Gupta: Unify, Embedr, Podcast Sync, SFU Rocketry, a health and activity wearable, Taskline, and HealthOS.",
+    "Projects by Savar Gupta: Unify, Embedr, Podcast Sync, SFU Rocketry, a ball-launching arm, a health and activity wearable, Serene, Taskline, and HealthOS.",
 };
 
 // One project at a time on a rail, on a page that does not scroll (decisions

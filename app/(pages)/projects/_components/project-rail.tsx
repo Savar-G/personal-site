@@ -155,7 +155,9 @@ export function RailMedia({ project }: { project: Project }) {
     case "image":
       return (
         <div
-          className="pj-rail-media pj-rail-photo"
+          className={`pj-rail-media pj-rail-photo${
+            media.drawing ? " pj-rail-photo--drawing" : ""
+          }`}
           style={{ aspectRatio: `${media.width} / ${media.height}` }}
         >
           <Image src={media.src} alt={media.alt} fill sizes={SIZES} />
