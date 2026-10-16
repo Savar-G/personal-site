@@ -229,6 +229,10 @@ export function mountRail(list: HTMLElement): () => void {
   const onNext = () => go(Math.round(target) + 1);
 
   layout();
+  // "All projects" on a case study links to /projects?p=<slug>: start on that card.
+  const from = new URLSearchParams(location.search).get("p");
+  const start = from ? cards.findIndex((card) => card.dataset.slug === from) : -1;
+  if (start > 0) moveTo(start, true);
 
   addEventListener("wheel", onWheel, { passive: false });
   addEventListener("resize", layout);

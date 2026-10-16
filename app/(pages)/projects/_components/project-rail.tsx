@@ -94,7 +94,7 @@ function RailVideo({
 
 const SIZES = "(max-width: 820px) 86vw, 600px";
 
-function RailMedia({ project }: { project: Project }) {
+export function RailMedia({ project }: { project: Project }) {
   const media: ProjectMedia = project.media;
   switch (media.kind) {
     case "showcase":
@@ -183,7 +183,11 @@ function RailCard({ project, index }: { project: Project; index: number }) {
   const links = sites.length ? sites : project.links.slice(0, 1);
 
   return (
-    <article className="pj-rail-card" aria-labelledby={`pj-${project.slug}`}>
+    <article
+      className="pj-rail-card"
+      data-slug={project.slug}
+      aria-labelledby={`pj-${project.slug}`}
+    >
       <div className="pj-rail-text">
         <p className="pj-rail-eyebrow">
           {pad(index + 1)} · {project.category}
