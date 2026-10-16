@@ -1,0 +1,415 @@
+/* ---------- Case study: /projects/<slug> (prototype variant B, R-92) ----------
+   The same card as the /projects rail, then the sections beside a sticky
+   contents list. The card's media comes from RailMedia (rail.css). */
+
+.cs-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--color-stone-500);
+  transition: color 0.16s var(--ease-out);
+}
+.cs-back:hover {
+  color: var(--color-stone-900);
+}
+
+/* ---- the card ---- */
+.cs-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  margin-top: 1.25rem;
+  padding: clamp(0.625rem, 1.2vw, 1rem);
+  border-radius: 1.375rem;
+  background: var(--color-stone-50);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--shadow) 7%, transparent),
+    0 1px 2px color-mix(in oklab, var(--shadow) 6%, transparent),
+    0 30px 60px -24px color-mix(in oklab, var(--shadow) 24%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  .cs-card {
+    background: var(--color-stone-100);
+  }
+}
+.cs-card-text {
+  min-width: 0;
+  padding: clamp(1rem, 2.6vw, 2.25rem);
+}
+.cs-name {
+  margin-top: 0.875rem;
+  font-size: clamp(2.125rem, 4.4vw, 3.25rem);
+  line-height: 1.02;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  color: var(--color-stone-900);
+}
+.cs-blurb {
+  margin-top: 0.875rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-stone-700);
+  text-wrap: pretty;
+}
+.cs-role {
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+  color: var(--color-stone-500);
+}
+.cs-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.375rem;
+}
+.cs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5625rem 0.875rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-stone-200);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-stone-900);
+  transition: background-color 0.16s var(--ease-out), border-color 0.16s var(--ease-out);
+}
+.cs-btn:hover {
+  background: var(--color-stone-100);
+  border-color: var(--color-stone-300);
+}
+.cs-btn--primary {
+  background: var(--color-stone-900);
+  border-color: var(--color-stone-900);
+  color: var(--color-stone-50);
+}
+.cs-btn--primary:hover {
+  background: var(--color-stone-700);
+  border-color: var(--color-stone-700);
+}
+.cs-card .pj-rail-media {
+  max-height: none;
+}
+.cs-card .pj-rail-tools {
+  align-self: stretch;
+  min-height: 18rem;
+}
+
+/* ---- body: contents list and facts on the left, sections on the right ---- */
+.cs-body {
+  display: grid;
+  grid-template-columns: 13.75rem minmax(0, 45rem);
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 3.5rem;
+}
+.cs-aside {
+  position: sticky;
+  top: 5.5rem;
+  align-self: start;
+}
+.cs-toc ol {
+  position: relative;
+  padding-left: 1rem;
+}
+.cs-toc ol::before,
+.cs-toc-fill {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.25rem;
+  width: 2px;
+  height: calc(100% - 0.5rem);
+  border-radius: 2px;
+}
+.cs-toc ol::before {
+  background: var(--color-stone-200);
+}
+.cs-toc-fill {
+  background: var(--color-stone-900);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+.cs-toc a {
+  display: block;
+  padding: 0.375rem 0;
+  font-size: 0.875rem;
+  color: var(--color-stone-500);
+  transition: color 0.2s var(--ease-out), transform 0.3s var(--ease-out);
+}
+.cs-toc a:hover {
+  color: var(--color-stone-900);
+}
+.cs-toc a.is-on {
+  color: var(--color-stone-900);
+  font-weight: 500;
+  transform: translateX(3px);
+}
+.cs-facts {
+  display: grid;
+  gap: 0.75rem;
+}
+.cs-toc + .cs-facts {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-stone-200);
+}
+.cs-facts dt {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-stone-500);
+}
+.cs-facts dd {
+  margin-top: 0.125rem;
+  font-size: 0.84375rem;
+  line-height: 1.45;
+  color: var(--color-stone-700);
+}
+.cs-facts--row {
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem 1.5rem;
+  margin-top: 2.5rem;
+  padding: 1.375rem 1.625rem;
+  border-radius: 1rem;
+  background: var(--color-stone-100);
+}
+
+/* ---- sections ---- */
+.cs-sec {
+  scroll-margin-top: 5.5rem;
+}
+.cs-sec + .cs-sec {
+  margin-top: 4.5rem;
+}
+.cs-sec > h2 {
+  margin-bottom: 1.25rem;
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--color-stone-900);
+}
+/* Each section rises in as it enters the window (scroll-driven, off the main
+   thread). Browsers without scroll timelines show it as is. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cs-sec {
+      animation: cs-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+@keyframes cs-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+  }
+}
+
+.cs-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.cs-tiles > div {
+  display: flex;
+  flex-direction: column;
+  padding: 1.375rem;
+  border-radius: 1rem;
+  background: var(--color-stone-100);
+}
+.cs-tiles dd {
+  font-size: 2.5rem;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-stone-900);
+}
+.cs-tiles dt {
+  margin-top: 0.625rem;
+  font-size: 0.875rem;
+  color: var(--color-stone-500);
+}
+/* The first number is the one that matters most. */
+.cs-tiles > div:first-child {
+  background: var(--color-stone-900);
+}
+.cs-tiles > div:first-child dd {
+  color: var(--color-stone-50);
+}
+.cs-tiles > div:first-child dt {
+  color: color-mix(in oklab, var(--color-stone-50) 65%, transparent);
+}
+.cs-note {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-stone-500);
+}
+
+.cs-prose p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-stone-700);
+  text-wrap: pretty;
+}
+.cs-prose p + p {
+  margin-top: 0.875rem;
+}
+
+.cs-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.cs-groups > div {
+  padding: 1.375rem;
+  border-radius: 1rem;
+  border: 1px solid var(--color-stone-200);
+}
+.cs-groups h3 {
+  margin-bottom: 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-stone-900);
+}
+.cs-did li {
+  position: relative;
+  padding-left: 1.125rem;
+  color: var(--color-stone-700);
+  line-height: 1.6;
+}
+.cs-did li + li {
+  margin-top: 0.75rem;
+}
+.cs-did li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.7em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-stone-300);
+}
+.cs-did strong {
+  font-weight: 600;
+  color: var(--color-stone-900);
+}
+
+.cs-steps {
+  display: grid;
+  gap: 0.75rem;
+}
+.cs-steps li {
+  position: relative;
+  padding: 1.25rem 1.375rem 1.25rem 4rem;
+  border-radius: 1rem;
+  background: var(--color-stone-100);
+}
+.cs-steps li > span {
+  position: absolute;
+  left: 1.375rem;
+  top: 1.3rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--color-stone-500);
+}
+.cs-steps h3 {
+  font-size: 1.03125rem;
+  font-weight: 600;
+  color: var(--color-stone-900);
+}
+.cs-steps p {
+  margin-top: 0.25rem;
+  font-size: 0.96875rem;
+  color: var(--color-stone-700);
+}
+
+/* ---- next project ---- */
+.cs-next {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 62.75rem;
+  margin: 6rem auto 0;
+  padding: 1.75rem 1.875rem;
+  border-radius: 1.25rem;
+  background: var(--color-stone-100);
+  transition: background-color 0.2s var(--ease-out);
+}
+.cs-next:hover {
+  background: var(--color-stone-200);
+}
+.cs-next strong {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--color-stone-900);
+}
+.cs-next p {
+  margin-top: 0.25rem;
+  font-size: 0.9375rem;
+  color: var(--color-stone-500);
+}
+.cs-next-arrow {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 999px;
+  background: var(--color-stone-900);
+  color: var(--color-stone-50);
+  font-size: 1.25rem;
+  transition: transform 0.3s var(--ease-out);
+}
+.cs-next:hover .cs-next-arrow {
+  transform: translateX(4px);
+}
+
+/* ---- phones: media on top, no contents list ---- */
+@media (max-width: 820px) {
+  .cs-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+  }
+  .cs-card .pj-rail-media {
+    order: -1;
+  }
+  .cs-card-text {
+    padding: 1rem 0.625rem 0.625rem;
+  }
+  .cs-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+  }
+  .cs-aside {
+    position: static;
+  }
+  .cs-toc {
+    display: none;
+  }
+  .cs-facts {
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 1rem;
+  }
+  .cs-tiles dd {
+    font-size: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-toc a,
+  .cs-next-arrow,
+  .cs-next {
+    transition: none;
+  }
+}

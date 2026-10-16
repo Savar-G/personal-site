@@ -1,43 +1,28 @@
 import type { Metadata } from "next";
-import { ViewTransition } from "react";
-import { GitHubContributions } from "@/app/_components/github-contributions";
 import { projects } from "@/lib/projects";
-import { ProjectCard } from "./_components/project-card";
+import { ProjectRail } from "./_components/project-rail";
 
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Projects by Savar Gupta: Unify, Embedr, Podcast Sync, SFU Rocketry, a health and activity wearable, Serene, Taskline, HealthOS, a ball-launching arm, microgrid demand forecasting, a rain-garden analytics hackathon, and MSCI equity research.",
+    "Projects by Savar Gupta: Unify, Embedr, Podcast Sync, SFU Rocketry, a ball-launching arm, MSCI equity research, a rain-garden analytics hackathon, microgrid demand forecasting, a health and activity wearable, Serene, Taskline, and HealthOS.",
 };
 
-// Media-led case cards (decision R-70): the flagship spans the full width,
-// the rest sit in a two-column grid. Wider than the other inner pages.
+// One project at a time on a rail, on a page that does not scroll (decisions
+// R-90, R-91); each card opens its case study at /projects/<slug>. The full
+// detail (ProjectCard) moves to those pages. The GitHub graph component stays
+// in app/_components for reuse, but this page no longer shows it.
 export default function ProjectsPage() {
   return (
-    <div className="page-wide animate-fade-in">
-      <header className="pt-2 pb-9 sm:pb-11">
+    <div className="page-wide pj-rail-page animate-fade-in">
+      <header className="pt-2">
         <h1 className="page-title">Projects</h1>
         <p className="mt-3 max-w-prose text-stone-500">
           Things I&apos;ve built.
         </p>
       </header>
 
-      <div className="pj-grid">
-        {projects.map((project, i) => (
-          // The folder's three papers on the desk fly into the first three cards.
-          <ViewTransition
-            key={project.name}
-            name={i < 3 ? `paper-${i + 1}` : undefined}
-            share="flight"
-          >
-            <ProjectCard project={project} index={i} />
-          </ViewTransition>
-        ))}
-      </div>
-
-      <div className="mt-14 sm:mt-16">
-        <GitHubContributions />
-      </div>
+      <ProjectRail projects={projects} />
     </div>
   );
 }
