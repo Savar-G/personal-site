@@ -1,10 +1,17 @@
-// Projects for /projects. Facts come from the Sep 2026 resume and Savar's own
-// messages; no invented metrics. Order matters: the desk's folder papers fly
-// into the first three cards, and the tall Rocketry card sits left of the
-// three small cards after it.
+// Projects for /projects. Facts come from the Sep 2026 resume, Savar's own
+// messages, and the course reports and decks for the school projects; no
+// invented metrics. Order matters: the desk's folder papers fly into the first
+// three cards, and the tall Rocketry card sits left of the four small cards
+// after it.
 
 export type Tone =
-  "startup" | "product" | "hardware" | "mechanical" | "software" | "plain";
+  | "startup"
+  | "product"
+  | "hardware"
+  | "mechanical"
+  | "software"
+  | "business"
+  | "plain";
 
 export type ProjectLink = {
   label: string;
@@ -41,7 +48,7 @@ export type ProjectMedia =
     }
   | { kind: "placeholder"; label: string }
   // No media: a small icon tile on a compact card.
-  | { kind: "icon"; icon: "tasks" | "heart" | "chip" };
+  | { kind: "icon"; icon: "tasks" | "heart" | "chip" | "chat" };
 
 export type Project = {
   name: string;
@@ -329,6 +336,19 @@ export const projects: Project[] = [
     media: { kind: "icon", icon: "chip" },
   },
   {
+    name: "Serene",
+    category: "Product · Discovery",
+    tone: "product",
+    role: "Team of 6, MSE 490",
+    dates: "Fall 2025",
+    summary:
+      "A voice-first AI companion wearable for seniors who live alone, with fall detection. We interviewed nurses, caregivers, and seniors first, and learned that families buy the device but seniors decide whether to wear it.",
+    did: [],
+    tools: ["Customer interviews", "Stakeholder mapping", "Market sizing"],
+    links: [],
+    media: { kind: "icon", icon: "chat" },
+  },
+  {
     name: "Taskline",
     category: "Software · AI tools",
     tone: "software",
@@ -368,5 +388,133 @@ export const projects: Project[] = [
       },
     ],
     media: { kind: "icon", icon: "heart" },
+  },
+  {
+    name: "Ball-Launching Arm",
+    category: "Hardware · Mechatronics",
+    tone: "hardware",
+    role: "Controls lead, team of 5",
+    dates: "May – Aug 2025",
+    summary:
+      "An autonomous arm for SFU's MSE 312 design competition. It senses which of three balls is in the hopper, feeds one at a time, and launches or drops it: a 3D-printed truss arm on a 12 V encoder gearmotor, run by Simulink on an Arduino Mega.",
+    did: [
+      {
+        lead: "Led the Simulink control system:",
+        text: "an LDR sensor classifies each ball, a servo state machine feeds one ball at a time, and a launch sequence cocks the arm to 55° and swings it to 160° at 400°/s. The marble drops instead.",
+      },
+      {
+        lead: "Wrote a custom trajectory generator",
+        text: "when Simulink's trapezoidal block would not return the arm in one direction, and tuned the PID position loop from the motor's measured step response.",
+      },
+      {
+        lead: "Picked the arm from three FEA iterations:",
+        text: "the chosen truss deflects 1.3 mm under 5 N (limit 10 mm) and has the lowest mass and inertia of the three.",
+      },
+    ],
+    tools: ["Simulink", "MATLAB", "Arduino Mega", "SolidWorks", "FEA", "3D printing"],
+    links: [],
+    media: {
+      kind: "image",
+      src: "/projects/mse312-launcher.webp",
+      alt: "The black 3D-printed truss arm beside the taped servo hopper, with a green marble ready to drop.",
+      width: 945,
+      height: 532,
+    },
+  },
+  {
+    name: "Microgrid Demand Forecasting",
+    category: "Software · Machine learning",
+    tone: "software",
+    role: "Team of 3, MSE 413",
+    dates: "Jan – Apr 2025",
+    summary:
+      "Hourly power forecasts for a real microgrid (Mesa Del Sol), so operators can see surplus periods and decide when to run off the main grid.",
+    did: [
+      {
+        lead: "Turned 10-second sensor logs into an hourly dataset:",
+        text: "10,917 rows of power, voltage, and frequency, with 3-hour lag features and sine/cosine time encoding.",
+      },
+      {
+        lead: "Compared linear, polynomial, and random forest models",
+        text: "with recursive forecasting: each prediction feeds the next step, as it would in real use.",
+      },
+      {
+        lead: "Best model: degree-3 polynomial regression,",
+        text: "R² 0.845 and RMSE 5.80, against 0.757 for a 200-tree random forest and 0.426 for linear regression.",
+      },
+    ],
+    tools: ["Python", "scikit-learn", "pandas", "Jupyter"],
+    links: [],
+    media: {
+      kind: "image",
+      src: "/projects/mse413-forecast.webp",
+      alt: "Forecast against actual island-mode power from May to August 2023: the polynomial model follows the real load closely.",
+      width: 1440,
+      height: 810,
+    },
+  },
+  {
+    name: "Greener Together",
+    category: "Business · Data analytics",
+    tone: "business",
+    role: "Team of 4, BUS 336 hackathon",
+    dates: "Nov 2025",
+    summary:
+      "Does volunteer stewardship make Vancouver's rain gardens work better? As the team Unify Consulting, we analyzed City of Vancouver condition data for 200+ sites and pitched the answer.",
+    did: [
+      {
+        lead: "Found that vegetation health drives site condition,",
+        text: "and that stewarded sites scored 0.37 points better on vegetation in 2024, with the biggest gains from 2022 to 2024.",
+      },
+      {
+        lead: "Built the analysis in R and the dashboards in Tableau:",
+        text: "a site map, a vegetation-to-condition scatter plot, and group comparisons.",
+      },
+      {
+        lead: "Recommended two moves to the City:",
+        text: "grow stewardship through schools and local groups, and forecast clogging and overflow with ARIMA so maintenance is preventive, not reactive.",
+      },
+    ],
+    tools: ["R", "Tableau"],
+    links: [],
+    media: {
+      kind: "image",
+      src: "/projects/hackathon-poster.webp",
+      alt: "Top of the team's poster: Greener Together, How Stewardship Strengthens Vancouver's Green Infrastructure.",
+      width: 1600,
+      height: 900,
+    },
+  },
+  {
+    name: "MSCI Equity Research",
+    category: "Finance · Equity research",
+    tone: "business",
+    role: "Solo analyst",
+    dates: "May 2025",
+    summary:
+      "A stock pitch on MSCI, the index and analytics company: business model, segments, industry, growth catalysts, and a DCF valuation.",
+    did: [
+      {
+        lead: "Recommended a BUY with a US$662.98 price target,",
+        text: "16% above the US$572.22 price on May 18, 2025.",
+      },
+      {
+        lead: "Built the DCF:",
+        text: "perpetuity growth method at a 7.5% WACC and 4% terminal growth, with a WACC-by-growth sensitivity table.",
+      },
+      {
+        lead: "Made the case on three points:",
+        text: "about 97% recurring revenue with 95%+ retention, tailwinds from passive investing and ESG, and less than 15% of a ~US$28B market captured so far.",
+      },
+    ],
+    tools: ["Excel", "DCF modelling", "PowerPoint"],
+    links: [],
+    media: {
+      kind: "image",
+      src: "/projects/msci-dcf.webp",
+      alt: "The pitch's DCF slide: the perpetuity growth build, the implied share price, and a sensitivity table.",
+      width: 1600,
+      height: 900,
+    },
   },
 ];

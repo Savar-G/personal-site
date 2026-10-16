@@ -962,7 +962,7 @@ body {
     grid-column: 1 / -1;
   }
   .pj-card--tall {
-    grid-row: span 3;
+    grid-row: span 4;
   }
   /* A video in a full-width card sits on the tray at a readable size. */
   .pj-card--feature .pj-media--video {
@@ -1253,6 +1253,7 @@ body {
 .pj-tone--hardware { --tone: #059669; }
 .pj-tone--mechanical { --tone: #e11d48; }
 .pj-tone--software { --tone: #2563eb; }
+.pj-tone--business { --tone: #0891b2; }
 .pj-tone--plain { --tone: var(--color-stone-500); }
 @media (prefers-color-scheme: dark) {
   .pj-tone--startup { --tone: #fb923c; }
@@ -1260,6 +1261,7 @@ body {
   .pj-tone--hardware { --tone: #34d399; }
   .pj-tone--mechanical { --tone: #fb7185; }
   .pj-tone--software { --tone: #60a5fa; }
+  .pj-tone--business { --tone: #22d3ee; }
 }
 
 .pj-name {
