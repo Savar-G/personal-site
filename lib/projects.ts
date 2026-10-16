@@ -402,9 +402,9 @@ export const projects: Project[] = [
     },
     layout: "tall",
   },
-  // School projects (R-93). Facts come from the course reports and poster; no
-  // grade or placement is claimed. `problem` and `reflection`
-  // are left for Savar to write.
+  // School projects (R-93). Facts come from the course reports; no grade or
+  // placement is claimed. `problem` and `reflection` are left for Savar to
+  // write.
   {
     name: "Ball-Launching Arm",
     slug: "ball-launching-arm",
@@ -472,120 +472,6 @@ export const projects: Project[] = [
       alt: "The black 3D-printed truss arm beside the taped servo hopper, with a green marble ready to drop.",
       width: 945,
       height: 709,
-    },
-  },
-  {
-    name: "Greener Together",
-    slug: "greener-together",
-    blurb:
-      "Does volunteer stewardship make Vancouver's rain gardens work better? A data hackathon answer from 200+ sites, in R and Tableau.",
-    category: "Business · Data analytics",
-    tone: "plain",
-    role: "Team member",
-    dates: "Nov 2025",
-    team: "4 students as Unify Consulting, BUS 336 hackathon",
-    summary:
-      "We analyzed City of Vancouver condition data for 200+ rain gardens to find out what community stewardship adds, and pitched two recommendations to the City.",
-    did: [
-      {
-        lead: "Found that vegetation health drives site condition,",
-        text: "and that stewarded sites scored better on vegetation in 2024, with the biggest gains from 2022 to 2024.",
-      },
-      {
-        lead: "Built the analysis in R and the dashboards in Tableau:",
-        text: "a site map, a vegetation-to-condition scatter plot, and group comparisons.",
-      },
-      {
-        lead: "Recommended two moves to the City:",
-        text: "grow stewardship through schools and local groups, and forecast clogging and overflow with ARIMA so maintenance is preventive, not reactive.",
-      },
-    ],
-    results: [
-      { value: "200+", label: "rain-garden sites" },
-      { value: "0.37", label: "points better vegetation at stewarded sites" },
-      { value: "2", label: "recommendations to the City" },
-    ],
-    resultsNote: "The vegetation gap in 2024 is statistically significant.",
-    approach: [
-      {
-        title: "Start from the City's cost",
-        text: "Rain gardens only work with steady maintenance, and maintenance is expensive. So the question was what volunteers add, not whether the gardens work.",
-      },
-      {
-        title: "Find the driver first",
-        text: "Vegetation health predicted overall condition, so comparing vegetation between stewarded and other sites gave a fair test.",
-      },
-      {
-        title: "Pair people with prediction",
-        text: "Volunteers improve the sites, and an ARIMA forecast of clogging and overflow lets the City fix sites before they fail.",
-      },
-    ],
-    tools: ["R", "Tableau"],
-    links: [],
-    media: {
-      kind: "image",
-      src: "/projects/hackathon-poster.webp",
-      alt: "Top of the team's poster: Greener Together, How Stewardship Strengthens Vancouver's Green Infrastructure.",
-      width: 1600,
-      height: 900,
-    },
-  },
-  {
-    name: "Microgrid Demand Forecasting",
-    slug: "microgrid-forecasting",
-    blurb:
-      "Hourly power forecasts for a real microgrid, so operators can see surplus periods and decide when to run off the main grid.",
-    category: "Software · Machine learning",
-    tone: "software",
-    role: "Team member",
-    dates: "Jan – Apr 2025",
-    team: "3 students, MSE 413",
-    summary:
-      "Machine-learning forecasts of island-mode power on the Mesa Del Sol microgrid, to find surplus periods and support grid disconnection decisions.",
-    did: [
-      {
-        lead: "Turned 10-second sensor logs into an hourly dataset:",
-        text: "10,917 rows of power, voltage, and frequency, with 3-hour lag features and sine/cosine time encoding.",
-      },
-      {
-        lead: "Compared linear, polynomial, and random forest models",
-        text: "on a held-out test set, scored by R² and RMSE.",
-      },
-      {
-        lead: "Best model: degree-3 polynomial regression,",
-        text: "R² 0.845 and RMSE 5.80, against 0.757 for a 200-tree random forest and 0.426 for linear regression.",
-      },
-    ],
-    results: [
-      { value: "0.845", label: "R², best model" },
-      { value: "5.80", label: "RMSE, best model" },
-      { value: "10,917", label: "hourly rows" },
-    ],
-    resultsNote:
-      "Degree-3 polynomial regression beat a 200-tree random forest (R² 0.757) and linear regression (0.426).",
-    approach: [
-      {
-        title: "Hourly, not every 10 seconds",
-        text: "Down-sampling to hourly kept the daily pattern and cut the compute.",
-      },
-      {
-        title: "Forecast the way it would run",
-        text: "Each prediction fed the next step (recursive forecasting), as it would in real use.",
-      },
-      {
-        title: "Deeper is not better",
-        text: "Random forests with depth 20 and 30 did slightly worse than depth 10, a sign of overfitting; more trees helped instead.",
-      },
-    ],
-    tools: ["Python", "scikit-learn", "pandas", "Jupyter"],
-    links: [],
-    media: {
-      kind: "image",
-      src: "/projects/mse413-forecast.webp",
-      alt: "Forecast against actual island-mode power from May to August 2023: the polynomial model follows the real load closely.",
-      width: 1440,
-      height: 810,
-      drawing: true,
     },
   },
   {
