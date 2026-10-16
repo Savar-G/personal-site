@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/posts";
+import { projects } from "@/lib/projects";
 
 const BASE_URL = "https://savargupta.com";
 
@@ -16,6 +17,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/travel`, lastModified: now, priority: 0.6 },
     { url: `${BASE_URL}/food`, lastModified: now, priority: 0.6 },
     { url: `${BASE_URL}/investing`, lastModified: now, priority: 0.6 },
+    ...projects.map((project) => ({
+      url: `${BASE_URL}/projects/${project.slug}`,
+      lastModified: now,
+      priority: 0.6,
+    })),
     ...posts.map((post) => ({
       url: `${BASE_URL}/${post.slug}`,
       lastModified: post.date ? new Date(`${post.date}T00:00:00Z`) : now,

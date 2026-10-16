@@ -45,6 +45,10 @@ export type ProjectMedia =
 
 export type Project = {
   name: string;
+  // The case study lives at /projects/<slug>.
+  slug: string;
+  // One or two lines for the /projects rail card. Draft copy; Savar rewrites it.
+  blurb: string;
   category: string;
   tone: Tone;
   role: string;
@@ -57,6 +61,20 @@ export type Project = {
   did: { lead?: string; text: string }[];
   didGroups?: { title: string; items: { lead?: string; text: string }[] }[];
   stats?: { value: string; label: string }[];
+  // ---- Case study (/projects/<slug>, R-92). Every part is optional; a
+  // section with no content is left out, never filled in. ----
+  // Key numbers that lead the page; falls back to `stats`.
+  results?: { value: string; label: string }[];
+  // One line under the numbers.
+  resultsNote?: string;
+  // Shown with role and dates when it adds something (team size, company).
+  team?: string;
+  // Why the project exists, in Savar's words.
+  problem?: string[];
+  // Decisions and what they cost, not a feature list.
+  approach?: { title: string; text: string }[];
+  // Savar writes these himself.
+  reflection?: string[];
   tools: string[];
   links: ProjectLink[];
   media: ProjectMedia;
@@ -67,6 +85,9 @@ export type Project = {
 export const projects: Project[] = [
   {
     name: "Unify",
+    slug: "unify",
+    blurb:
+      "The all-in-one newcomer settlement platform. Unify makes settling in Canada simpler, clearer, and more connected.",
     category: "Startup · Software & AI",
     tone: "startup",
     role: "Co-founder",
@@ -115,6 +136,33 @@ export const projects: Project[] = [
       { value: "650+", label: "users" },
       { value: "16", label: "partnerships" },
       { value: "35+", label: "events" },
+    ],
+    results: [
+      { value: "650+", label: "users" },
+      { value: "16", label: "partnerships" },
+      { value: "35+", label: "community events" },
+      { value: "2M+", label: "social views" },
+    ],
+    resultsNote: "Live on the App Store since March 2026.",
+    team: "24 people (2025-26)",
+    // Savar's words, from his YC Startup School answers (2026).
+    problem: [
+      "I watched close family and family friends move to Canada, and so much of their pain was avoidable: endless Googling, scrambling for the right information, missing deadlines no one warned them about. One friend had to leave the country because the deadline to extend their study permit slipped past them.",
+      "The information exists. It's just scattered across government PDFs, Reddit, and word-of-mouth, with no community and no trusted guide.",
+    ],
+    approach: [
+      {
+        title: "Listen before building",
+        text: "The roadmap came from 51 interviews, 225 surveys, and 73 beta testers, not from guesses.",
+      },
+      {
+        title: "Keep it free for newcomers",
+        text: "A referral model earns commission when newcomers sign up with partners, so the app never charges the people it helps.",
+      },
+      {
+        title: "One backend, three apps",
+        text: "The mobile app, the web app, and the landing page share one Supabase backend, so a small team ships to every platform at once.",
+      },
     ],
     tools: ["React Native", "React", "Supabase", "pgvector", "OpenAI"],
     links: [
@@ -178,6 +226,9 @@ export const projects: Project[] = [
   },
   {
     name: "Embedr",
+    slug: "embedr",
+    blurb:
+      "An AI engineering environment for hardware: datasheets, KiCad schematics, and firmware bring-up.",
     category: "Startup · Software & AI",
     tone: "startup",
     role: "Product & GTM",
@@ -233,6 +284,9 @@ export const projects: Project[] = [
   },
   {
     name: "Podcast Sync",
+    slug: "podcast-sync",
+    blurb:
+      "YouTube on my desktop, Apple Podcasts on the go. The two apps never knew where I was in the other one, so I made them stay in sync, both ways.",
     category: "Software · Open source",
     tone: "software",
     role: "Solo builder",
@@ -263,6 +317,31 @@ export const projects: Project[] = [
       },
     ],
     layout: "feature",
+    results: [
+      { value: "33/33", label: "test episodes matched" },
+      { value: "0", label: "taps to hand off to iPhone" },
+      { value: "128", label: "tests, with CI" },
+    ],
+    resultsNote: "Open source. Everything runs on my Mac and in my own iCloud.",
+    // Savar's words (the old summary, R-85).
+    problem: [
+      "I like watching the video versions of podcasts on YouTube, at my desk or while I eat. On the go, I switch to Apple Podcasts on my iPhone and listen, no video.",
+      "The two apps never knew where I was in the other one, so every switch meant scrubbing to find my spot again.",
+    ],
+    approach: [
+      {
+        title: "Match on what both apps agree on",
+        text: "Titles differ between YouTube and Apple Podcasts, so the match uses length, publish date, and the guest's name instead.",
+      },
+      {
+        title: "Let iCloud do the travelling",
+        text: "Moving Apple Podcasts on the Mac is enough: iCloud already syncs it to the iPhone, so there is no server to run.",
+      },
+      {
+        title: "Build in parallel",
+        text: "Four Claude Code agents worked in separate git worktrees, one per part of the system.",
+      },
+    ],
     tools: ["Python", "Chrome extension", "macOS MediaRemote", "SQLite", "iCloud", "Claude Code"],
     links: [
       {
@@ -282,6 +361,9 @@ export const projects: Project[] = [
   },
   {
     name: "SFU Rocketry",
+    slug: "sfu-rocketry",
+    blurb:
+      "A student team building liquid-fuelled rockets. I designed, validated, and hot-fired a LOX/Ethanol engine.",
     category: "Hardware · Mechanical",
     tone: "mechanical",
     role: "Propulsion & Mechanical Engineer",
@@ -317,6 +399,9 @@ export const projects: Project[] = [
   },
   {
     name: "Health & Activity Wearable",
+    slug: "wearable",
+    blurb:
+      "An ESP32-S3 wearable with IMU and heart-rate sensing and an on-device activity classifier that streams to a phone over BLE, with no cloud.",
     category: "Hardware · Firmware",
     tone: "hardware",
     role: "Hardware & Firmware Engineer",
@@ -330,6 +415,9 @@ export const projects: Project[] = [
   },
   {
     name: "Taskline",
+    slug: "taskline",
+    blurb:
+      "An Obsidian plugin that turns agent-extracted action items from meetings and notes into one execution queue.",
     category: "Software · AI tools",
     tone: "software",
     role: "Solo builder",
@@ -348,13 +436,51 @@ export const projects: Project[] = [
   },
   {
     name: "HealthOS",
+    slug: "healthos",
+    blurb:
+      "A personal health dashboard that tracks strength training, running, sleep, recovery, and body composition.",
     category: "Software",
     tone: "plain",
     role: "Solo builder",
     summary:
       "A personal health dashboard that tracks strength training, running, sleep, recovery, and body composition.",
-    did: [],
-    tools: ["Next.js"],
+    did: [
+      {
+        lead: "A Next.js dashboard over all of it:",
+        text: "strength, running, sleep, recovery, and body composition in one place.",
+      },
+      {
+        lead: "Four Claude Code agents, one per domain,",
+        text: "each with its own context file, maintain the data. The dashboard just reads it.",
+      },
+      {
+        lead: "A running agent that writes my training plan,",
+        text: "which replaced a $30/mo service.",
+      },
+    ],
+    results: [
+      { value: "18,000+", label: "strength sets since 2020" },
+      { value: "1,100+", label: "nights of sleep" },
+      { value: "1,600+", label: "weight entries" },
+      { value: "$30/mo", label: "service it replaced" },
+    ],
+    resultsNote: "I use it daily.",
+    // Savar's words, from his YC Startup School answers (2026).
+    problem: [
+      "My health data lived in six apps that didn't talk to each other: Oura for sleep, Strong for lifts, a weight tracker, running notes.",
+      "I couldn't see how recovery affected my lifting, or how last week's mileage set up this week's readiness.",
+    ],
+    approach: [
+      {
+        title: "Agents own the data",
+        text: "Each domain has one agent and one context file, so the dashboard stays a plain reader.",
+      },
+      {
+        title: "One place for every signal",
+        text: "Putting sleep, lifts, runs, and weight side by side is what shows how one affects the next.",
+      },
+    ],
+    tools: ["Next.js", "Claude Code agents"],
     links: [
       {
         label: "health.savargupta.com",
