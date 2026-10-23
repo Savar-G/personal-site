@@ -72,6 +72,30 @@ export default async function InvestingPage() {
             cap value fund.
           </p>
         </div>
+
+        <section className="inv-phil" aria-labelledby="inv-phil">
+          <h2 id="inv-phil">My investing philosophy</h2>
+          <ol className="leading-relaxed text-stone-600">
+            <li>
+              Great opportunities rarely come, so take them when they do. When there is blood in
+              the market, that is usually the best time to buy.
+            </li>
+            <li>
+              Lump sum beats dollar-cost averaging. Dollar-cost averaging works too, but studies
+              have found that investing a lump sum gives higher returns.
+            </li>
+            <li>Companies with a monopoly.</li>
+            <li>Pricing power.</li>
+            <li>Operating leverage.</li>
+            <li>Capital light.</li>
+            <li>Embedded into society.</li>
+            <li>A long, durable growth runway.</li>
+          </ol>
+          <p className="leading-relaxed text-stone-600">
+            Not every company in my portfolio meets every one of these. My largest positions
+            usually meet most of them, if not all. Every other company meets several.
+          </p>
+        </section>
       </div>
 
       <Holdings accounts={accounts} />

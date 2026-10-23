@@ -5,6 +5,14 @@
   transition: text-decoration-thickness .16s var(--ease-out), color .16s var(--ease-out); }
 .inv-story a:hover { color: var(--color-stone-600); text-decoration-thickness: 2px; }
 
+/* "My investing philosophy": a numbered list under the story, same heading as "What I hold". */
+.inv-phil { margin-top: 3.5rem; }
+.inv-phil h2 { margin: 0 0 1rem; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; }
+.inv-phil ol { list-style: decimal; padding-left: 1.5rem; }
+.inv-phil li + li { margin-top: .5rem; }
+.inv-phil li::marker { color: var(--color-stone-400); font-variant-numeric: tabular-nums; }
+.inv-phil p { margin-top: 1.25rem; }
+
 .inv {
   /* One colour per holding, in slot order: teal to magenta, alternating light and dark
      so neighbouring slices differ; validated for colour-blind separation of neighbours
