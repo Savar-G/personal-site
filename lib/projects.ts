@@ -79,6 +79,16 @@ export type Project = {
   approach?: { title: string; text: string }[];
   // Savar writes these himself.
   reflection?: string[];
+  // The project's Instagram: counts and the newest posts, copied from the
+  // live profile on `asOf`. Static files; refresh them by hand.
+  instagram?: {
+    handle: string;
+    followers: string;
+    posts: string;
+    asOf: string;
+    avatar: string;
+    items: { href: string; src: string; alt: string; reel?: boolean }[];
+  };
   tools: string[];
   links: ProjectLink[];
   media: ProjectMedia;
@@ -168,6 +178,49 @@ export const projects: Project[] = [
         text: "The mobile app, the web app, and the landing page share one Supabase backend, so a small team ships to every platform at once.",
       },
     ],
+    // From instagram.com/unifysocialca on 2026-10-27: the six newest posts,
+    // pinned posts left out.
+    instagram: {
+      handle: "unifysocialca",
+      followers: "1,137",
+      posts: "79",
+      asOf: "2026-10-27",
+      avatar: "/projects/unify-ig-avatar.webp",
+      items: [
+        {
+          href: "https://www.instagram.com/reel/DfArfmJyy5R/",
+          src: "/projects/unify-ig-1.webp",
+          alt: "Reel: 5 things every international student should know before moving to Canada.",
+          reel: true,
+        },
+        {
+          href: "https://www.instagram.com/p/De4nv1aoKHt/",
+          src: "/projects/unify-ig-2.webp",
+          alt: "Unify is now on Android, with a Halloween ghost holding a phone.",
+        },
+        {
+          href: "https://www.instagram.com/reel/De2Pj4ChLcs/",
+          src: "/projects/unify-ig-3.webp",
+          alt: "Reel: the difference between going home, and going home.",
+          reel: true,
+        },
+        {
+          href: "https://www.instagram.com/p/DeyLDz2AeGT/",
+          src: "/projects/unify-ig-4.webp",
+          alt: "Poster for a free Resume and Interview Prep workshop.",
+        },
+        {
+          href: "https://www.instagram.com/p/DeuxajfAZox/",
+          src: "/projects/unify-ig-5.webp",
+          alt: "Guide: building credit in Canada as an international student.",
+        },
+        {
+          href: "https://www.instagram.com/p/DecTD5dIM9g/",
+          src: "/projects/unify-ig-6.webp",
+          alt: "The cultural clubs attending a Unify panel and networking event.",
+        },
+      ],
+    },
     tools: ["React Native", "React", "Supabase", "pgvector", "OpenAI"],
     links: [
       { label: "unifysocial.ca", href: "https://unifysocial.ca", kind: "site" },

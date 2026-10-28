@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { GitHubIcon } from "@/app/_components/icons";
+import { GitHubIcon, InstagramIcon, PlayIcon } from "@/app/_components/icons";
 import { projects, type Project } from "@/lib/projects";
 import { CaseCard, CaseContents } from "../_components/case-client";
 import { CountUp } from "../_components/count-up";
@@ -100,6 +101,55 @@ export default async function CasePage({ params }: { params: Params }) {
         </div>
       ) : (
         <DidList items={project.did} />
+      ),
+    });
+  const ig = project.instagram;
+  if (ig)
+    sections.push({
+      id: "instagram",
+      title: "On Instagram",
+      body: (
+        <>
+          <div className="cs-ig-head">
+            <span className="cs-ig-avatar">
+              <Image src={ig.avatar} alt="" width={48} height={48} />
+            </span>
+            <div className="cs-ig-who">
+              <strong>@{ig.handle}</strong>
+              <span>
+                <b>{ig.followers}</b> followers · <b>{ig.posts}</b> posts
+              </span>
+            </div>
+            <a
+              href={`https://www.instagram.com/${ig.handle}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cs-btn cs-btn--primary press"
+            >
+              <InstagramIcon className="h-3.5 w-3.5" />
+              Follow
+              <span aria-hidden="true">↗</span>
+              <span className="sr-only">(opens in new tab)</span>
+            </a>
+          </div>
+          <ul className="cs-ig-grid">
+            {ig.items.map((item) => (
+              <li key={item.href}>
+                <a href={item.href} target="_blank" rel="noopener noreferrer">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    width={480}
+                    height={600}
+                    sizes="(max-width: 820px) 31vw, 120px"
+                  />
+                  {item.reel && <PlayIcon className="cs-ig-reel" />}
+                  <span className="sr-only">(opens in new tab)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
       ),
     });
   if (project.approach?.length)
